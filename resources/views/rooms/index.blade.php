@@ -79,8 +79,8 @@
                     
                       <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
                 <h3 class="text-lg font-semibold">Daftar Kamar</h3>
-
                 <div class="flex flex-col sm:flex-row gap-3">
+                    @role('admin')
                     <!-- Form Import Excel -->
                     <form action="{{ route('rooms.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
                         @csrf
@@ -97,6 +97,7 @@
                         Import
                     </button>
                 </form>
+                @endrole
                 
                 <!-- Form Pencarian -->
                 <form method="GET" action="{{ route('rooms.index') }}" class="flex items-center space-x-2">
@@ -121,6 +122,7 @@
 
                 
             </div>
+                <div class="px-6 text-gray-900">
 
                    <div class="overflow-x-auto">
                     <table class="min-w-full border border-gray-300 divide-y divide-gray-200">
@@ -138,7 +140,7 @@
                         <tbody class="divide-y divide-gray-200">
                             @forelse ($rooms as $room)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $loop->iteration }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $rooms->firstItem() + $loop->index }}</td>
                                <td class="px-4 py-2 text-sm text-gray-800 text-center">
                                 {{ $room->room_number }}
 
@@ -177,14 +179,19 @@
                                 <td class="px-4 py-2 text-sm text-gray-800 text-center">
                                     <div class="flex justify-center gap-2">
                                         @if($room->status == 'tersedia')
+                                          @role('admin')
                                             <a href="{{ route('rooms.edit', $room->id) }}" 
                                             class="w-24 text-center px-3 py-1 text-white bg-yellow-400 rounded-md hover:bg-yellow-700 text-xs">
                                             Edit
                                             </a>
+                                          @endrole
+                                         @role('resepsionis')
+
                                             <a href="{{ route('rooms.cekin', $room->id) }}" 
                                             class="w-24 text-center px-3 py-1 text-white bg-indigo-500 rounded-md hover:bg-indigo-700 text-xs">
                                             Cek In
                                             </a>
+                                         @endrole
                                         @elseif($room->status == 'dibooking')
                                             @php
                                                 $latestReservation = $room->reservations->sortByDesc('id')->first();
@@ -198,11 +205,14 @@
                                                     <span>Info</span>
                                                 </a>
                                             @endif
+                                             @role('resepsionis')
                                             <a href="{{ route('maintenances.create', $room->id) }}" 
                                             class="w-24 text-center px-3 py-1 text-white bg-green-500 rounded-md hover:bg-green-700 text-xs">
                                             Cek Out
                                             </a>
-                                        @else
+                                            @endrole
+                                            
+                                            @else
                                             <span class="px-2 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded-full">
                                                 Perawatan
                                             </span>
@@ -219,6 +229,7 @@
                             @endforelse
                         </tbody>
                     </table>
+                   </div>
                     </div>
 
 

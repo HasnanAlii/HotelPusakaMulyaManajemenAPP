@@ -81,7 +81,7 @@
             {{-- Total Reservasi Bulanan --}}
            <div class="bg-white p-6 rounded-xl shadow flex justify-between items-center">
                 <div>
-                    <p class="text-gray-600 font-semibold">Total Reservasi Bulan Ini</p>
+                    <p class="text-gray-600 font-semibold">Total Reservasi Kamar Bulan Ini</p>
                     <h3 class="text-2xl font-bold text-blue-600">{{ $totalMonthlyReservations }}</h3>
                 </div>
                 <div class="p-3 bg-blue-100 rounded-full">
@@ -91,7 +91,7 @@
                 {{-- Total Maintenance Bulanan --}}
 
             <div>
-                <p class="text-gray-600 font-semibold">Total Maintenance Bulan Ini</p>
+                <p class="text-gray-600 font-semibold">Total Perawatan Kamar Bulan Ini</p>
                 <h3 class="text-2xl font-bold text-green-600">{{ $totalMonthlyMaintenances }}</h3>
             </div>
             <div class="p-3 bg-green-100 rounded-full">

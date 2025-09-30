@@ -7,8 +7,11 @@
         <!-- Logo + Title -->
         <div class="flex items-center justify-center h-16 border-b px-2">
             <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
-                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                <span class="font-semibold text-blue-700 text-md">Hotel Pusaka Mulya</span>
+                <img src="{{ asset('assets/logo.png') }}" 
+                                    alt="Logo Hotel Pusaka Mulya" 
+                                    class="h-16 mt-4 w-auto mb-3">
+
+   
             </a>
         </div>
 

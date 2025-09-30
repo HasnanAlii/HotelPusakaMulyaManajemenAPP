@@ -31,7 +31,7 @@
                         <tbody class="divide-y divide-gray-200">
                             @forelse($maintenances as $maintenance)
                                 <tr>
-                                    <td class="px-4 py-2 text-sm text-center">{{ $loop->iteration }}</td>
+                                    <td class="px-4 py-2 text-sm text-center">{{ $maintenances->firstItem() + $loop->index }}</td>
                                     <td class="px-4 py-2 text-sm text-center">{{ $maintenance->room->room_number ?? '-' }}</td>
                                     <td class="px-4 py-2 text-sm">{{ $maintenance->damage }}</td>
                                     {{-- <td class="px-4 py-2 text-sm">{{ $maintenance->customer->name ?? '-' }}</td>
@@ -66,6 +66,7 @@
                                     @endif
 
                                     {{-- Tombol Hapus --}}
+                                     @role('admin')
                                     <form action="{{ route('maintenances.destroy', $maintenance->id) }}" method="POST" 
                                         onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                         @csrf
@@ -75,6 +76,7 @@
                                             Hapus
                                         </button>
                                     </form>
+                                     @endrole
                                 </div>
                             </td>
 

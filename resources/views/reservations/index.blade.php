@@ -76,7 +76,7 @@
                         <tbody class="divide-y divide-gray-200">
                             @forelse ($reservations as $reservation)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $loop->iteration }}</td>
+                                    <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $reservations->firstItem() + $loop->index }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $reservation->room->room_number }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-800 text-left">{{ $reservation->customer->name }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-800 text-left">{{ $reservation->customer->nik }}</td>

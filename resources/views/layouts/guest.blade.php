@@ -5,7 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Hotel Pusaka Mulya') }}</title>
+              <link rel="icon" href="{{ asset('assets/logo.png') }}?v=2" type="image/png">
+
+
+
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -18,7 +22,9 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                   <img src="{{ asset('assets/logo.png') }}" 
+                        alt="Logo Hotel Pusaka Mulya" 
+                        class="h-28 w-auto mb-3">
                 </a>
             </div>
 

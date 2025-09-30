@@ -20,10 +20,12 @@
                 {{-- Tombol tambah --}}
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold">Daftar Karyawan</h3>
+                     @role('admin')
                     <a href="{{ route('employees.create') }}" 
                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                         + Tambah Karyawan
                     </a>
+                     @endrole
                 </div>
 
                 {{-- Tabel --}}
@@ -47,20 +49,23 @@
                 $isValid = $lastAttendance && \Carbon\Carbon::parse($lastAttendance->date)->gt(now()->subDay());
             @endphp
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $loop->iteration }}</td>
+                <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $employees->firstItem() + $loop->index }}</td>
                 <td class="px-4 py-2 text-sm text-gray-800">{{ $employee->name }}</td>
                 <td class="px-4 py-2 text-sm text-gray-800">{{ $employee->position }}</td>
                 <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $isValid ? $lastAttendance->date : '-' }}</td>
                 <td class="px-4 py-2 text-sm text-gray-800 text-center">{{ $isValid ? $lastAttendance->check_in : '-' }}</td>
                 <td class="px-4 py-2 text-sm text-gray-800 text-center">
                     <div class="flex justify-center gap-2">
+                        @role('resepsionis')
                         <form action="{{ route('employees.attend', $employee->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700">
                                 + Absen
                             </button>
                         </form>
+                         @endrole
 
+                        @role('admin')
                         <a href="{{ route('employees.edit', $employee->id) }}" 
                            class="px-3 py-1 text-xs bg-yellow-500 text-white rounded hover:bg-yellow-600">
                             Edit
@@ -73,6 +78,7 @@
                                 Hapus
                             </button>
                         </form>
+                         @endrole
                     </div>
                 </td>
             </tr>

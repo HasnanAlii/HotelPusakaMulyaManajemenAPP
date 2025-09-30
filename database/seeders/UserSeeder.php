@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     {
         // 🔹 Buat role
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $kasirRole = Role::firstOrCreate(['name' => 'kasir']);
+        $resepsionisRole = Role::firstOrCreate(['name' => 'resepsionis']);
 
         // 🔹 Buat permission
         $permissions = [
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
         $adminRole->syncPermissions(Permission::all());
 
         // 🔹 Kasir hanya boleh kelola reservasi
-        $kasirRole->syncPermissions(['manage reservations']);
+        $resepsionisRole->syncPermissions(['manage reservations']);
 
         // 🔹 Buat user admin
         $admin = User::firstOrCreate(
@@ -54,6 +54,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]
         );
-        $kasir->assignRole($kasirRole);
+        $kasir->assignRole($resepsionisRole);
     }
 }

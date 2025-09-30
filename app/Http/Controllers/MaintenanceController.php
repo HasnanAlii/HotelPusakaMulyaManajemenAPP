@@ -16,21 +16,22 @@ class MaintenanceController extends Controller
     /**
      * Menampilkan daftar kerusakan kamar
      */
-    public function index()
-    {
-        try {
-            $maintenances = Maintenance::with(['room', 'customer', 'employee'])
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
+        public function index()
+        {
+            try {
+                $maintenances = Maintenance::with(['room', 'customer', 'employee'])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
-            return view('maintenances.index', compact('maintenances'));
-        } catch (\Exception $e) {
-            return redirect()->back()->with([
-                'message' => 'Gagal memuat daftar maintenance: ' . $e->getMessage(),
-                'alert-type' => 'error'
-            ]);
+                return view('maintenances.index', compact('maintenances'));
+            } catch (\Exception $e) {
+                return redirect()->back()->with([
+                    'message' => 'Gagal memuat daftar maintenance: ' . $e->getMessage(),
+                    'alert-type' => 'error'
+                ]);
+            }
         }
-    }
+
 
     /**
      * Form tambah data kerusakan

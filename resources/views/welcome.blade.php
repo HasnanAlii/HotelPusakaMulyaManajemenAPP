@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Pusaka Mulya</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ asset('assets/logo.png') }}?v=2" type="image/png">
+
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -12,27 +15,40 @@
 
     <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-serif text-blue-700 font-bold">Hotel Pusaka Mulya</div>
-            <div class="flex items-center space-x-6">
-                <a href="#about" class="text-gray-700 hover:text-blue-600 transition font-medium">Tentang</a>
-                <a href="#rooms" class="text-gray-700 hover:text-blue-600 transition font-medium">Kamar</a>
-                <a href="#contact" class="text-gray-700 hover:text-blue-600 transition font-medium">Kontak</a>
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        
+        <!-- Logo + Nama Hotel -->
+      <div class="flex items-center gap-3">
+    <img src="{{ asset('assets/logo.png') }}" alt="Logo Hotel Pusaka Mulya" class="h-20 w-auto">
+    <span class="text-3xl font-bold text-blue-500">
+        Hotel Pusaka Mulya
+    </span>
+</div>
 
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="px-5 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition">
-                            Dashboard
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="px-5 py-2 border border-blue-600 text-blue-600 rounded-md font-medium hover:bg-blue-600 hover:text-white transition">
-                            Log in
-                        </a>
-                    @endauth
-                @endif
-            </div>
+
+        <!-- Menu Navigasi -->
+        <div class="flex items-center space-x-8">
+            <a href="#about" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Tentang</a>
+            <a href="#rooms" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Kamar</a>
+            <a href="#contact" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Kontak</a>
+
+            @if (Route::has('login'))
+                @auth
+                    <a href="{{ url('/dashboard') }}" 
+                       class="px-5 py-2 rounded-lg bg-blue-600 text-white font-medium shadow hover:bg-blue-700 transition duration-300">
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" 
+                       class="px-5 py-2 rounded-lg border border-blue-600 text-blue-600 font-medium hover:bg-blue-600 hover:text-white shadow-sm transition duration-300">
+                        Log in
+                    </a>
+                @endauth
+            @endif
         </div>
-    </nav>
+    </div>
+</nav>
+
 
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-r from-blue-600 to-blue-500 text-white h-screen flex items-center">
