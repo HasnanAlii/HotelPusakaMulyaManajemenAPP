@@ -71,6 +71,10 @@ class ReservationController extends Controller
                 'check_in'    => 'required|date',
                 'check_out'   => 'required|date|after_or_equal:check_in',
             ]);
+            $validated['check_in'] = Carbon::createFromFormat('d-m-Y', $validated['check_in'])->format('Y-m-d');
+            $validated['check_out'] = Carbon::createFromFormat('d-m-Y', $validated['check_out'])->format('Y-m-d');
+
+            // Reservation::create($validated);
 
             $validated['status'] = 'checkin';
 

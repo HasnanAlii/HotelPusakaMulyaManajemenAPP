@@ -67,7 +67,7 @@ class MaintenanceController extends Controller
             $validated = $request->validate([
                 'room_id'     => 'required|exists:rooms,id',
                 'damage'      => 'nullable|string|max:255',
-                'employee_id' => 'required|exists:employees,id',
+                'employee_id' => 'nullable|exists:employees,id',
                 'status'      => 'required|in:tersedia,perawatan',
             ]);
 

@@ -153,7 +153,10 @@
                                     @php
                                         // Hitung jumlah kamar yang dipesan oleh customer ini
                                         $customerId = $latestReservation->customer->id;
-                                        $jumlahKamar = \App\Models\Reservation::where('customer_id', $customerId)->count();
+                                        $jumlahKamar = \App\Models\Reservation::where('customer_id', $customerId)
+                                        ->whereIn('status', ['checkin']) 
+                                        ->count();
+      
                                     @endphp
 
                                     @if($jumlahKamar >= 5)
@@ -185,13 +188,13 @@
                                             Edit
                                             </a>
                                           @endrole
-                                         @role('resepsionis')
+                                         {{-- @role('resepsionis') --}}
 
                                             <a href="{{ route('rooms.cekin', $room->id) }}" 
                                             class="w-24 text-center px-3 py-1 text-white bg-indigo-500 rounded-md hover:bg-indigo-700 text-xs">
                                             Cek In
                                             </a>
-                                         @endrole
+                                         {{-- @endrole --}}
                                         @elseif($room->status == 'dibooking')
                                             @php
                                                 $latestReservation = $room->reservations->sortByDesc('id')->first();
@@ -205,12 +208,12 @@
                                                     <span>Info</span>
                                                 </a>
                                             @endif
-                                             @role('resepsionis')
+                                             {{-- @role('resepsionis') --}}
                                             <a href="{{ route('maintenances.create', $room->id) }}" 
                                             class="w-24 text-center px-3 py-1 text-white bg-green-500 rounded-md hover:bg-green-700 text-xs">
                                             Cek Out
                                             </a>
-                                            @endrole
+                                            {{-- @endrole --}}
                                             
                                             @else
                                             <span class="px-2 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded-full">
