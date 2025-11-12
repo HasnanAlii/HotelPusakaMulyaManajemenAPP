@@ -61,7 +61,7 @@
                 <div>
                     <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Biaya Perbaikan</label>
                     <input type="text" name="amount" id="amount"
-                           value="{{ old('amount', number_format($maintenance->amount ?? 0, 0, ',', '.')) }}"
+                           {{-- value="{{ old('amount', number_format($maintenance->amount ?? 0, 0, ',', '.')) }}" --}}
                            class="w-full rounded-lg border-gray-300 px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                            placeholder="Masukkan biaya perbaikan (Rp)">
                 </div>

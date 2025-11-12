@@ -1,9 +1,13 @@
 @props(['active'])
 
 @php
-$classes = ($active ?? false)
-            ? 'inline-flex items-center px-4 py-2 rounded-md bg-blue-300 text-white text-sm  font-medium leading-5 focus:outline-none transition duration-150 ease-in-out'
-            : 'inline-flex items-center px-4 py-2 rounded-md text-sm font-medium leading-5 text-gray-600 hover:bg-gray-200 hover:text-gray-900 focus:outline-none transition duration-150 ease-in-out';
+$commonClasses = 'flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition-all duration-200';
+
+$conditionalClasses = ($active ?? false)
+    ? 'bg-blue-50 text-blue-700'
+    : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600';
+
+$classes = $commonClasses . ' ' . $conditionalClasses;
 @endphp
 
 <a {{ $attributes->merge(['class' => $classes]) }}>

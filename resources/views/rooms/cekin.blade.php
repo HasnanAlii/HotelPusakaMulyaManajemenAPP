@@ -23,7 +23,7 @@
                         <select 
                             name="customer_id" 
                             id="customer_id" 
-                            class="w-full border border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-lg p-3 shadow-sm transition">
+                            class="w-full border border-gray-300  focus:border-orange-500 focus:ring-orange-500 rounded-lg shadow-sm transition">
                             <option value="">-- Pilih Customer --</option>
                             @foreach ($customers as $customer)
                                 <option value="{{ $customer->id }}">{{ $customer->name }}</option>

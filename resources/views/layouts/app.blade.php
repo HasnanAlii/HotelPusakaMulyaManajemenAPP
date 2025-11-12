@@ -6,88 +6,166 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Hotel Pusaka Mulya') }}</title>
-          <link rel="icon" href="{{ asset('assets/logo.png') }}?v=2" type="image/png">
-
-
+    <link rel="icon" href="{{ asset('assets/logo.png') }}?v=2" type="image/png">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-    <!-- CSS Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <!-- Scripts Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <!-- Tambahkan Flatpickr (modern datepicker ringan) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-
-    <!-- App CSS & JS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
 
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
+<body class="font-sans antialiased bg-gray-50" x-data="{ sidebarOpen: true }">
+    <div class="min-h-screen flex">
+
+        {{-- SIDEBAR --}}
+        <aside 
+            x-show="sidebarOpen" 
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="-translate-x-64 opacity-0"
+            x-transition:enter-end="translate-x-0 opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-x-0 opacity-100"
+            x-transition:leave-end="-translate-x-64 opacity-0"
+            class="w-64 h-screen bg-white border-r border-gray-200 fixed top-0 left-0 shadow-xl z-40 flex flex-col justify-between"
+        >
+            <div>
+                <div class="flex items-center justify-center border-b border-gray-200 px-4 py-4">
+                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
+                        <img src="{{ asset('assets/logo.png') }}" alt="Logo Hotel Pusaka Mulya" class="h-24 w-auto">
+                    </a>
                 </div>
-            </header>
+
+                <nav class="mt-4 px-3 space-y-1">
+                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
+                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
+                        {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                        <i data-feather="home" class="h-5 w-5"></i>
+                        Dashboard
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('rooms.index') }}" :active="request()->routeIs('rooms.index*')"
+                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
+                        {{ request()->routeIs('rooms.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                        <i data-feather="grid" class="h-5 w-5"></i>
+                        Manajemen Kamar
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('employees.index') }}" :active="request()->routeIs('employees.index*')"
+                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
+                        {{ request()->routeIs('employees.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                        <i data-feather="users" class="h-5 w-5"></i>
+                        Manajemen Pegawai
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('maintenances.index') }}" :active="request()->routeIs('maintenances.index*')"
+                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
+                        {{ request()->routeIs('maintenances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                        <i data-feather="alert-circle" class="h-5 w-5"></i>
+                        Laporan Kerusakan
+                    </x-nav-link>
+
+                    @role('admin')
+                    <x-nav-link href="{{ route('finances.index') }}" :active="request()->routeIs('finances.index*')"
+                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
+                        {{ request()->routeIs('finances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                        <i data-feather="dollar-sign" class="h-5 w-5"></i>
+                        Laporan Keuangan
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('reservations.index') }}" :active="request()->routeIs('reservations.index*')"
+                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
+                        {{ request()->routeIs('reservations.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                        <i data-feather="file-text" class="h-5 w-5"></i>
+                        Laporan Reservasi
+                    </x-nav-link>
+                    @endrole
+                </nav>
+            </div>
+
+            {{-- PROFIL & LOGOUT --}}
+            <div class="border-t border-gray-200 p-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold uppercase">
+                        {{ substr(Auth::user()->name, 0, 1) }}
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-800 text-sm">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <a href="{{ route('profile.edit') }}"
+                        class="flex items-center gap-2 text-sm text-gray-700 hover:text-blue-600 font-medium px-2 py-1 transition">
+                        <i data-feather="user" class="w-4 h-4"></i>
+                        Profil Saya
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center gap-2 text-sm text-gray-700 hover:text-red-600 font-medium px-2 py-1 transition w-full text-left">
+                            <i data-feather="log-out" class="w-4 h-4"></i>
+                            Keluar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        {{-- OVERLAY (Mobile) --}}
+        <div 
+            x-show="sidebarOpen" 
+            @click="sidebarOpen = false"
+            class="fixed inset-0 bg-black bg-opacity-30 z-30 lg:hidden"
+            x-transition.opacity
+        ></div>
+
+        {{-- HEADER + MAIN --}}
+        <div class="flex-1 transition-all duration-300" :class="sidebarOpen ? 'ml-64' : 'ml-0'">
+   <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20">
+    <div class="flex items-center justify-between px-6 py-4">
+        {{-- Kiri: Tombol Sidebar + Judul Halaman --}}
+        <div class="flex items-center gap-3">
+            <button 
+                @click="sidebarOpen = !sidebarOpen" 
+                class="p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 focus:outline-none transition"
+            >
+                <svg x-show="!sidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg x-show="sidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <h1 class="text-lg sm:text-xl font-semibold text-gray-800 truncate">
+                {{ $header ?? 'Hotel Pusaka Mulya' }}
+            </h1>
+        </div>
+
+        {{-- Kanan: Slot tombol tambahan (misal "Tambah Customer") --}}
+        @isset($headerButton)
+            <div class="flex-shrink-0">
+                {{ $headerButton }}
+            </div>
         @endisset
+    </div>
+</header>
 
-        <!-- Feather Icons -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                feather.replace();
-            });
-        </script>
-        
- 
-    <div class="ml-52">
-        {{ $slot }}
+
+            <main class="p-6">
+                {{ $slot }}
+            </main>
+        </div>
     </div>
 
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true
-        });
-
-        @if(Session::has('message'))
-            var type = "{{ Session::get('alert-type', 'info') }}";
-            switch(type){
-                case 'info':
-                    Toast.fire({ icon: 'info', title: "{{ Session::get('message') }}" }); break;
-                case 'success':
-                    Toast.fire({ icon: 'success', title: "{{ Session::get('message') }}" }); break;
-                case 'warning':
-                    Toast.fire({ icon: 'warning', title: "{{ Session::get('message') }}" }); break;
-                case 'error':
-                    Toast.fire({ icon: 'error', title: "{{ Session::get('message') }}" }); break;
-            }
-        @endif
-
-        @if ($errors->any())
-            let errors = `<ul>`;
-            @foreach ($errors->all() as $error)
-                errors += `<li>{{ $error }}</li>`;
-            @endforeach
-            errors += `</ul>`;
-            Swal.fire({ icon: 'error', title: "Ooops!", html: errors });
-        @endif
+        document.addEventListener("DOMContentLoaded", () => feather.replace());
     </script>
-
-    </div>
 </body>
 </html>
