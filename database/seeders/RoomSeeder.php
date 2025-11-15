@@ -9,164 +9,91 @@ class RoomSeeder extends Seeder
 {
     public function run()
     {
-        Room::create([
-            'room_number' => '101',
-            'bed_type' => 'Queen',
-            'facilities' => 'WiFi, AC, TV',
-            'price' => 500000,
-            'status' => 'tersedia'
-        ]);
+        $rooms = [
 
-        Room::create([
-            'room_number' => '102',
-            'bed_type' => 'King',
-            'facilities' => 'WiFi, AC, Mini Bar',
-            'price' => 750000,
-            'status' => 'dibooking'
-        ]);
+            // 350.000 → Superior 3
+            ['01', 'Single/double', 'AC, TV, Air Panas, Sarapan', 350000, 'Superior 3'],
+            ['02', 'Single/double', 'AC, TV, Air Panas, Sarapan', 350000, 'Superior 3'],
+            ['03', 'Single/double', 'AC, TV, Air Panas, Sarapan', 350000, 'Superior 3'],
+            ['04', 'Single/double', 'AC, TV, Air Panas, Sarapan', 350000, 'Superior 3'],
 
-        Room::create([
-            'room_number' => '103',
-            'bed_type' => 'Single',
-            'facilities' => 'WiFi, Fan',
-            'price' => 300000,
-            'status' => 'tersedia'
-        ]);
+            // 250.000 → Superior 2
+            ['05', 'Single/double', 'Kipas angin, TV, Air panas, Sarapan', 250000, 'Superior 2'],
+            ['06', 'Single/double', 'Kipas angin, TV, Air panas, Sarapan', 250000, 'Superior 2'],
+            ['07', 'Single/double', 'Kipas angin, TV, Air panas, Sarapan', 250000, 'Superior 2'],
+            ['08', 'Single/double', 'Kipas angin, TV, Air panas, Sarapan', 250000, 'Superior 2'],
 
-        Room::create([
-            'room_number' => '104',
-            'bed_type' => 'Double',
-            'facilities' => 'WiFi, AC',
-            'price' => 450000,
-            'status' => 'tersedia'
-        ]);
+            // 200.000 → Superior 1
+            ['001', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['002', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['003', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['004', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['005', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['006', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['007', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['008', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['010', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['011', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['012', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['014', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['015', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['016', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['017', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['018', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['019', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['020', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
 
-        Room::create([
-            'room_number' => '105',
-            'bed_type' => 'Twin',
-            'facilities' => 'WiFi, AC, TV',
-            'price' => 550000,
-            'status' => 'tersedia'
-        ]);
+            ['101', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['103', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['104', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['105', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['106', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['107', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['108', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['109', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
+            ['1010', 'single', 'Kipas angin, TV, Sarapan', 200000, 'Superior 1'],
 
-        Room::create([
-            'room_number' => '106',
-            'bed_type' => 'Queen',
-            'facilities' => 'WiFi, AC',
-            'price' => 520000,
-            'status' => 'dibooking'
-        ]);
+            // 150.000 → Standar 1
+            ['1', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['2', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['3', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['4', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['1B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['2B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['3B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['7B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['8B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['9B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['10B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['11B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['12B', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['1V', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['2V', 'single', 'Kipas Angin', 150000, 'Standar 1'],
+            ['3V', 'single', 'Kipas Angin', 150000, 'Standar 1'],
 
-        Room::create([
-            'room_number' => '107',
-            'bed_type' => 'King',
-            'facilities' => 'WiFi, AC, Mini Bar, TV',
-            'price' => 800000,
-            'status' => 'tersedia'
-        ]);
+            // 100.000 → Standar
+            ['1A', 'single', 'Kamar', 100000, 'Standar'],
+            ['2A', 'single', 'Kamar', 100000, 'Standar'],
+            ['3A', 'single', 'Kamar', 100000, 'Standar'],
+            ['4A', 'single', 'Kamar', 100000, 'Standar'],
+            ['9',  'single', 'Kamar', 100000, 'Standar'],
+            ['10', 'single', 'Kamar', 100000, 'Standar'],
+            ['11', 'single', 'Kamar', 100000, 'Standar'],
+            ['12', 'single', 'Kamar', 100000, 'Standar'],
+            ['14', 'single', 'Kamar', 100000, 'Standar'],
+            ['15', 'single', 'Kamar', 100000, 'Standar'],
 
-        Room::create([
-            'room_number' => '108',
-            'bed_type' => 'Double',
-            'facilities' => 'WiFi, AC',
-            'price' => 470000,
-            'status' => 'tersedia'
-        ]);
+        ];
 
-        Room::create([
-            'room_number' => '109',
-            'bed_type' => 'Single',
-            'facilities' => 'WiFi',
-            'price' => 280000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '110',
-            'bed_type' => 'Twin',
-            'facilities' => 'WiFi, AC, TV',
-            'price' => 600000,
-            'status' => 'dibooking'
-        ]);
-
-        Room::create([
-            'room_number' => '201',
-            'bed_type' => 'Queen',
-            'facilities' => 'WiFi, AC, TV',
-            'price' => 530000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '202',
-            'bed_type' => 'King',
-            'facilities' => 'WiFi, AC, Mini Bar',
-            'price' => 780000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '203',
-            'bed_type' => 'Single',
-            'facilities' => 'WiFi, Fan',
-            'price' => 310000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '204',
-            'bed_type' => 'Double',
-            'facilities' => 'WiFi, AC',
-            'price' => 460000,
-            'status' => 'dibooking'
-        ]);
-
-        Room::create([
-            'room_number' => '205',
-            'bed_type' => 'Twin',
-            'facilities' => 'WiFi, AC, TV',
-            'price' => 580000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '206',
-            'bed_type' => 'Queen',
-            'facilities' => 'WiFi, AC',
-            'price' => 510000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '207',
-            'bed_type' => 'King',
-            'facilities' => 'WiFi, AC, Mini Bar, TV',
-            'price' => 820000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '208',
-            'bed_type' => 'Double',
-            'facilities' => 'WiFi, AC',
-            'price' => 480000,
-            'status' => 'dibooking'
-        ]);
-
-        Room::create([
-            'room_number' => '209',
-            'bed_type' => 'Single',
-            'facilities' => 'WiFi',
-            'price' => 290000,
-            'status' => 'tersedia'
-        ]);
-
-        Room::create([
-            'room_number' => '210',
-            'bed_type' => 'Twin',
-            'facilities' => 'WiFi, AC, TV',
-            'price' => 620000,
-            'status' => 'tersedia'
-        ]);
+        foreach ($rooms as $r) {
+            Room::create([
+                'room_number' => $r[0],
+                'bed_type'    => $r[1],
+                'facilities'  => $r[2],
+                'price'       => $r[3],
+                'category'    => $r[4], 
+                'status'      => 'tersedia',
+            ]);
+        }
     }
 }

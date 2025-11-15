@@ -78,6 +78,8 @@ class MaintenanceController extends Controller
                 ->with('customer')
                 ->first();
 
+            $lastReservation->update(['status' => 'checkout']); 
+
             Maintenance::create([
                 'room_id'     => $room->id,
                 'damage'      => $validated['damage'] ?? null,
@@ -91,7 +93,7 @@ class MaintenanceController extends Controller
             return redirect()
                 ->route('rooms.index')
                 ->with([
-                    'message' => 'Data maintenance berhasil ditambahkan.',
+                    'message' => 'Check Out Berhasil.',
                     'alert-type' => 'success'
                 ]);
         } catch (\Exception $e) {

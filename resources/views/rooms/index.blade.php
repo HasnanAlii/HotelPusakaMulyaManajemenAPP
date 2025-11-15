@@ -12,11 +12,20 @@
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                   <div x-data="{ showCustomer: false }">
-                <button 
-                    @click="showCustomer = true"
-                    class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 mb-5 rounded-lg font-semibold shadow flex items-center gap-2">
-                    <span>➕</span> Tambah Customer
-                </button>
+                   <button 
+                        @click="showCustomer = true"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 mb-5 shadow-md rounded-lg font-semibold shadow flex items-center gap-2 transition"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                            class="w-5 h-5" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor" 
+                            stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Tambah Customer
+                    </button>
 
                 <div 
                     x-show="showCustomer"
@@ -78,7 +87,7 @@
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
                         <h3 class="text-lg font-semibold">Daftar Kamar</h3>
                         <div class="flex flex-col sm:flex-row gap-3">
-                            @role('admin')
+                            {{-- @role('admin')
                             <form action="{{ route('rooms.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
                                 @csrf
                                 <input type="file" name="file" 
@@ -92,8 +101,29 @@
                                 Import
                             </button>
                         </form>
-                        @endrole
-                        
+                        @endrole --}}
+                       <form method="GET" action="{{ route('rooms.index') }}" class="flex items-center gap-3">
+
+                            <select name="category" 
+                                class="rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm pr-7 py-2">
+
+                                <option value="">Semua Kategori</option>
+
+                                <option value="Standar"    {{ request('category') == 'Standar' ? 'selected' : '' }}>Standar</option>
+                                <option value="Standar 1"  {{ request('category') == 'Standar 1' ? 'selected' : '' }}>Standar 1</option>
+                                <option value="Superior 1" {{ request('category') == 'Superior 1' ? 'selected' : '' }}>Superior 1</option>
+                                <option value="Superior 2" {{ request('category') == 'Superior 2' ? 'selected' : '' }}>Superior 2</option>
+                                <option value="Superior 3" {{ request('category') == 'Superior 3' ? 'selected' : '' }}>Superior 3</option>
+
+                            </select>
+
+                            <button type="submit" 
+                                class="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm">
+                                Filter
+                            </button>
+
+                        </form>
+
                         <form method="GET" action="{{ route('rooms.index') }}" class="flex items-center space-x-2">
                             <input 
                                 type="text" 
@@ -103,7 +133,8 @@
                                 class="rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm px-3 py-2"
                             >
                             <button type="submit" 
-                                class="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
+                                class="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm">
+                                Cari
                                 <svg xmlns="http://www.w3.org/2000/svg" 
                                     class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <circle cx="11" cy="11" r="8"></circle>
@@ -111,6 +142,14 @@
                                 </svg>
                             </button>
                         </form>
+                        <a href="{{ route('rooms.cekin.multiple') }}"
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 shadow-md rounded-xl font-semibold flex items-center gap-2 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Cek In Banyak
+                        </a>
+
                         </div>
                     </div>
 
@@ -120,60 +159,81 @@
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition duration-300 hover:shadow-xl border border-gray-200">
                             
                             <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-start">
-                                <div>
-                                    <h3 class="text-2xl font-bold text-blue-700">Kamar {{ $room->room_number }}</h3>
-                                    
-                                    @php
-                                        $latestReservation = $room->reservations->sortByDesc('id')->first();
-                                    @endphp
-                                    @if($latestReservation && $latestReservation->customer)
-                                        @php
-                                            $customerId = $latestReservation->customer->id;
-                                            $jumlahKamar = \App\Models\Reservation::where('customer_id', $customerId)
-                                            ->whereIn('status', ['checkin']) 
-                                            ->count();
-                                        @endphp
+                              <div>
+                                <h3 class="text-2xl font-bold text-blue-700">Kamar {{ $room->room_number }}</h3>
 
-                                        @if($jumlahKamar >= 5)
-                                            <span class="mt-1 inline-block px-2 py-0.5 text-xs font-semibold text-white bg-purple-600 rounded-full">
+                                @php
+                                    $latestReservation = $room->reservations->sortByDesc('id')->first();
+                                @endphp
+
+                                {{-- Hanya tampilkan jika kamar status booking dan reservasi status checkin --}}
+                                @if (
+                                    $room->status === 'dibooking' &&
+                                    $latestReservation &&
+                                    $latestReservation->status === 'checkin' &&
+                                    $latestReservation->customer
+                                )
+                                    @php
+                                        // Hitung kamar aktif (checkin) milik customer itu
+                                        $activeRoomCount = \App\Models\Reservation::where('customer_id', $latestReservation->customer->id)
+                                            ->where('status', 'checkin')
+                                            ->count();
+                                    @endphp
+
+                                    @if ($activeRoomCount >= 5)
+                                        <span class="mt-1 inline-block px-2 py-0.5 text-xs font-semibold text-white bg-purple-600 rounded-full">
                                             {{ $latestReservation->customer->name }}
-                                            </span>
-                                        @endif
+                                        </span>
                                     @endif
-                                    </div>
-                                
-                                <div class="flex-shrink-0">
-                                    @if($room->status == 'tersedia')
-                                        <span class="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Tersedia</span>
-                                    @elseif($room->status == 'dibooking')
-                                        <span class="px-3 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded-full">Dibooking</span>
-                                    @else
-                                        <span class="px-3 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Perawatan</span>
-                                    @endif
-                                </div>
+                                @endif
                             </div>
 
-                            <div class="p-4 space-y-3 flex-grow">
+
+                                
+                                <div class="flex-shrink-0">
+                                        @if($room->status == 'tersedia')
+                                            <span class="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Tersedia</span>
+                                        @elseif($room->status == 'dibooking')
+                                            <span class="px-3 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded-full">Dibooking</span>
+                                        @else
+                                            <span class="px-3 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Perawatan</span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="p-4 space-y-3 flex-grow">
                                 <p class="text-2xl font-semibold text-gray-900">
                                     Rp {{ number_format($room->price) }}
                                     <span class="text-base font-normal text-gray-500">/ malam</span>
                                 </p>
-                                
+
+                                <!-- KATEGORI KAMAR -->
                                 <div class="text-sm text-gray-700 flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <i data-feather="tag" class="h-5 mr-1 text-blue-500"></i>
+                                    {{ $room->category }}
+                                </div>
+
+
+                                <!-- BED TYPE -->
+                                <div class="text-sm text-gray-700 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" 
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path d="M5.5 10.5h13a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zM5.5 10.5V9a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1.5"/>
                                         <path d="M2 17.5v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
                                     </svg>
                                     <span>{{ $room->bed_type }}</span>
                                 </div>
 
+                                <!-- FASILITAS -->
                                 <div class="text-sm text-gray-700 flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500 flex-shrink-0" 
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <span class="break-words">{{ $room->facilities ?? '-' }}</span>
                                 </div>
                             </div>
+
 
                             <div class="p-3 bg-gray-50 border-t border-gray-200">
                                 <div class="flex flex-col sm:flex-row gap-2">

@@ -97,7 +97,7 @@ class ReservationController extends Controller
 
             return redirect()->route('rooms.show', $reservation->room->id)
                              ->with([
-                                'message' => 'Reservasi berhasil dibuat dan tercatat di keuangan.',
+                                'message' => 'Check In Berhasil.',
                                 'alert-type' => 'success'
                              ]);
         } catch (\Exception $e) {
@@ -138,7 +138,7 @@ class ReservationController extends Controller
         $deletedFinances += $orphanFinances;
 
         return redirect()->back()->with([
-            'message' => "Berhasil hapus {$deletedReservations} reservasi lama dan {$deletedFinances} data finance lebih dari 2 bulan lalu.",
+            'message' => "Berhasil hapus {$deletedReservations} reservasi lama dan {$deletedFinances} data Keuangan lebih dari 2 bulan lalu.",
             'alert-type' => 'success'
         ]);
     } catch (\Exception $e) {

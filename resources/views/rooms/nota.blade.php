@@ -7,7 +7,7 @@
 
     <div class="py-6">
         <div class="max-w-4xl mx-auto sm:px-4 lg:px-6">
-            <div class="bg-white shadow-md rounded-xl p-6 border border-gray-200">
+           <div class="bg-white shadow-md rounded-xl p-6 border border-gray-200 print-area">
 
                 <!-- Header: Logo + Nama Hotel -->
                 <div class="flex items-center justify-between mb-4 border-b pb-2">
@@ -17,8 +17,8 @@
                         <p class="text-gray-500 text-xs">Telp: (021) 12345678 | Email: info@pusakamulya.com</p>
                     </div>
                     <div>
-                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=80&q=80" 
-                             alt="Logo Hotel" class="w-12 h-12 rounded-full object-cover">
+                        <img src="{{ asset('assets/logo.png') }}" 
+                             alt="Logo Hotel" class="w-24 rounded-full object-cover">
                     </div>
                 </div>
 
@@ -111,4 +111,34 @@
             </div>
         </div>
     </div>
+
+    <style>
+@media print {
+
+    header, 
+    nav,
+    .sidebar,
+    .hidden-print, 
+    .page-header,
+    .bg-gray-100,
+    [class*="header"],
+    [class*="navigation"] {
+        display: none !important;
+    }
+
+    .print-area {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    body {
+        background: white !important;
+    }
+}
+</style>
+
 </x-app-layout>

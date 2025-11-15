@@ -21,16 +21,16 @@
                     <div>
                         <label class="block text-gray-700 font-medium mb-2">Customer</label>
                         <select 
-                            name="customer_id" 
-                            id="customer_id" 
-                            class="w-full border border-gray-300  focus:border-orange-500 focus:ring-orange-500 rounded-lg shadow-sm transition">
-                            <option value="">-- Pilih Customer --</option>
-                            @foreach ($customers as $customer)
-                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                            id="customerSelect" 
+                            name="customer_id"
+                            class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm transition"
+                            required>
+                            <option value="">-- Cari / Pilih Customer --</option>
+                            @foreach ($customers as $cust)
+                                <option value="{{ $cust->id }}">{{ $cust->name }}</option>
                             @endforeach
                         </select>
                     </div>
-
                     {{-- Nomor Kamar --}}
                     <div>
                         <label class="block text-gray-700 font-medium mb-2">Nomor Kamar</label>
@@ -175,6 +175,16 @@
             document.getElementById("total").value = "";
         }
     }
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+     new TomSelect("#customerSelect", { placeholder: "Cari Customer..." });
+
+});
+
 </script>
 
 </x-app-layout>

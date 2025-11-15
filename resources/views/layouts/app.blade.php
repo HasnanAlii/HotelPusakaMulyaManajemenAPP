@@ -6,7 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Hotel Pusaka Mulya') }}</title>
-    <link rel="icon" href="{{ asset('assets/logo.png') }}?v=2" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('assets/logo.png') }}?v=3" type="image/png">
+    <link rel="icon" href="{{ asset('assets/logo.png') }}?v=3" type="image/png">
+
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -17,15 +19,22 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-gray-50" x-data="{ sidebarOpen: true }">
+<body class="font-sans antialiased bg-gray-50" x-data="{ sidebarOpen: false }">
+
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+
     <div class="min-h-screen flex">
 
         {{-- SIDEBAR --}}
         <aside 
-            x-show="sidebarOpen" 
+            x-cloak
+            x-show="sidebarOpen"
             x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="-translate-x-64 opacity-0"
             x-transition:enter-end="translate-x-0 opacity-100"
@@ -167,5 +176,41 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => feather.replace());
     </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true
+            });
+
+            @if(Session::has('message'))
+                var type = "{{ Session::get('alert-type', 'info') }}";
+                switch(type){
+                    case 'info':
+                        Toast.fire({ icon: 'info', title: "{{ Session::get('message') }}" }); break;
+                    case 'success':
+                        Toast.fire({ icon: 'success', title: "{{ Session::get('message') }}" }); break;
+                    case 'warning':
+                        Toast.fire({ icon: 'warning', title: "{{ Session::get('message') }}" }); break;
+                    case 'error':
+                        Toast.fire({ icon: 'error', title: "{{ Session::get('message') }}" }); break;
+                }
+            @endif
+
+            @if ($errors->any())
+                let errors = `<ul class="swal-error-list">`;
+                @foreach ($errors->all() as $error)
+                    errors += `<li>{{ $error }}</li>`;
+                @endforeach
+                errors += `</ul>`;
+                Swal.fire({ icon: 'error', title: "Terjadi Kesalahan", html: errors });
+            @endif
+        </script>
 </body>
 </html>

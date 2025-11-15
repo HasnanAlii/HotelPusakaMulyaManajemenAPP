@@ -16,6 +16,7 @@ return new class extends Migration
         $table->string('room_number')->unique();
         $table->string('bed_type');
         $table->text('facilities')->nullable();
+        $table->string('category')->nullable();
         $table->unsignedBigInteger('price');
         $table->enum('status', ['tersedia', 'dibooking', 'perawatan'])->default('tersedia');
         $table->timestamps();
