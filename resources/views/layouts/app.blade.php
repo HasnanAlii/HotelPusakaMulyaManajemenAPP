@@ -23,159 +23,196 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
+
 <body class="font-sans antialiased bg-gray-50" x-data="{ sidebarOpen: false }">
 
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
+<style>
+    [x-cloak] { display: none !important; }
+</style>
 
-    <div class="min-h-screen flex">
+<div class="min-h-screen flex">
 
-        {{-- SIDEBAR --}}
-        <aside 
-            x-cloak
-            x-show="sidebarOpen"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="-translate-x-64 opacity-0"
-            x-transition:enter-end="translate-x-0 opacity-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="translate-x-0 opacity-100"
-            x-transition:leave-end="-translate-x-64 opacity-0"
-            class="w-64 h-screen bg-white border-r border-gray-200 fixed top-0 left-0 shadow-xl z-40 flex flex-col justify-between"
-        >
-            <div>
-                <div class="flex items-center justify-center border-b border-gray-200 px-4 py-4">
-                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
-                        <img src="{{ asset('assets/logo.png') }}" alt="Logo Hotel Pusaka Mulya" class="h-24 w-auto">
-                    </a>
-                </div>
+    {{-- SIDEBAR BARU (selalu ada, hanya mengecil) --}}
+    <aside 
+        :class="sidebarOpen ? 'w-64' : 'w-20'"
+        class="h-screen bg-white border-r border-gray-200 fixed top-0 left-0 shadow-xl z-40 
+               flex flex-col justify-between transition-all duration-300"
+    >
 
-                <nav class="mt-4 px-3 space-y-1">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
-                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
-                        {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-                        <i data-feather="home" class="h-5 w-5"></i>
-                        Dashboard
-                    </x-nav-link>
+        {{-- LOGO --}}
+        <div>
+            <div class="flex items-center justify-center border-b border-gray-200 px-4 py-4">
 
-                    <x-nav-link href="{{ route('rooms.index') }}" :active="request()->routeIs('rooms.index*')"
-                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
-                        {{ request()->routeIs('rooms.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-                        <i data-feather="grid" class="h-5 w-5"></i>
-                        Manajemen Kamar
-                    </x-nav-link>
+                {{-- Logo besar --}}
+                <img 
+                    x-show="sidebarOpen" 
+                    src="{{ asset('assets/logo.png') }}" 
+                    class="h-24 transition-all"
+                >
 
-                    <x-nav-link href="{{ route('employees.index') }}" :active="request()->routeIs('employees.index*')"
-                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
-                        {{ request()->routeIs('employees.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-                        <i data-feather="users" class="h-5 w-5"></i>
-                        Manajemen Pegawai
-                    </x-nav-link>
-
-                    <x-nav-link href="{{ route('maintenances.index') }}" :active="request()->routeIs('maintenances.index*')"
-                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
-                        {{ request()->routeIs('maintenances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-                        <i data-feather="alert-circle" class="h-5 w-5"></i>
-                        Laporan Kerusakan
-                    </x-nav-link>
-
-                    @role('admin')
-                    <x-nav-link href="{{ route('finances.index') }}" :active="request()->routeIs('finances.index*')"
-                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
-                        {{ request()->routeIs('finances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-                        <i data-feather="dollar-sign" class="h-5 w-5"></i>
-                        Laporan Keuangan
-                    </x-nav-link>
-
-                    <x-nav-link href="{{ route('reservations.index') }}" :active="request()->routeIs('reservations.index*')"
-                        class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition duration-150
-                        {{ request()->routeIs('reservations.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-                        <i data-feather="file-text" class="h-5 w-5"></i>
-                        Laporan Reservasi
-                    </x-nav-link>
-                    @endrole
-                </nav>
+                {{-- Logo kecil --}}
+                <img 
+                    x-show="!sidebarOpen" 
+                    src="{{ asset('assets/logo.png') }}" 
+                    class="h-10 transition-all"
+                >
             </div>
 
-            {{-- PROFIL & LOGOUT --}}
-            <div class="border-t border-gray-200 p-4">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold uppercase">
-                        {{ substr(Auth::user()->name, 0, 1) }}
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-800 text-sm">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
-                    </div>
-                </div>
-                <div class="space-y-1">
-                    <a href="{{ route('profile.edit') }}"
-                        class="flex items-center gap-2 text-sm text-gray-700 hover:text-blue-600 font-medium px-2 py-1 transition">
-                        <i data-feather="user" class="w-4 h-4"></i>
-                        Profil Saya
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit"
-                            class="flex items-center gap-2 text-sm text-gray-700 hover:text-red-600 font-medium px-2 py-1 transition w-full text-left">
-                            <i data-feather="log-out" class="w-4 h-4"></i>
-                            Keluar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </aside>
+            {{-- MENU --}}
+            <nav class="mt-4 px-3 space-y-1">
 
-        {{-- OVERLAY (Mobile) --}}
-        <div 
-            x-show="sidebarOpen" 
-            @click="sidebarOpen = false"
-            class="fixed inset-0 bg-black bg-opacity-30 z-30 lg:hidden"
-            x-transition.opacity
-        ></div>
+                {{-- DASHBOARD --}}
+                <a href="{{ route('dashboard') }}"
+                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                    
+                    <i data-feather="home" class="h-5 w-5"></i>
+                    <span x-show="sidebarOpen">Dashboard</span>
+                </a>
 
-        {{-- HEADER + MAIN --}}
-        <div class="flex-1 transition-all duration-300" :class="sidebarOpen ? 'ml-64' : 'ml-0'">
-   <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20">
-    <div class="flex items-center justify-between px-6 py-4">
-        {{-- Kiri: Tombol Sidebar + Judul Halaman --}}
-        <div class="flex items-center gap-3">
-            <button 
-                @click="sidebarOpen = !sidebarOpen" 
-                class="p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 focus:outline-none transition"
-            >
-                <svg x-show="!sidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                <svg x-show="sidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+                {{-- ROOMS --}}
+                <a href="{{ route('rooms.index') }}"
+                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   {{ request()->routeIs('rooms.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
 
-            <h1 class="text-lg sm:text-xl font-semibold text-gray-800 truncate">
-                {{ $header ?? 'Hotel Pusaka Mulya' }}
-            </h1>
+                    <i data-feather="grid" class="h-5 w-5"></i>
+                    <span x-show="sidebarOpen">Manajemen Kamar</span>
+                </a>
+
+                {{-- PEGAWAI --}}
+                <a href="{{ route('employees.index') }}"
+                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   {{ request()->routeIs('employees.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+
+                    <i data-feather="users" class="h-5 w-5"></i>
+                    <span x-show="sidebarOpen">Manajemen Pegawai</span>
+                </a>
+
+                {{-- KERUSAKAN --}}
+                <a href="{{ route('maintenances.index') }}"
+                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   {{ request()->routeIs('maintenances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+
+                    <i data-feather="alert-circle" class="h-5 w-5"></i>
+                    <span x-show="sidebarOpen">Laporan Kerusakan</span>
+                </a>
+
+                @role('admin')
+                {{-- KEUANGAN --}}
+                <a href="{{ route('finances.index') }}"
+                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   {{ request()->routeIs('finances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+
+                    <i data-feather="dollar-sign" class="h-5 w-5"></i>
+                    <span x-show="sidebarOpen">Laporan Keuangan</span>
+                </a>
+
+                {{-- RESERVASI --}}
+                <a href="{{ route('reservations.index') }}"
+                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   {{ request()->routeIs('reservations.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+
+                    <i data-feather="file-text" class="h-5 w-5"></i>
+                    <span x-show="sidebarOpen">Laporan Reservasi</span>
+                </a>
+                @endrole
+            </nav>
         </div>
 
-        {{-- Kanan: Slot tombol tambahan (misal "Tambah Customer") --}}
-        @isset($headerButton)
-            <div class="flex-shrink-0">
-                {{ $headerButton }}
-            </div>
-        @endisset
-    </div>
-</header>
+{{-- PROFILE & LOGOUT --}}
+<div class="border-t border-gray-200 p-4">
 
+    {{-- USER INFO --}}
+    <div class="flex items-center gap-3 mb-4">
 
-            <main class="p-6">
-                {{ $slot }}
-            </main>
+        {{-- Avatar Huruf --}}
+        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold 
+                    flex items-center justify-center uppercase">
+            {{ substr(Auth::user()->name, 0, 1) }}
+        </div>
+
+        {{-- Nama & Email (hilang ketika sidebar tertutup) --}}
+        <div class="flex flex-col" x-show="sidebarOpen" x-transition.opacity>
+            <p class="font-semibold text-gray-800 text-sm leading-none">
+                {{ Auth::user()->name }}
+            </p>
+            <p class="text-xs text-gray-500 leading-none mt-1">
+                {{ Auth::user()->email }}
+            </p>
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => feather.replace());
-    </script>
+    {{-- PROFILE LINK --}}
+    <a href="{{ route('profile.edit') }}"
+       class="flex items-center gap-2 text-sm px-2 py-2 rounded-md 
+              text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition">
+       
+        <i data-feather="user" class="w-4 h-4"></i>
+        <span x-show="sidebarOpen" x-transition.opacity>Profil Saya</span>
+    </a>
+
+    {{-- LOGOUT --}}
+    <form method="POST" action="{{ route('logout') }}" class="mt-1">
+        @csrf
+        <button type="submit"
+            class="flex items-center gap-2 text-sm px-2 py-2 rounded-md w-full text-left
+                   text-gray-700 hover:text-red-600 hover:bg-gray-100 transition">
+            
+            <i data-feather="log-out" class="w-4 h-4"></i>
+            <span x-show="sidebarOpen" x-transition.opacity>Keluar</span>
+        </button>
+    </form>
+
+</div>
+
+
+    </aside>
+
+    {{-- MOBILE OVERLAY --}}
+    <div 
+        x-show="sidebarOpen && window.innerWidth < 1024" 
+        @click="sidebarOpen = false"
+        class="fixed inset-0 bg-black/30 z-30"
+        x-transition.opacity
+    ></div>
+
+    {{-- MAIN CONTENT --}}
+    <div class="flex-1 transition-all duration-300" :class="sidebarOpen ? 'ml-64' : 'ml-20'">
+
+        {{-- HEADER --}}
+        <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20">
+            <div class="flex items-center justify-between px-6 py-4">
+
+                <div class="flex items-center gap-3">
+                    <button @click="sidebarOpen = !sidebarOpen"
+                        class="p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition">
+                        
+                        <i data-feather="menu" x-show="!sidebarOpen"></i>
+                        <i data-feather="x" x-show="sidebarOpen"></i>
+                    </button>
+
+                    <h1 class="text-lg sm:text-xl font-semibold text-gray-800 truncate">
+                        {{ $header ?? 'Hotel Pusaka Mulya' }}
+                    </h1>
+                </div>
+
+                @isset($headerButton)
+                    <div>{{ $headerButton }}</div>
+                @endisset
+            </div>
+        </header>
+
+        <main class="p-6">
+            {{ $slot }}
+        </main>
+
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => feather.replace());
+</script>
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>

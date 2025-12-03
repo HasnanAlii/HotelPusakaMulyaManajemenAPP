@@ -42,7 +42,7 @@
                             @csrf
                             <div class="mb-4">
                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                                <input type="text" id="name" name="name" required
+                                <input type="text" id="name" name="name" required placeholder="Nama Customer"
                                     class="w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
