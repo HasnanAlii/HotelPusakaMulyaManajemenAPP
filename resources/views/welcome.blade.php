@@ -109,7 +109,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                     <a href="#rekomendasi" class="px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold shadow-xl shadow-blue-600/20 hover:bg-blue-700 hover:-translate-y-1 transition duration-300">
-                        Cari Kamar Cerdas
+                        Rekomendasi Kamar
                     </a>
                     <a href="#pricelist" class="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-xl font-semibold hover:bg-slate-50 hover:border-slate-300 transition duration-300 flex items-center justify-center gap-2">
                         <i class="fas fa-list-ul text-blue-500"></i> Lihat Tarif
@@ -386,7 +386,6 @@
 </section>
 
 
-
     <section id="rekomendasi" class="py-24 bg-slate-100 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
             <div class="absolute right-0 top-0 w-96 h-96 bg-blue-600 rounded-full blur-[100px]"></div>
@@ -402,58 +401,52 @@
             <div class="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-slate-200">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
+                    <!-- HARGA DROPDOWN -->
                     <div class="space-y-3">
                         <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-tag text-blue-500"></i> Harga (Rp)
                         </label>
-                        <input 
-                            id="hargaInput"
-                            type="number"
-                            min="50000"
+                        <select id="hargaInput" 
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-700 
-                                focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                            placeholder="minimal 100.000"
-                        >
+                                focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+                            <option value="">Pilih Budget</option>
+                            <option value="100000">Rp 100.000</option>
+                            <option value="150000">Rp 150.000</option>
+                            <option value="200000">Rp 200.000</option>
+                            <option value="250000">Rp 250.000</option>
+                            <option value="350000">Rp 350.000</option>
+                        </select>
                     </div>
 
-
+                    <!-- FASILITAS -->
                     <div class="space-y-3">
                         <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-concierge-bell text-blue-500"></i> Kelengkapan Fasilitas
                         </label>
-                        <div class="relative">
-                            <select id="fasilitas" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition cursor-pointer">
-                                <option value="sedikit">Cukup Tidur</option>
-                                <option value="cukup">Menengah</option>
-                                <option value="lengkap">Komplit</option>
-                            </select>
-                            {{-- <div class="absolute right-4 top-3.5 text-slate-400 pointer-events-none">
-                                <i class="fas fa-chevron-down text-xs"></i>
-                            </div> --}}
-                        </div>
+                        <select id="fasilitas" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+                            <option value="sedikit">Cukup Tidur</option>
+                            <option value="cukup">Menengah</option>
+                            <option value="lengkap">Komplit</option>
+                        </select>
                     </div>
 
+                    <!-- KENYAMANAN -->
                     <div class="space-y-3">
                         <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-star text-blue-500"></i> Tingkat Kenyamanan
                         </label>
-                        <div class="relative">
-                            <select id="nyaman" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition cursor-pointer">
-                                <option value="rendah">Standard</option>
-                                <option value="sedang">Extra Nyaman</option>
-                                <option value="tinggi">VIP</option>
-                            </select>
-                            {{-- <div class="absolute right-4 top-3.5 text-slate-400 pointer-events-none">
-                                <i class="fas fa-chevron-down text-xs"></i>
-                            </div> --}}
-                        </div>
+                        <select id="nyaman" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+                            <option value="rendah">Standard</option>
+                            <option value="sedang">Extra Nyaman</option>
+                            <option value="tinggi">VIP</option>
+                        </select>
                     </div>
 
                 </div>
 
                 <div class="mt-8 text-center">
                     <button onclick="prosesFuzzy()" class="inline-flex items-center gap-2 px-10 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-slate-800 hover:shadow-lg transition-all transform active:scale-95">
-                        <i class="fas fa-search-dollar"></i> Cari Rekomendasi
+                        <i class="fas fa-search-dollar"></i> Cari Kamar
                     </button>
                 </div>
             </div>
@@ -461,10 +454,11 @@
             <div id="hasilRekomendasi" class="mt-12 transition-all duration-500">
                 <div class="text-center text-slate-400 italic">
                     Hasil rekomendasi akan muncul di sini...
-                 </div>
+                </div>
             </div>
         </div>
     </section>
+
 
     <section id="about" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
@@ -592,98 +586,31 @@
     </footer>
 
 <script>
-/* ===============================
-   DATA KAMAR (Terupdate)
-=============================== */
+
 const kamarData = [
-    { 
-        nama: "Standar", 
-        harga: 100000, 
-        fasilitas: 1, 
-        nyaman: 1, 
-        gambar: "k3.jpeg",
-        desc: "Pilihan hemat untuk istirahat sejenak.",
-        fasilitasList: [ { icon: "fa-bed", label: "Single Bed" } ]
-    },
-    { 
-        nama: "Standar 1", 
-        harga: 150000, 
-        fasilitas: 2, 
-        nyaman: 1.5, 
-        gambar: "k4.jpeg",
-        desc: "Kamar nyaman dengan sirkulasi udara baik.",
-        fasilitasList: [
-            { icon: "fa-bed", label: "Single Bed" },
-            { icon: "fa-fan", label: "Kipas Angin" }
-        ]
-    },
-    { 
-        nama: "Superior 1", 
-        harga: 200000, 
-        fasilitas: 3, 
-        nyaman: 2, 
-        gambar: "k4.jpeg",
-        desc: "Fasilitas hiburan TV dan sarapan pagi.",
-        fasilitasList: [
-            { icon: "fa-bed", label: "Single Bed" },
-            { icon: "fa-fan", label: "Kipas Angin" },
-            { icon: "fa-tv", label: "TV Channel" },
-            { icon: "fa-utensils", label: "Sarapan" }
-        ]
-    },
-    { 
-        nama: "Superior 2", 
-        harga: 250000, 
-        fasilitas: 4, 
-        nyaman: 3, 
-        gambar: "k2.jpeg",
-        desc: "Relaksasi maksimal dengan air panas.",
-        fasilitasList: [
-            { icon: "fa-bed", label: "Double Bed" },
-            { icon: "fa-fan", label: "Kipas Angin" },
-            { icon: "fa-hot-tub", label: "Air Panas" },
-            { icon: "fa-tv", label: "TV" },
-            { icon: "fa-utensils", label: "Sarapan" }
-        ]
-    },
-    { 
-        nama: "Superior 3", 
-        harga: 350000, 
-        fasilitas: 5, 
-        nyaman: 3, 
-        gambar: "k1.jpeg",
-        desc: "Pengalaman VIP dengan AC dan fasilitas lengkap.",
-        fasilitasList: [
-            { icon: "fa-bed", label: "Double Bed" },
-            { icon: "fa-snowflake", label: "AC Dingin" },
-            { icon: "fa-hot-tub", label: "Air Panas" },
-            { icon: "fa-tv", label: "TV LED" },
-            { icon: "fa-utensils", label: "Sarapan" },
-            { icon: "fa-water", label: "Pemanas Air" }
-        ]
-    }
+    { nama: "Standar", harga: 100000, fasilitas: 1, nyaman: 1, gambar: "k3.jpeg", desc: "Pilihan hemat untuk istirahat sejenak.", fasilitasList: [ { icon: "fa-bed", label: "Single Bed" } ] },
+    { nama: "Standar 1", harga: 150000, fasilitas: 2, nyaman: 1.5, gambar: "k4.jpeg", desc: "Kamar nyaman dengan sirkulasi udara baik.", fasilitasList: [ { icon: "fa-bed", label: "Single Bed" }, { icon: "fa-fan", label: "Kipas Angin" } ] },
+    { nama: "Superior 1", harga: 200000, fasilitas: 3, nyaman: 2, gambar: "k4.jpeg", desc: "Fasilitas hiburan TV dan sarapan pagi.", fasilitasList: [ { icon: "fa-bed", label: "Single Bed" }, { icon: "fa-fan", label: "Kipas Angin" }, { icon: "fa-tv", label: "TV Channel" }, { icon: "fa-utensils", label: "Sarapan" } ] },
+    { nama: "Superior 2", harga: 250000, fasilitas: 4, nyaman: 3, gambar: "k2.jpeg", desc: "Relaksasi maksimal dengan air panas.", fasilitasList: [ { icon: "fa-bed", label: "Double Bed" }, { icon: "fa-fan", label: "Kipas Angin" }, { icon: "fa-hot-tub", label: "Air Panas" }, { icon: "fa-tv", label: "TV" }, { icon: "fa-utensils", label: "Sarapan" } ] },
+    { nama: "Superior 3", harga: 350000, fasilitas: 5, nyaman: 3, gambar: "k1.jpeg", desc: "Pengalaman VIP dengan AC dan fasilitas lengkap.", fasilitasList: [ { icon: "fa-bed", label: "Double Bed" }, { icon: "fa-snowflake", label: "AC Dingin" }, { icon: "fa-hot-tub", label: "Air Panas" }, { icon: "fa-tv", label: "TV LED" }, { icon: "fa-utensils", label: "Sarapan" }, { icon: "fa-water", label: "Pemanas Air" } ] }
 ];
 
-/* ===============================
-   HELPER FUNCTIONS
-=============================== */
+
 function formatRupiah(angka) {
     return angka.toLocaleString("id-ID");
 }
 
 /* ===============================
-   LOGIKA FUZZY
+   FUZZY
 =============================== */
-function fuzzyHarga(harga) {
-    return 1 / (harga / 100000); 
+function fuzzyHarga(h) {
+    return 1 / (h / 100000);
 }
-
 function fuzzyFasilitas(f, pref) {
     if (pref === "sedikit") return 1 / f;
     if (pref === "cukup") return 1 / (Math.abs(f - 3) + 1);
     if (pref === "lengkap") return f / 5;
 }
-
 function fuzzyNyaman(n, pref) {
     if (pref === "rendah") return 1 / n;
     if (pref === "sedang") return 1 / (Math.abs(n - 2) + 1);
@@ -691,28 +618,24 @@ function fuzzyNyaman(n, pref) {
 }
 
 /* ===============================
-   PROSES REKOMENDASI (MAIN)
+   MAIN PROCESS
 =============================== */
 function prosesFuzzy() {
-    let hargaRaw = document.getElementById("hargaInput").value;
-    let maxHarga = parseInt(hargaRaw.replace(/\D/g, "")); 
-
+    let maxHarga = parseInt(document.getElementById("hargaInput").value);
     let fasPref = document.getElementById("fasilitas").value;
     let nyamanPref = document.getElementById("nyaman").value;
     let container = document.getElementById("hasilRekomendasi");
 
-    // Validasi Input
-    if (!maxHarga || maxHarga < 50000) {
+    if (!maxHarga) {
         container.innerHTML = `
-            <div class="p-6 bg-red-50 border border-red-100 rounded-2xl text-center animate-pulse">
+            <div class="p-6 bg-red-50 border border-red-100 rounded-2xl text-center">
                 <i class="fas fa-exclamation-circle text-red-500 text-3xl mb-2"></i>
-                <p class="text-red-600 font-semibold">Mohon masukkan budget harga yang valid.</p>
+                <p class="text-red-600 font-semibold">Silakan pilih batas harga terlebih dahulu.</p>
             </div>
         `;
         return;
     }
 
-    // Tampilan Loading
     container.innerHTML = `
         <div class="flex flex-col items-center justify-center py-12 space-y-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
             <div class="animate-spin h-10 w-10 border-4 border-slate-200 border-t-blue-600 rounded-full"></div>
@@ -720,10 +643,7 @@ function prosesFuzzy() {
         </div>
     `;
 
-    // Proses (Simulasi Delay)
     setTimeout(() => {
-
-        // 1. Filter: Cari kamar yang harganya MASUK budget user
         let kamarFiltered = kamarData.filter(k => k.harga <= maxHarga);
 
         if (kamarFiltered.length === 0) {
@@ -731,39 +651,31 @@ function prosesFuzzy() {
                 <div class="p-8 bg-slate-50 rounded-3xl text-center border border-slate-200">
                     <i class="fas fa-search text-slate-400 text-4xl mb-3"></i>
                     <h3 class="text-lg font-bold text-slate-700">Tidak Ditemukan</h3>
-                    <p class="text-slate-500 mt-1">Maaf, belum ada kamar dengan harga di bawah Rp ${formatRupiah(maxHarga)}.</p>
+                    <p class="text-slate-500 mt-1">Tidak ada kamar dengan harga di bawah Rp ${formatRupiah(maxHarga)}.</p>
                 </div>
             `;
             return;
         }
 
-        // 2. Fuzzy Scoring
         let hasil = kamarFiltered.map(k => {
-            let h = fuzzyHarga(k.harga); // Skor harga
-            let f = fuzzyFasilitas(k.fasilitas, fasPref); // Skor fasilitas
-            let n = fuzzyNyaman(k.nyaman, nyamanPref); // Skor kenyamanan
-            
-            let skor = (h + f + n) / 3; // Rata-rata
-            return { ...k, skor };
+            let h = fuzzyHarga(k.harga);
+            let f = fuzzyFasilitas(k.fasilitas, fasPref);
+            let n = fuzzyNyaman(k.nyaman, nyamanPref);
+            return { ...k, skor: (h + f + n) / 3 };
         });
 
-        // 3. Sorting (Nilai Tertinggi)
         hasil.sort((a, b) => b.skor - a.skor);
-        let k = hasil[0]; // Ambil juara 1
+        let k = hasil[0];
 
-        // 4. Render HTML Cantik
         container.innerHTML = `
-            <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-slate-100 animate-fade-in-up transition-all hover:shadow-2xl group">
+            <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-slate-100 group">
 
                 <div class="md:w-5/12 relative h-72 md:h-auto overflow-hidden">
                     <img src="assets/${k.gambar}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
-                    
                     <div class="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent"></div>
-                    
                     <span class="absolute top-4 left-4 bg-white/90 backdrop-blur text-blue-700 px-3 py-1 text-xs font-bold rounded-full shadow-lg flex items-center gap-1">
                         <i class="fas fa-check-circle text-green-500"></i> Best Match
                     </span>
-
                     <div class="absolute bottom-5 left-5 text-white">
                         <p class="text-xs opacity-80 mb-1">Harga per malam</p>
                         <p class="text-3xl font-bold tracking-tight">Rp ${formatRupiah(k.harga)}</p>
@@ -771,51 +683,32 @@ function prosesFuzzy() {
                 </div>
 
                 <div class="md:w-7/12 p-8 flex flex-col justify-center">
-                    <div class="mb-6">
-                        <h4 class="text-blue-600 font-bold text-[10px] uppercase tracking-widest mb-1">Rekomendasi AI</h4>
-                        <h3 class="text-3xl font-serif font-bold text-slate-800">${k.nama}</h3>
-                        <p class="text-slate-500 mt-2 text-sm leading-relaxed">${k.desc}</p>
+                    <h4 class="text-blue-600 font-bold text-[10px] uppercase tracking-widest mb-1">Rekomendasi Kami</h4>
+                    <h3 class="text-3xl font-serif font-bold text-slate-800">${k.nama}</h3>
+                    <p class="text-slate-500 mt-2 text-sm">${k.desc}</p>
+
+                    <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-6 mb-3">Fasilitas:</h5>
+                    <div class="flex flex-wrap gap-2">
+                        ${k.fasilitasList.map(f => `
+                            <span class="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold border border-blue-100 flex items-center gap-2">
+                                <i class="fas ${f.icon}"></i> ${f.label}
+                            </span>
+                        `).join("")}
                     </div>
 
-                    <div class="mb-8">
-                        <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Fasilitas Termasuk:</h5>
-                        <div class="flex flex-wrap gap-2">
-                            ${k.fasilitasList.map(f => `
-                                <span class="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold border border-blue-100 flex items-center gap-2">
-                                    <i class="fas ${f.icon}"></i> ${f.label}
-                                </span>
-                            `).join("")}
-                        </div>
-                    </div>
-
-                    <a href="https://wa.me/6281224575810?text=Halo Admin, saya direkomendasikan sistem untuk pesan kamar ${k.nama}"
-                       target="_blank"
-                       class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-center shadow-lg shadow-blue-500/30 transition transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                       <i class="fab fa-whatsapp text-lg"></i> Pesan Sekarang
-                    </a>
                 </div>
 
             </div>
         `;
-    }, 800); // Sedikit delay agar terlihat "mikir"
-}
-
-/* ===============================
-   EVENT LISTENER INPUT FORMAT
-=============================== */
-const inputHarga = document.getElementById("hargaInput");
-if(inputHarga){
-    inputHarga.addEventListener("input", function (e) {
-        let angka = e.target.value.replace(/\D/g, "");
-        if (angka.length === 0) {
-            e.target.value = "";
-            return;
-        }
-        e.target.value = angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    });
+    }, 600);
 }
 </script>
 
-
 </body>
 </html>
+
+                    {{-- <a href="https://wa.me/6281224575810?text=Halo Admin, saya direkomendasikan sistem untuk pesan kamar ${k.nama}"
+                       target="_blank"
+                      class="mt-8 w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-center shadow-lg shadow-blue-500/30 transition transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                       <i class="fab fa-whatsapp text-lg"></i> Pesan Sekarang
+                     </a> --}}

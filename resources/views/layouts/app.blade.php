@@ -24,195 +24,212 @@
 </head>
 
 
-<body class="font-sans antialiased bg-gray-50" x-data="{ sidebarOpen: false }">
+    <style>
+        [x-cloak] { display: none !important; }
 
-<style>
-    [x-cloak] { display: none !important; }
-</style>
+        aside {
+            transition: width .3s cubic-bezier(.4,0,.2,1);
+        }
+
+        .main-content {
+            transition: margin-left .3s cubic-bezier(.4,0,.2,1);
+        }
+
+        .fade-text { 
+            opacity: 1 !important;
+        }
+
+        /* ============================
+           PRELOADER ANIMATION
+        ============================= */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .spinner {
+            width: 55px;
+            height: 55px;
+            border: 5px solid #e2e8f0;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-gray-50"
+      x-data="{ 
+          sidebarOpen: localStorage.getItem('sidebarOpen') === 'true' 
+      }"
+      x-init="$watch('sidebarOpen', val => localStorage.setItem('sidebarOpen', val))">
+
+<!-- ============================
+     L O A D I N G   S C R E E N
+============================= -->
+<div id="preloader">
+    <div class="spinner"></div>
+</div>
+
 
 <div class="min-h-screen flex">
 
-    {{-- SIDEBAR BARU (selalu ada, hanya mengecil) --}}
+    <!-- SIDEBAR -->
     <aside 
+        class="fixed top-0 left-0 h-screen bg-white border-r border-gray-200 shadow-xl z-40 flex flex-col justify-between overflow-x-hidden"
         :class="sidebarOpen ? 'w-64' : 'w-20'"
-        class="h-screen bg-white border-r border-gray-200 fixed top-0 left-0 shadow-xl z-40 
-               flex flex-col justify-between transition-all duration-300"
-    >
+        x-cloak>
 
-        {{-- LOGO --}}
-        <div>
-            <div class="flex items-center justify-center border-b border-gray-200 px-4 py-4">
+        <div class="flex-shrink-0">
+            <div class="flex items-center justify-center border-b border-gray-200 h-24">
 
-                {{-- Logo besar --}}
-                <img 
-                    x-show="sidebarOpen" 
-                    src="{{ asset('assets/logo.png') }}" 
-                    class="h-24 transition-all"
-                >
+                <!-- Logo besar -->
+                <img x-show="sidebarOpen"
+                     src="{{ asset('assets/logo.png') }}"
+                     class="h-16 w-auto object-contain transition-opacity duration-200">
 
-                {{-- Logo kecil --}}
-                <img 
-                    x-show="!sidebarOpen" 
-                    src="{{ asset('assets/logo.png') }}" 
-                    class="h-10 transition-all"
-                >
+                <!-- Logo kecil -->
+                <img x-show="!sidebarOpen"
+                     src="{{ asset('assets/logo.png') }}"
+                     class="h-10 w-10 object-contain">
+
             </div>
 
-            {{-- MENU --}}
-            <nav class="mt-4 px-3 space-y-1">
+            <!-- MENU -->
+            <nav class="mt-6 px-3 space-y-2">
 
-                {{-- DASHBOARD --}}
                 <a href="{{ route('dashboard') }}"
-                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   class="flex items-center px-4 py-3 rounded-lg 
+                   transition-colors duration-200 
                    {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-                    
                     <i data-feather="home" class="h-5 w-5"></i>
-                    <span x-show="sidebarOpen">Dashboard</span>
+                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Dashboard</span>
                 </a>
 
-                {{-- ROOMS --}}
                 <a href="{{ route('rooms.index') }}"
-                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   class="flex items-center px-4 py-3 rounded-lg 
+                   transition-colors duration-200
                    {{ request()->routeIs('rooms.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-
                     <i data-feather="grid" class="h-5 w-5"></i>
-                    <span x-show="sidebarOpen">Manajemen Kamar</span>
+                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Manajemen Kamar</span>
                 </a>
 
-                {{-- PEGAWAI --}}
                 <a href="{{ route('employees.index') }}"
-                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   class="flex items-center px-4 py-3 rounded-lg 
+                   transition-colors duration-200
                    {{ request()->routeIs('employees.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-
                     <i data-feather="users" class="h-5 w-5"></i>
-                    <span x-show="sidebarOpen">Manajemen Pegawai</span>
+                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Manajemen Pegawai</span>
                 </a>
 
-                {{-- KERUSAKAN --}}
                 <a href="{{ route('maintenances.index') }}"
-                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   class="flex items-center px-4 py-3 rounded-lg 
+                   transition-colors duration-200
                    {{ request()->routeIs('maintenances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-
                     <i data-feather="alert-circle" class="h-5 w-5"></i>
-                    <span x-show="sidebarOpen">Laporan Kerusakan</span>
+                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Kerusakan</span>
                 </a>
 
                 @role('admin')
-                {{-- KEUANGAN --}}
                 <a href="{{ route('finances.index') }}"
-                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   class="flex items-center px-4 py-3 rounded-lg 
+                   transition-colors duration-200
                    {{ request()->routeIs('finances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-
                     <i data-feather="dollar-sign" class="h-5 w-5"></i>
-                    <span x-show="sidebarOpen">Laporan Keuangan</span>
+                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Keuangan</span>
                 </a>
 
-                {{-- RESERVASI --}}
                 <a href="{{ route('reservations.index') }}"
-                   class="flex items-center gap-3 h-11 px-4 rounded-lg font-semibold transition
+                   class="flex items-center px-4 py-3 rounded-lg 
+                   transition-colors duration-200
                    {{ request()->routeIs('reservations.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
-
                     <i data-feather="file-text" class="h-5 w-5"></i>
-                    <span x-show="sidebarOpen">Laporan Reservasi</span>
+                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Reservasi</span>
                 </a>
                 @endrole
+
             </nav>
         </div>
 
-{{-- PROFILE & LOGOUT --}}
-<div class="border-t border-gray-200 p-4">
+        <div class="border-t border-gray-200 p-4 bg-white">
+            <div class="flex items-center overflow-hidden">
+                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center uppercase">
+                    {{ substr(Auth::user()->name, 0, 1) }}
+                </div>
+                
+                <div x-show="sidebarOpen" class="ml-3 whitespace-nowrap">
+                    <p class="font-semibold text-gray-800 text-sm truncate w-32">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-gray-500 truncate w-32">{{ Auth::user()->email }}</p>
+                </div>
+            </div>
 
-    {{-- USER INFO --}}
-    <div class="flex items-center gap-3 mb-4">
+            <div class="mt-4 space-y-1">
+                <a href="{{ route('profile.edit') }}"
+                   class="flex items-center gap-3 text-sm px-2 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition">
+                    <i data-feather="user" class="w-4 h-4"></i>
+                    <span x-show="sidebarOpen" class="fade-text">Profil Saya</span>
+                </a>
 
-        {{-- Avatar Huruf --}}
-        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold 
-                    flex items-center justify-center uppercase">
-            {{ substr(Auth::user()->name, 0, 1) }}
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="flex items-center gap-3 text-sm px-2 py-2 rounded-md w-full text-left text-gray-700 hover:text-red-600 hover:bg-gray-100 transition">
+                        <i data-feather="log-out" class="w-4 h-4"></i>
+                        <span x-show="sidebarOpen" class="fade-text">Keluar</span>
+                    </button>
+                </form>
+            </div>
         </div>
-
-        {{-- Nama & Email (hilang ketika sidebar tertutup) --}}
-        <div class="flex flex-col" x-show="sidebarOpen" x-transition.opacity>
-            <p class="font-semibold text-gray-800 text-sm leading-none">
-                {{ Auth::user()->name }}
-            </p>
-            <p class="text-xs text-gray-500 leading-none mt-1">
-                {{ Auth::user()->email }}
-            </p>
-        </div>
-    </div>
-
-    {{-- PROFILE LINK --}}
-    <a href="{{ route('profile.edit') }}"
-       class="flex items-center gap-2 text-sm px-2 py-2 rounded-md 
-              text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition">
-       
-        <i data-feather="user" class="w-4 h-4"></i>
-        <span x-show="sidebarOpen" x-transition.opacity>Profil Saya</span>
-    </a>
-
-    {{-- LOGOUT --}}
-    <form method="POST" action="{{ route('logout') }}" class="mt-1">
-        @csrf
-        <button type="submit"
-            class="flex items-center gap-2 text-sm px-2 py-2 rounded-md w-full text-left
-                   text-gray-700 hover:text-red-600 hover:bg-gray-100 transition">
-            
-            <i data-feather="log-out" class="w-4 h-4"></i>
-            <span x-show="sidebarOpen" x-transition.opacity>Keluar</span>
-        </button>
-    </form>
-
-</div>
-
 
     </aside>
 
-    {{-- MOBILE OVERLAY --}}
-    <div 
-        x-show="sidebarOpen && window.innerWidth < 1024" 
-        @click="sidebarOpen = false"
-        class="fixed inset-0 bg-black/30 z-30"
-        x-transition.opacity
-    ></div>
+    <!-- MAIN -->
+    <div class="flex-1 main-content min-w-0 flex flex-col min-h-screen"
+         :class="sidebarOpen ? 'ml-64' : 'ml-20'">
 
-    {{-- MAIN CONTENT --}}
-    <div class="flex-1 transition-all duration-300" :class="sidebarOpen ? 'ml-64' : 'ml-20'">
+        <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20 h-16 flex items-center px-6 justify-between">
+            <div class="flex items-center gap-4">
+                <button @click="sidebarOpen = !sidebarOpen"
+                    class="p-2 rounded-lg text-gray-500 hover:text-blue-600 hover:bg-gray-100 transition">
+                    <i data-feather="menu"></i>
+                </button>
 
-        {{-- HEADER --}}
-        <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20">
-            <div class="flex items-center justify-between px-6 py-4">
-
-                <div class="flex items-center gap-3">
-                    <button @click="sidebarOpen = !sidebarOpen"
-                        class="p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition">
-                        
-                        <i data-feather="menu" x-show="!sidebarOpen"></i>
-                        <i data-feather="x" x-show="sidebarOpen"></i>
-                    </button>
-
-                    <h1 class="text-lg sm:text-xl font-semibold text-gray-800 truncate">
-                        {{ $header ?? 'Hotel Pusaka Mulya' }}
-                    </h1>
-                </div>
-
-                @isset($headerButton)
-                    <div>{{ $headerButton }}</div>
-                @endisset
+                <h1 class="text-lg sm:text-xl font-semibold text-gray-800 truncate">
+                    {{ $header ?? 'Hotel Pusaka Mulya' }}
+                </h1>
             </div>
+
+            @isset($headerButton)
+                <div>{{ $headerButton }}</div>
+            @endisset
         </header>
 
-        <main class="p-6">
+        <main class="flex-1 p-6 overflow-y-auto">
             {{ $slot }}
         </main>
-
     </div>
-
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => feather.replace());
-</script>
+
+    <script>
+    window.onload = () => {
+        feather.replace();
+        document.getElementById('preloader').style.display = 'none';
+    };
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => feather.replace());
+    </script>
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
@@ -251,3 +268,4 @@
         </script>
 </body>
 </html>
+
