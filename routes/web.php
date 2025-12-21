@@ -102,7 +102,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/maintenances', [MaintenanceController::class, 'index'])->name('maintenances.index');
     Route::get('/maintenances/create/{id}', [MaintenanceController::class, 'create'])->name('maintenances.create');
     Route::post('/maintenances', [MaintenanceController::class, 'store'])->name('maintenances.store');
-    Route::get('/maintenances/{maintenance}', [MaintenanceController::class, 'show'])->name('maintenances.show');
+    // Route::get('/maintenances/{maintenance}', [MaintenanceController::class, 'show'])->name('maintenances.show');
     Route::get('/maintenances/{maintenance}/edit', [MaintenanceController::class, 'edit'])->name('maintenances.edit');
     Route::put('/maintenances/{maintenance}', [MaintenanceController::class, 'update'])->name('maintenances.update');
     Route::delete('/maintenances/{maintenance}', [MaintenanceController::class, 'destroy'])->name('maintenances.destroy');
@@ -112,6 +112,13 @@ Route::middleware('auth')->group(function () {
     | Expenses
     |--------------------------------------------------------------------------
     */
+
+    Route::get('/maintenances/createe', [MaintenanceController::class, 'createe'])
+    ->name('maintenances.createe');
+
+Route::post('/maintenances/add', [MaintenanceController::class, 'storee'])
+    ->name('maintenances.storee');
+
     Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
     Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
     Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');

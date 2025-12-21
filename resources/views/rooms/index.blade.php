@@ -10,7 +10,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class=" mx-auto sm:px-6 lg:px-8">
                   <div x-data="{ showCustomer: false }">
                    <button 
                         @click="showCustomer = true"
@@ -87,7 +87,7 @@
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
                         <h3 class="text-lg font-semibold">Daftar Kamar</h3>
                         <div class="flex flex-col sm:flex-row gap-3">
-                            {{-- @role('admin')
+                            @role('admin')
                             <form action="{{ route('rooms.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
                                 @csrf
                                 <input type="file" name="file" 
@@ -101,7 +101,7 @@
                                 Import
                             </button>
                         </form>
-                        @endrole --}}
+                        @endrole
                        <form method="GET" action="{{ route('rooms.index') }}" class="flex items-center gap-3">
 
                             <select name="category" 

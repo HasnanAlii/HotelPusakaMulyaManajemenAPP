@@ -57,6 +57,35 @@ class MaintenanceController extends Controller
             ]);
         }
     }
+public function createe()
+{
+    $rooms = Room::all(); // atau ->where('status', 'tersedia')->get();
+
+    return view('maintenances.add', compact('rooms'));
+}
+
+
+public function storee(Request $request)
+{
+    $validated = $request->validate([
+        'room_id' => 'required|exists:rooms,id',
+        'damage'  => 'required|string|max:255',
+    ]);
+
+    Maintenance::create([
+        'room_id'     => $validated['room_id'],
+        'damage'      => $validated['damage'],
+        'amount'      => 0,
+        'is_repaired' => false,
+    ]);
+
+    return redirect()
+        ->route('maintenances.index')
+        ->with([
+            'message' => 'Data kerusakan berhasil ditambahkan.',
+            'alert-type' => 'success'
+        ]);
+}
 
     /**
      * Simpan data kerusakan baru
