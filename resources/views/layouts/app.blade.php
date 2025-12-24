@@ -155,6 +155,17 @@
                     <i data-feather="file-text" class="h-5 w-5"></i>
                     <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Reservasi</span>
                 </a>
+
+                     <a href="{{ route('admin.fuzzy-setting.edit') }}"
+                class="flex items-center gap-3 w-full h-11 rounded-lg px-4 font-semibold transition-all
+                    {{ request()->routeIs('admin.fuzzy-setting.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                
+                <i data-feather="settings" class="h-5 w-5"></i>
+                
+                <span x-show="sidebarOpen" class="whitespace-nowrap">
+                   Kelola Nilai Fuzzy
+                </span>
+            </a>
                 @endrole
 
             </nav>

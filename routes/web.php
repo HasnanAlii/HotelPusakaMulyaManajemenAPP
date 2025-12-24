@@ -11,6 +11,8 @@ use App\Http\Controllers\{
     MaintenanceController,
     ExpenseController,
     FinanceController,
+    FuzzyController,
+    FuzzySettingController,
     ReportController
 };
 
@@ -22,6 +24,27 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+
+// Route::get('/', [FuzzyController::class, 'index'])->name('fuzzy.index');
+Route::post('/', [FuzzyController::class, 'process'])->name('fuzzy.process');
+
+Route::prefix('admin')
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/fuzzy', [FuzzyController::class, 'history'])
+            ->name('fuzzy.index');
+
+        Route::get('/fuzzy/{id}', [FuzzyController::class, 'show'])
+            ->name('fuzzy.show');
+            Route::get('/fuzzy-setting', [FuzzySettingController::class, 'edit'])->name('fuzzy-setting.edit');
+            Route::put('/fuzzy-setting', [FuzzySettingController::class, 'update'])->name('fuzzy-setting.update');
+});
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

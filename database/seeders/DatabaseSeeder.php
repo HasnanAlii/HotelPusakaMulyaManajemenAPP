@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             // ReservationSeeder::class,
             // MaintenanceSeeder::class,
             ExpenseSeeder::class,
+             FuzzySettingSeeder::class,
            
         ]);
     }
