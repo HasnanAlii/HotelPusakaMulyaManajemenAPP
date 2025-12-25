@@ -1,3 +1,325 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\FuzzyInput;
+use App\Models\Room;
+use App\Models\FuzzySetting;
+use Illuminate\Http\Request;
+
+class FuzzyController extends Controller
+{
+    /* ==========================
+       FORM INPUT
+    ========================== */
+    public function index()
+    {
+        $inputs = FuzzyInput::with('options')->get()->keyBy('kode');
+        return view('welcome', compact('inputs'));
+    }
+
+    /* ==========================
+       PROSES FUZZY
+    ========================== */
+    public function process(Request $request)
+    {
+        $request->validate([
+            'harga_input'      => 'required|integer|min:50000',
+            'pref_fasilitas'   => 'required|in:sedikit,cukup,lengkap',
+            'pref_kenyamanan'  => 'required|in:rendah,sedang,tinggi',
+        ]);
+
+        $rooms   = Room::where('status', 'tersedia')->get();
+        $setting = FuzzySetting::first();
+
+        $hasil = [];
+
+        foreach ($rooms as $room) {
+
+            /* ==========================
+               FUZZIFIKASI
+            ========================== */
+            $muHarga = $this->muHargaPreferensi(
+                $room->price,
+                $request->harga_input,
+                $setting
+            );
+
+            $muFasilitas = $this->muFasilitas(
+                $room->facilities,
+                $request->pref_fasilitas,
+                $setting
+            );
+
+            $muKenyamanan = $this->muKenyamanan(
+                $this->mapKenyamanan($room->category),
+                $request->pref_kenyamanan,
+                $setting
+            );
+
+            /* ==========================
+               INFERENSI (MIN)
+            ========================== */
+            $alpha = min($muHarga, $muFasilitas, $muKenyamanan);
+
+            if ($alpha <= 0) {
+                continue; // tidak layak direkomendasikan
+            }
+
+            /* ==========================
+               KONSEKUEN Z (TSUKAMOTO)
+            ========================== */
+            $z = $this->zRekomendasi($alpha, $setting);
+
+            $hasil[] = [
+                'room'          => $room,
+                'mu_harga'      => round($muHarga, 3),
+                'mu_fasilitas'  => round($muFasilitas, 3),
+                'mu_kenyamanan' => round($muKenyamanan, 3),
+                'alpha'         => round($alpha, 3),
+                'z'             => round($z, 2),
+            ];
+        }
+
+        /* ==========================
+           RANKING REKOMENDASI
+        ========================== */
+        $rekomendasi = collect($hasil)
+            ->sortByDesc('z')
+            ->values(); // reset index
+
+        return view('fuzzy.hasil', compact('rekomendasi'));
+    }
+
+    /* =====================================================
+       FUZZY HARGA (SEGITIGA SIMETRIS)
+    ===================================================== */
+    private function muHargaPreferensi($harga, $input, $s)
+    {
+        $min = $input * $s->harga_min_ratio;
+        $mid = $input;
+        $max = $input * $s->harga_max_ratio;
+
+        if ($harga <= $min || $harga >= $max) return 0;
+
+        if ($harga <= $mid) {
+            return ($harga - $min) / ($mid - $min);
+        }
+
+        return ($max - $harga) / ($max - $mid);
+    }
+
+    /* =====================================================
+       FUZZY FASILITAS
+    ===================================================== */
+    private function muFasilitas($f, $pref, $s)
+    {
+        return match ($pref) {
+            'sedikit' => $this->muFasilitasSedikit($f, $s),
+            'cukup'   => $this->muFasilitasCukup($f, $s),
+            'lengkap' => $this->muFasilitasLengkap($f, $s),
+        };
+    }
+
+    private function muFasilitasSedikit($f, $s)
+    {
+        if ($f <= $s->fasilitas_min) return 1;
+        if ($f >= $s->fasilitas_mid) return 0;
+
+        return ($s->fasilitas_mid - $f) /
+               ($s->fasilitas_mid - $s->fasilitas_min);
+    }
+
+    private function muFasilitasCukup($f, $s)
+    {
+        if ($f <= $s->fasilitas_min || $f >= $s->fasilitas_max) return 0;
+        if ($f == $s->fasilitas_mid) return 1;
+
+        return ($f < $s->fasilitas_mid)
+            ? ($f - $s->fasilitas_min) / ($s->fasilitas_mid - $s->fasilitas_min)
+            : ($s->fasilitas_max - $f) / ($s->fasilitas_max - $s->fasilitas_mid);
+    }
+
+    private function muFasilitasLengkap($f, $s)
+    {
+        if ($f <= $s->fasilitas_mid) return 0;
+        if ($f >= $s->fasilitas_max) return 1;
+
+        return ($f - $s->fasilitas_mid) /
+               ($s->fasilitas_max - $s->fasilitas_mid);
+    }
+
+    /* =====================================================
+       FUZZY KENYAMANAN
+    ===================================================== */
+    private function muKenyamanan($n, $pref, $s)
+    {
+        return match ($pref) {
+            'rendah'  => $this->muNyamanRendah($n, $s),
+            'sedang'  => $this->muNyamanSedang($n, $s),
+            'tinggi'  => $this->muNyamanTinggi($n, $s),
+        };
+    }
+
+    private function muNyamanRendah($n, $s)
+    {
+        if ($n <= $s->nyaman_min) return 1;
+        if ($n >= $s->nyaman_mid) return 0;
+
+        return ($s->nyaman_mid - $n) /
+               ($s->nyaman_mid - $s->nyaman_min);
+    }
+
+    private function muNyamanSedang($n, $s)
+    {
+        if ($n <= $s->nyaman_min || $n >= $s->nyaman_max) return 0;
+        if ($n == $s->nyaman_mid) return 1;
+
+        return ($n < $s->nyaman_mid)
+            ? ($n - $s->nyaman_min) / ($s->nyaman_mid - $s->nyaman_min)
+            : ($s->nyaman_max - $n) / ($s->nyaman_max - $s->nyaman_mid);
+    }
+
+    private function muNyamanTinggi($n, $s)
+    {
+        if ($n <= $s->nyaman_mid) return 0;
+        if ($n >= $s->nyaman_max) return 1;
+
+        return ($n - $s->nyaman_mid) /
+               ($s->nyaman_max - $s->nyaman_mid);
+    }
+
+    /* =====================================================
+       CATEGORY → NUMERIC
+    ===================================================== */
+    private function mapKenyamanan($category)
+    {
+        return match (strtolower($category)) {
+            'vip'        => 3,
+            'superior'  => 2,
+            default     => 1,
+        };
+    }
+
+    /* =====================================================
+       KONSEKUEN Z (TSUKAMOTO)
+    ===================================================== */
+    private function zRekomendasi($alpha, $s)
+    {
+        return $s->z_min + ($alpha * ($s->z_max - $s->z_min));
+    }
+}
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Room;
+use Illuminate\Http\Request;
+
+class FuzzyController extends Controller
+{
+    public function process(Request $request)
+    {
+        $request->validate([
+            'harga_input'     => 'required|integer|min:50000',
+            'pref_fasilitas'  => 'required|in:sedikit,cukup,lengkap',
+            'pref_kenyamanan' => 'required|in:rendah,sedang,tinggi',
+        ]);
+
+        $maxHarga   = (int) $request->harga_input;
+        $prefFasil  = $request->pref_fasilitas;
+        $prefNyaman = $request->pref_kenyamanan;
+
+        // Sama persis dengan JS
+        $rooms = Room::where('status', 'tersedia')
+            ->where('price', '<=', $maxHarga)
+            ->get();
+
+        if ($rooms->isEmpty()) {
+            return view('fuzzy.hasil', [
+                'hasil' => [],
+                'rekomendasi' => null
+            ]);
+        }
+
+        $hasil = [];
+
+        foreach ($rooms as $room) {
+
+            /* ===============================
+               FUZZY HARGA (1 / (h / 100000))
+            =============================== */
+            $h = $this->safeDiv(1, $this->safeDiv($room->price, 100000));
+
+            /* ===============================
+               FUZZY FASILITAS
+            =============================== */
+            $fasilitas = max((int)$room->facilities, 0.000001);
+
+            if ($prefFasil === 'sedikit') {
+                $f = $this->safeDiv(1, $fasilitas);
+            } elseif ($prefFasil === 'cukup') {
+                $f = $this->safeDiv(1, abs($fasilitas - 3) + 1);
+            } else { // lengkap
+                $f = $this->safeDiv($fasilitas, 5);
+            }
+
+            /* ===============================
+               FUZZY KENYAMANAN
+            =============================== */
+            $nyaman = max($this->mapNyamanRoom($room->category), 0.000001);
+
+            if ($prefNyaman === 'rendah') {
+                $n = $this->safeDiv(1, $nyaman);
+            } elseif ($prefNyaman === 'sedang') {
+                $n = $this->safeDiv(1, abs($nyaman - 2) + 1);
+            } else { // tinggi
+                $n = $this->safeDiv($nyaman, 3);
+            }
+
+            /* ===============================
+               SKOR AKHIR (JS STYLE)
+            =============================== */
+            $skor = ($h + $f + $n) / 3;
+
+            $hasil[] = [
+                'room' => $room,
+                'skor' => $skor
+            ];
+        }
+
+        usort($hasil, fn($a, $b) => $b['skor'] <=> $a['skor']);
+        $rekomendasi = $hasil[0];
+
+        return view('fuzzy.hasil', compact('hasil', 'rekomendasi'));
+    }
+
+    /* ===============================
+       SAFE DIV (ANTI 0)
+    =============================== */
+    private function safeDiv($a, $b)
+    {
+        return $a / ($b == 0 ? 0.000001 : $b);
+    }
+
+    /* ===============================
+       MAP KENYAMANAN (SAMA JS)
+    =============================== */
+    private function mapNyamanRoom($category)
+    {
+        return match (strtolower($category)) {
+            'standar'     => 1,
+            'standar 1'   => 1.5,
+            'superior 1'  => 2,
+            'superior 2'  => 3,
+            'superior 3'  => 3,
+            default       => 1,
+        };
+    }
+}
+
+
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
@@ -380,91 +702,103 @@
     </section>
 
 
-    <section id="rekomendasi" class="py-24 bg-slate-100 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
-            <div class="absolute right-0 top-0 w-96 h-96 bg-blue-600 rounded-full blur-[100px]"></div>
+    <section id="rekomendasi" class="relative py-24 bg-slate-100 overflow-hidden">
+        {{-- Background Accent --}}
+        <div class="absolute inset-0 opacity-5 pointer-events-none">
+            <div class="absolute -top-20 -right-20 w-[420px] h-[420px] bg-blue-600 rounded-full blur-[120px]"></div>
         </div>
 
-        <div class="max-w-5xl mx-auto px-6 relative z-10">
+        <div class="relative z-10 max-w-5xl mx-auto px-6">
 
             {{-- HEADER --}}
-            <div class="text-center mb-12">
-                <span class="bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">
+            <div class="text-center mb-14">
+                <span class="inline-block mb-4 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider
+                            bg-blue-100 text-blue-700">
                     Teknologi Cerdas
                 </span>
-                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
                     Bingung Memilih Kamar?
                 </h2>
-                <p class="text-slate-600 max-w-2xl mx-auto">
-                    Sistem menggunakan <span class="text-blue-600 font-semibold">Logika Fuzzy Tsukamoto</span>
+
+                <p class="max-w-2xl mx-auto text-slate-600 leading-relaxed">
+                    Sistem menggunakan
+                    <span class="font-semibold text-blue-600">Logika Fuzzy Tsukamoto</span>
                     untuk mencocokkan preferensi Anda dengan kamar yang tersedia.
                 </p>
             </div>
 
             {{-- FORM --}}
             <form action="{{ route('fuzzy.process') }}" method="POST"
-                class="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-slate-200">
+                class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 md:p-10">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
                     {{-- HARGA --}}
-                    <div class="space-y-3">
-                        <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-tag text-blue-500"></i> Harga (Rp)
                         </label>
+
                         <select name="harga_input" required
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
-                                text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
+                            class="w-full rounded-xl bg-slate-50 border border-slate-300 px-4 py-3
+                                text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500
+                                transition">
                             <option value="">Pilih Budget</option>
-                            <option value="100000">Rp 100.000</option>
-                            <option value="150000">Rp 150.000</option>
-                            <option value="200000">Rp 200.000</option>
-                            <option value="250000">Rp 250.000</option>
-                            <option value="350000">Rp 350.000</option>
+                            @foreach ($inputs['harga']->options as $opt)
+                                <option value="{{ $opt->value }}">{{ $opt->label }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                     {{-- FASILITAS --}}
-                    <div class="space-y-3">
-                        <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-concierge-bell text-blue-500"></i> Kelengkapan Fasilitas
                         </label>
+
                         <select name="pref_fasilitas" required
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
-                                text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
-                            <option value="sedikit">Cukup Tidur</option>
-                            <option value="cukup">Menengah</option>
-                            <option value="lengkap">Komplit</option>
+                            class="w-full rounded-xl bg-slate-50 border border-slate-300 px-4 py-3
+                                text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500
+                                transition">
+                            @foreach ($inputs['fasilitas']->options as $opt)
+                                <option value="{{ $opt->value }}">{{ $opt->label }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                     {{-- KENYAMANAN --}}
-                    <div class="space-y-3">
-                        <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-star text-blue-500"></i> Tingkat Kenyamanan
                         </label>
+
                         <select name="pref_kenyamanan" required
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
-                                text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
-                            <option value="rendah">Standar</option>
-                            <option value="sedang">Extra Nyaman</option>
-                            <option value="tinggi">VIP</option>
+                            class="w-full rounded-xl bg-slate-50 border border-slate-300 px-4 py-3
+                                text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500
+                                transition">
+                            @foreach ($inputs['kenyamanan']->options as $opt)
+                                <option value="{{ $opt->value }}">{{ $opt->label }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                 </div>
 
                 {{-- BUTTON --}}
-                <div class="mt-10 text-center">
+                <div class="mt-12 text-center">
                     <button type="submit"
-                        class="inline-flex items-center gap-2 px-10 py-4 bg-blue-600 text-white
-                            rounded-xl font-bold hover:bg-slate-800 hover:shadow-lg transition">
-                        <i class="fas fa-search-dollar"></i> Cari Kamar
+                        class="inline-flex items-center gap-3 px-12 py-4 rounded-xl
+                            bg-blue-600 text-white font-bold
+                            hover:bg-slate-900 hover:shadow-xl
+                            focus:ring-4 focus:ring-blue-200
+                            transition">
+                        <i class="fas fa-search-dollar"></i>
+                        Cari Kamar
                     </button>
                 </div>
             </form>
-
         </div>
     </section>
 
@@ -1059,3 +1393,4 @@
     </script>
 </body>
 </html> --}}
+

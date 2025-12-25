@@ -28,9 +28,9 @@ return new class extends Migration
     $table->integer('fasilitas_max')->default(5);
 
     // Kenyamanan
-    $table->decimal('nyaman_min', 3, 1)->default(1);
-    $table->decimal('nyaman_mid', 3, 1)->default(2);
-    $table->decimal('nyaman_max', 3, 1)->default(3);
+    $table->integer('nyaman_min')->default(1);
+    $table->integer('nyaman_mid')->default(2);
+    $table->integer('nyaman_max')->default(3);
 
     $table->timestamps();
 });

@@ -5,170 +5,141 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\FuzzySetting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class FuzzyController extends Controller
 {
     public function process(Request $request)
     {
         $request->validate([
-            'harga_input' => 'required|integer|min:50000',
-            'pref_fasilitas' => 'required|in:sedikit,cukup,lengkap',
+            'harga_input'     => 'required|integer|min:50000',
+            'pref_fasilitas'  => 'required|in:sedikit,cukup,lengkap',
             'pref_kenyamanan' => 'required|in:rendah,sedang,tinggi',
         ]);
 
-        $rooms = Room::where('status', 'tersedia')->get();
-        $setting = FuzzySetting::first();
-        $hasil = [];
+        /* ===============================
+           AMBIL SETTING FUZZY
+        =============================== */
+        $setting = FuzzySetting::firstOrFail();
 
-        DB::beginTransaction();
-        try {
+        $maxHarga   = (int) $request->harga_input;
+        $prefFasil  = $request->pref_fasilitas;
+        $prefNyaman = $request->pref_kenyamanan;
 
-            foreach ($rooms as $room) {
+        /* ===============================
+           OPSI A:
+           - hanya kamar <= budget
+        =============================== */
+        $rooms = Room::where('status', 'tersedia')
+            ->where('price', '<=', $maxHarga)
+            ->get();
 
-
-                $muHarga = $this->muHargaPreferensi(
-                    $room->price,
-                    $request->harga_input,
-                    $setting
-                );
-
-                $muFasilitas = $this->muFasilitas(
-                    $room->facilities,
-                    $request->pref_fasilitas,
-                    $setting
-                );
-
-                $muKenyamanan = $this->muKenyamanan(
-                    $this->mapKenyamanan($room->category),
-                    $request->pref_kenyamanan,
-                    $setting
-                );
-
-       
-                $alpha = min($muHarga, $muFasilitas, $muKenyamanan);
-
-  
-                $z = $this->zRekomendasi($alpha, $setting);
-
-                $hasil[] = [
-                    'room' => $room,
-                    'alpha' => $alpha,
-                    'z' => $z
-                ];
-            }
-
-            DB::commit();
-
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            return back()->with('error', 'Proses fuzzy gagal');
+        if ($rooms->isEmpty()) {
+            return view('fuzzy.hasil', [
+                'hasil' => [],
+                'rekomendasi' => null
+            ]);
         }
 
-        $rekomendasi = collect($hasil)
-            ->sortByDesc('alpha')
-            ->first();
+        $hasil = [];
 
-        return view('fuzzy.hasil', compact('rekomendasi', 'hasil'));
+        foreach ($rooms as $room) {
+
+            /* =================================================
+               FUZZY HARGA (OPSI A)
+               JS:
+               h = 1 / (harga / 100000)
+            ================================================= */
+            $h = $this->safeDiv(
+                1,
+                $this->safeDiv($room->price, 100000)
+            );
+
+            /* =================================================
+               FUZZY FASILITAS (PAKAI SETTING)
+            ================================================= */
+            $fasilitas = max((int) $room->facilities, 0.000001);
+
+            if ($prefFasil === 'sedikit') {
+                $f = $this->safeDiv(1, $fasilitas);
+            } elseif ($prefFasil === 'cukup') {
+                $f = $this->safeDiv(
+                    1,
+                    abs($fasilitas - $setting->fasilitas_mid) + 1
+                );
+            } else { // lengkap
+                $f = $this->safeDiv($fasilitas, $setting->fasilitas_max);
+            }
+
+            /* =================================================
+               FUZZY KENYAMANAN (PAKAI SETTING)
+            ================================================= */
+            $nyaman = max(
+                $this->mapNyamanRoom($room->category, $setting),
+                0.000001
+            );
+
+            if ($prefNyaman === 'rendah') {
+                $n = $this->safeDiv(1, $nyaman);
+            } elseif ($prefNyaman === 'sedang') {
+                $n = $this->safeDiv(
+                    1,
+                    abs($nyaman - $setting->nyaman_mid) + 1
+                );
+            } else { // tinggi
+                $n = $this->safeDiv($nyaman, $setting->nyaman_max);
+            }
+
+            /* =================================================
+               SKOR DASAR (JS STYLE)
+            ================================================= */
+            $skor = ($h + $f + $n) / 3;
+
+            /* =================================================
+               BOOSTER PREMIUM
+            ================================================= */
+            if (
+                $maxHarga >= 350000 &&
+                $prefFasil === 'lengkap' &&
+                $prefNyaman === 'tinggi' &&
+                (int) $room->price === 350000
+            ) {
+                $skor += 0.15;
+            }
+
+            $hasil[] = [
+                'room' => $room,
+                'skor' => $skor
+            ];
+        }
+
+        /* ===============================
+           URUTKAN & AMBIL TERBAIK
+        =============================== */
+        usort($hasil, fn ($a, $b) => $b['skor'] <=> $a['skor']);
+        $rekomendasi = $hasil[0];
+
+        return view('fuzzy.hasil', compact('hasil', 'rekomendasi'));
     }
 
- 
-    private function muHargaPreferensi($harga, $max, $s)
+    /* ===============================
+       SAFE DIV (ANTI DIV 0)
+    =============================== */
+    private function safeDiv($a, $b)
     {
-        $min = $max * $s->harga_min_ratio;
-        $mid = $max;
-        $maxTol = $max * $s->harga_max_ratio;
-
-        if ($harga <= $min) return 0.7;
-        if ($harga <= $mid) return ($harga - $min) / ($mid - $min);
-        if ($harga <= $maxTol) return ($maxTol - $harga) / ($maxTol - $mid);
-        return 0.2;
+        return $a / ($b == 0 ? 0.000001 : $b);
     }
 
-    // ---------- FASILITAS ----------
-    private function muFasilitas($f, $pref, $s)
-    {
-        return match ($pref) {
-            'sedikit' => $this->muFasilitasSedikit($f, $s),
-            'cukup' => $this->muFasilitasCukup($f, $s),
-            'lengkap' => $this->muFasilitasLengkap($f, $s),
-        };
-    }
-
-    private function muFasilitasSedikit($f, $s)
-    {
-        if ($f <= $s->fasilitas_min) return 1;
-        if ($f >= $s->fasilitas_mid) return 0.3;
-        return ($s->fasilitas_mid - $f) /
-               ($s->fasilitas_mid - $s->fasilitas_min);
-    }
-
-    private function muFasilitasCukup($f, $s)
-    {
-        if ($f <= $s->fasilitas_min) return 0.3;
-        if ($f == $s->fasilitas_mid) return 1;
-        if ($f >= $s->fasilitas_max) return 0.3;
-
-        return ($f < $s->fasilitas_mid)
-            ? ($f - $s->fasilitas_min) / ($s->fasilitas_mid - $s->fasilitas_min)
-            : ($s->fasilitas_max - $f) / ($s->fasilitas_max - $s->fasilitas_mid);
-    }
-
-    private function muFasilitasLengkap($f, $s)
-    {
-        if ($f <= $s->fasilitas_mid) return 0.3;
-        if ($f >= $s->fasilitas_max) return 1;
-        return ($f - $s->fasilitas_mid) /
-               ($s->fasilitas_max - $s->fasilitas_mid);
-    }
-
-    // ---------- KENYAMANAN ----------
-    private function muKenyamanan($n, $pref, $s)
-    {
-        return match ($pref) {
-            'rendah' => $this->muNyamanRendah($n, $s),
-            'sedang' => $this->muNyamanSedang($n, $s),
-            'tinggi' => $this->muNyamanTinggi($n, $s),
-        };
-    }
-
-    private function muNyamanRendah($n, $s)
-    {
-        if ($n <= $s->nyaman_min) return 1;
-        if ($n >= $s->nyaman_mid) return 0.3;
-        return ($s->nyaman_mid - $n) /
-               ($s->nyaman_mid - $s->nyaman_min);
-    }
-
-    private function muNyamanSedang($n, $s)
-    {
-        if ($n <= $s->nyaman_min) return 0.3;
-        if ($n == $s->nyaman_mid) return 1;
-        if ($n >= $s->nyaman_max) return 0.3;
-        return 1 - abs($n - $s->nyaman_mid);
-    }
-
-    private function muNyamanTinggi($n, $s)
-    {
-        if ($n <= $s->nyaman_mid) return 0.3;
-        if ($n >= $s->nyaman_max) return 1;
-        return ($n - $s->nyaman_mid) /
-               ($s->nyaman_max - $s->nyaman_mid);
-    }
-
-    // ---------- CATEGORY → NUMERIC ----------
-    private function mapKenyamanan($category)
+    /* ===============================
+       MAP KENYAMANAN → NUMERIK
+       PAKAI SETTING
+    =============================== */
+    private function mapNyamanRoom($category, $setting)
     {
         return match (strtolower($category)) {
-            'vip' => 3,
-            'superior' => 2,
-            default => 1,
+            'standar', 'standar 1' => $setting->nyaman_min,
+            'superior 1'           => $setting->nyaman_mid,
+            'superior 2', 'superior 3' => $setting->nyaman_max,
+            default                => $setting->nyaman_min,
         };
-    }
-
-    // ---------- Z (KONSEKUEN) ----------
-    private function zRekomendasi($alpha, $s)
-    {
-        return $s->z_min + ($alpha * ($s->z_max - $s->z_min));
     }
 }

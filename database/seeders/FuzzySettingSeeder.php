@@ -49,9 +49,9 @@ class FuzzySettingSeeder extends Seeder
                    sedang  : 2
                    tinggi  : 3
                 ================================================= */
-                'nyaman_min' => 1.0,
-                'nyaman_mid' => 2.0,
-                'nyaman_max' => 3.0,
+                'nyaman_min' => 1,
+                'nyaman_mid' => 2,
+                'nyaman_max' => 3,
             ]);
         }
     }

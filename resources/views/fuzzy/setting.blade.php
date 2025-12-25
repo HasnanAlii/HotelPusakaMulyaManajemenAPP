@@ -104,13 +104,13 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                    Contoh: 1 = tempat tidur
+                                 Cukup Tidur
                                 </p>
                             </div>
 
                             <div>
                                 <label class="block text-gray-700 font-medium mb-2">
-                                    Fasilitas Tengah (Ideal)
+                                    Fasilitas Tengah
                                 </label>
                                 <input type="number"
                                     name="fasilitas_mid"
@@ -118,7 +118,7 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                    Contoh: 3 = TV, kipas, tempat tidur
+                                 Menengah
                                 </p>
                             </div>
 
@@ -132,7 +132,7 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                    Contoh: 5 = fasilitas lengkap
+                                     Komplit
                                 </p>
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                    1 = standar
+                                    Standar
                                 </p>
                             </div>
 
@@ -174,7 +174,7 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                    2 = superior
+                                    Extra Nyaman
                                 </p>
                             </div>
 
@@ -188,7 +188,7 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                    3 = VIP
+                                     VIP
                                 </p>
                             </div>
                         </div>

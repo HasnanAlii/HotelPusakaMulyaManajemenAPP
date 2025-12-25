@@ -49,18 +49,16 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-center">
                 
-                <a href="#" class="flex items-center gap-3 group">
+                <a href="/" class="flex items-center gap-3 group">
                     <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="h-10 md:h-12 w-auto drop-shadow-sm transition group-hover:scale-105"> 
                     <span class="text-xl md:text-2xl font-heading font-bold text-slate-800 tracking-tight">
                         Pusaka<span class="text-blue-600">Mulya</span>
                     </span>
                 </a>
-
-  
     </nav>
     
 
-        <main class="flex-1 p-6 overflow-y-auto">
+        <main class="flex-1 overflow-y-auto">
             {{ $slot }}
         </main>
 
@@ -134,7 +132,7 @@
                     class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl 
                             font-semibold shadow-lg shadow-green-600/20 transition-all">
                         <i class="fab fa-whatsapp text-xl"></i>
-                        <span>Chat WhatsApp</span>
+                        {{-- <span>Chat WhatsApp</span> --}}
                     </a>
                     <a href="https://instagram.com/pusakamulya_hotel"
                     target="_blank"
