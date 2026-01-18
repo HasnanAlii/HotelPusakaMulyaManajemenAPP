@@ -7,60 +7,61 @@
 
     @php
         // LOGIC PHP TETAP SAMA
-        $roomData = [
-            [
-                'nama' => 'Standar',
-                'gambar' => 'k3.jpeg',
-                'desc' => 'Pilihan hemat untuk istirahat sejenak dengan kenyamanan dasar yang terjaga.',
-                'fasilitasList' => [
-                    ['icon' => 'fa-bed', 'label' => 'Single Bed'],
-                ],
-            ],
-            [
-                'nama' => 'Standar 1',
-                'gambar' => 'k4.jpeg',
-                'desc' => 'Kamar nyaman dengan sirkulasi udara alami yang baik untuk kesegaran.',
-                'fasilitasList' => [
-                    ['icon' => 'fa-bed', 'label' => 'Single Bed'],
-                    ['icon' => 'fa-fan', 'label' => 'Kipas Angin'],
-                ],
-            ],
-            [
-                'nama' => 'Superior 1',
-                'gambar' => 'k4.jpeg',
-                'desc' => 'Nikmati hiburan TV kabel dan sarapan pagi lezat untuk memulai hari Anda.',
-                'fasilitasList' => [
-                    ['icon' => 'fa-bed', 'label' => 'Single Bed'],
-                    ['icon' => 'fa-fan', 'label' => 'Kipas Angin'],
-                    ['icon' => 'fa-tv', 'label' => 'TV Channel'],
-                    ['icon' => 'fa-utensils', 'label' => 'Sarapan'],
-                ],
-            ],
-            [
-                'nama' => 'Superior 2',
-                'gambar' => 'k2.jpeg',
-                'desc' => 'Relaksasi maksimal dengan fasilitas air panas pribadi setelah hari yang panjang.',
-                'fasilitasList' => [
-                    ['icon' => 'fa-bed', 'label' => 'Double Bed'],
-                    ['icon' => 'fa-fan', 'label' => 'Kipas Angin'],
-                    ['icon' => 'fa-hot-tub', 'label' => 'Air Panas'],
-                    ['icon' => 'fa-tv', 'label' => 'TV'],
-                    ['icon' => 'fa-utensils', 'label' => 'Sarapan'],
-                ],
-            ],
-            [
-                'nama' => 'Superior 3',
-                'gambar' => 'k1.jpeg',
-                'desc' => 'Kamar premium terluas dengan pendingin ruangan dan fasilitas terlengkap.',
-                'fasilitasList' => [
-                    ['icon' => 'fa-bed', 'label' => 'Double Bed'],
-                    ['icon' => 'fa-snowflake', 'label' => 'AC'],
-                    ['icon' => 'fa-hot-tub', 'label' => 'Air Panas'],
-                    ['icon' => 'fa-tv', 'label' => 'TV LED'],
-                    ['icon' => 'fa-utensils', 'label' => 'Sarapan'],
-                ],
-            ],
-        ];
+   $roomData = [
+    [
+        'nama' => 'Standar',
+        'galeri' => 'Standar',
+        'desc' => 'Pilihan hemat untuk istirahat sejenak dengan kenyamanan dasar yang terjaga.',
+        'fasilitasList' => [
+            ['icon' => 'fa-bed', 'label' => 'Single Bed'],
+        ],
+    ],
+    [
+        'nama' => 'Standar 1',
+        'galeri' => 'Standar 1',
+        'desc' => 'Kamar nyaman dengan sirkulasi udara alami yang baik untuk kesegaran.',
+        'fasilitasList' => [
+            ['icon' => 'fa-bed', 'label' => 'Single Bed'],
+            ['icon' => 'fa-fan', 'label' => 'Kipas Angin'],
+        ],
+    ],
+    [
+        'nama' => 'Superior 1',
+        'galeri' => 'Superior 1',
+        'desc' => 'Nikmati hiburan TV kabel dan sarapan pagi lezat untuk memulai hari Anda.',
+        'fasilitasList' => [
+            ['icon' => 'fa-bed', 'label' => 'Single Bed'],
+            ['icon' => 'fa-fan', 'label' => 'Kipas Angin'],
+            ['icon' => 'fa-tv', 'label' => 'TV Channel'],
+            ['icon' => 'fa-utensils', 'label' => 'Sarapan'],
+        ],
+    ],
+    [
+        'nama' => 'Superior 2',
+        'galeri' => 'Superior 2',
+        'desc' => 'Relaksasi maksimal dengan fasilitas air panas pribadi setelah hari yang panjang.',
+        'fasilitasList' => [
+            ['icon' => 'fa-bed', 'label' => 'Double Bed'],
+            ['icon' => 'fa-fan', 'label' => 'Kipas Angin'],
+            ['icon' => 'fa-hot-tub', 'label' => 'Air Panas'],
+            ['icon' => 'fa-tv', 'label' => 'TV'],
+            ['icon' => 'fa-utensils', 'label' => 'Sarapan'],
+        ],
+    ],
+    [
+        'nama' => 'Superior 3',
+        'galeri' => 'Superior 3',
+        'desc' => 'Kamar premium terluas dengan pendingin ruangan dan fasilitas terlengkap.',
+        'fasilitasList' => [
+            ['icon' => 'fa-bed', 'label' => 'Double Bed'],
+            ['icon' => 'fa-snowflake', 'label' => 'AC'],
+            ['icon' => 'fa-hot-tub', 'label' => 'Air Panas'],
+            ['icon' => 'fa-tv', 'label' => 'TV LED'],
+            ['icon' => 'fa-utensils', 'label' => 'Sarapan'],
+        ],
+    ],
+];
+
 
         $category = $rekomendasi['room']->category;
         $detail = collect($roomData)->firstWhere('nama', $category) ?? $roomData[0];
@@ -96,12 +97,22 @@
                             <i class="fas fa-star mr-1 text-yellow-300"></i> Pilihan Terbaik
                         </span>
                     </div>
-                    <img 
-                        src="{{ asset('assets/'.$detail['gambar']) }}" 
-                        alt="Gambar {{ $category }}"
-                        class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                 
+                @php
+                    $roomRekom = $rekomendasi['room'];                 
+                    $foto = $galeri[$roomRekom->category] ?? null;   
+                @endphp
+
+                @if($foto)
+                    <img src="{{ asset('storage/'.$foto->image_path) }}"
+                        alt="{{ $roomRekom->category }}"
+                         class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
                         loading="lazy">
-                    {{-- Gradient Overlay --}}
+                @else
+                    <img src="{{ asset('assets/no-image.png') }}"
+                        alt="Tidak ada gambar"
+                        class="w-full h-64 object-cover rounded-xl shadow-lg">
+                @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/5"></div>
                 </div>
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     FinanceController,
     FuzzyController,
     FuzzySettingController,
+    GaleriController,
     ReportController
 };
 
@@ -20,6 +21,8 @@ use App\Http\Controllers\{
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/', [GaleriController::class, 'awal']);
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -34,6 +37,12 @@ Route::prefix('admin')
     ->middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
+
+        Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri.index');
+        Route::get('/galeri/create', [GaleriController::class, 'create'])->name('galeri.create');
+        Route::post('/galeri', [GaleriController::class, 'store'])->name('galeri.store');
+        Route::get('/galeri/{galeri}/edit', [GaleriController::class, 'edit'])->name('galeri.edit');
+        Route::put('/galeri/{galeri}', [GaleriController::class, 'update'])->name('galeri.update');
 
         Route::get('/fuzzy', [FuzzyController::class, 'history'])
             ->name('fuzzy.index');

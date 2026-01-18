@@ -50,7 +50,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-center">
                 
-                <a href="#" class="flex items-center gap-3 group">
+                <a href="" class="flex items-center gap-3 group">
                     <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="h-10 md:h-12 w-auto drop-shadow-sm transition group-hover:scale-105"> 
                     <span class="text-xl md:text-2xl font-heading font-bold text-slate-800 tracking-tight">
                         Pusaka<span class="text-blue-600">Mulya</span>
@@ -135,10 +135,27 @@
             <div class="order-1 md:order-2 relative h-[500px] flex items-center justify-center">
                 <div class="relative w-full h-full max-w-md mx-auto">
                     <div class="absolute inset-0 bg-gray-200 rounded-[2rem] overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition duration-500 z-10">
-                        <img src="{{ asset('assets/k7.jpeg') }}" class="w-full h-full object-cover">
+                        @php
+                            $g = $galeri->where('id', 1)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                class="w-full h-full object-cover mb-2">
+                        @endif
                     </div>
                     <div class="absolute -bottom-8 -left-8 w-48 h-48 bg-white p-2 rounded-2xl shadow-xl z-20 animate-float hidden md:block">
-                        <img src="{{ asset('assets/k0.jpeg') }}" class="w-full h-full object-cover rounded-xl">
+                        @php
+                            $g = $galeri->where('id', 2)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                class="w-full h-full object-cover rounded-xl">
+                        @endif
+
                     </div>
                     {{-- <div class="absolute top-10 -right-4 bg-white/90 backdrop-blur p-4 rounded-xl shadow-lg z-30 animate-float" style="animation-delay: 1s;">
                         <div class="flex items-center gap-3">
@@ -173,7 +190,15 @@
 
                 <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-slate-100 flex flex-col">
                     <div class="relative h-64 overflow-hidden">
-                        <img src="{{ asset('assets/k3.jpeg') }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @php
+                            $g = $galeri->where('id', 3)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                 class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60"></div>
                     </div>
 
@@ -183,10 +208,19 @@
                                 <h4 class="text-2xl font-bold text-slate-800 font-serif">Standar</h4>
                                 <p class="text-slate-400 text-xs mt-1">Basic Room</p>
                             </div>
-                            <div class="text-right">
-                                <span class="block text-2xl font-bold text-blue-600">100K</span>
-                                <span class="text-xs text-slate-400">/malam</span>
-                            </div>
+                                @php
+                                    $roomStandar = $rooms->where('category', 'Standar')->first();
+                                @endphp
+
+                                @if($roomStandar)
+                                <div class="text-right">
+                                    <span class="block text-xl font-bold text-blue-600">
+                                        Rp {{ number_format($roomStandar->price, 0, ',', '.') }}
+                                    </span>
+                                    <span class="text-xs text-slate-400">/malam</span>
+                                </div>
+                                @endif
+
                         </div>
 
                         <div class="flex-1 space-y-3 mb-6">
@@ -204,7 +238,15 @@
 
                 <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-slate-100 flex flex-col">
                     <div class="relative h-64 overflow-hidden">
-                        <img src="{{ asset('assets/k4.jpeg') }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @php
+                            $g = $galeri->where('id', 4)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                 class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60"></div>
                     </div>
 
@@ -215,7 +257,15 @@
                                 <p class="text-slate-400 text-xs mt-1">Economy Plus</p>
                             </div>
                             <div class="text-right">
-                                <span class="block text-2xl font-bold text-blue-600">150K</span>
+                                <span class="block text-xl font-bold text-blue-600">  
+                                @php
+                                    $roomStandar1 = $rooms->where('category', 'Standar 1')->first();
+                                @endphp
+
+                                @if($roomStandar1)
+                                    Rp  {{ number_format($roomStandar1->price, 0, ',', '.') }}
+                                @endif
+                                </span>
                                 <span class="text-xs text-slate-400">/malam</span>
                             </div>
                         </div>
@@ -250,7 +300,15 @@
                     </div>
 
                     <div class="relative h-64 overflow-hidden">
-                        <img src="{{ asset('assets/k4.jpeg') }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @php
+                            $g = $galeri->where('id', 5)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                 class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60"></div>
                     </div>
 
@@ -261,7 +319,15 @@
                                 <p class="text-slate-400 text-xs mt-1">Comfort & Meal</p>
                             </div>
                             <div class="text-right">
-                                <span class="block text-2xl font-bold text-blue-600">200K</span>
+                                <span class="block text-xl font-bold text-blue-600">
+                                @php
+                                    $roomSuperior1 = $rooms->where('category', 'Superior 1')->first();
+                                @endphp
+
+                                @if($roomSuperior1)
+                                     Rp {{ number_format($roomSuperior1->price, 0, ',', '.') }}
+                                @endif
+                                </span>
                                 <span class="text-xs text-slate-400">/malam</span>
                             </div>
                         </div>
@@ -289,7 +355,15 @@
 
                 <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-slate-100 flex flex-col">
                     <div class="relative h-64 overflow-hidden">
-                        <img src="{{ asset('assets/k2.jpeg') }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @php
+                            $g = $galeri->where('id', 6)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                 class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60"></div>
                     </div>
 
@@ -300,7 +374,15 @@
                                 <p class="text-slate-400 text-xs mt-1">Hot Water Relax</p>
                             </div>
                             <div class="text-right">
-                                <span class="block text-2xl font-bold text-blue-600">250K</span>
+                                <span class="block text-xl font-bold text-blue-600">
+                                @php
+                                    $roomSuperior2 = $rooms->where('category', 'Superior 2')->first();
+                                @endphp
+
+                                @if($roomSuperior2)
+                                     Rp {{ number_format($roomSuperior2->price, 0, ',', '.') }}
+                                @endif
+                                </span>
                                 <span class="text-xs text-slate-400">/malam</span>
                             </div>
                         </div>
@@ -335,7 +417,15 @@
                     </div>
 
                     <div class="relative h-64 overflow-hidden">
-                        <img src="{{ asset('assets/k1.jpeg') }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @php
+                            $g = $galeri->where('id', 7)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                 class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent"></div>
                     </div>
 
@@ -346,7 +436,16 @@
                                 <p class="text-blue-400 text-xs mt-1">Full Experience</p>
                             </div>
                             <div class="text-right">
-                                <span class="block text-2xl font-bold text-blue-700">350K</span>
+                                
+                                <span class="block text-xl font-bold text-blue-700">
+                                @php
+                                    $roomSuperior3 = $rooms->where('category', 'Superior 3')->first();
+                                @endphp
+
+                                @if($roomSuperior3)
+                                     Rp {{ number_format($roomSuperior3->price, 0, ',', '.') }}
+                                @endif
+                        </span>
                                 <span class="text-xs text-blue-400">/malam</span>
                             </div>
                         </div>
@@ -472,7 +571,15 @@
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
             <div class="w-full md:w-1/2 relative">
                 <div class="absolute top-4 left-4 w-full h-full border-2 border-blue-100 rounded-3xl z-0"></div>
-                <img src="{{ asset('assets/k0.jpeg') }}" class="relative rounded-3xl shadow-2xl z-10 w-full object-cover h-[400px]">
+                        @php
+                            $g = $galeri->where('id', 8)->first();
+                        @endphp
+
+                        @if($g)
+                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                                alt="{{ $g->caption }}"
+                                class="relative rounded-3xl shadow-2xl z-10 w-full object-cover h-[400px]">
+                        @endif
                 <div class="absolute -bottom-6 -right-6 bg-blue-600 text-white p-6 rounded-2xl z-20 shadow-xl hidden md:block">
                     <p class="text-3xl font-bold font-heading">10+</p>
                     <p class="text-sm opacity-90">Tahun Pengalaman</p>

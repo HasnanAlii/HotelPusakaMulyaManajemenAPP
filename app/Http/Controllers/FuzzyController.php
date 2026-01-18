@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\FuzzySetting;
+use App\Models\galeri;
 use Illuminate\Http\Request;
 
 class FuzzyController extends Controller
@@ -118,7 +119,9 @@ class FuzzyController extends Controller
         usort($hasil, fn ($a, $b) => $b['skor'] <=> $a['skor']);
         $rekomendasi = $hasil[0];
 
-        return view('fuzzy.hasil', compact('hasil', 'rekomendasi'));
+        $galeri = Galeri::all()->keyBy('caption'); 
+
+        return view('fuzzy.hasil', compact('hasil', 'rekomendasi', 'galeri'));
     }
 
     /* ===============================

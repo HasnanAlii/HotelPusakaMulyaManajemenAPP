@@ -9,17 +9,32 @@ use Faker\Factory as Faker;
 
 class EmployeeSeeder extends Seeder
 {
-   public function run()
+    public function run()
     {
-        $faker = Faker::create();
+        $data = [
+            // Resepsionis
+            ['name' => 'Tata',  'position' => 'Resepsionis ',  'attendance' => 0],
+            ['name' => 'Iyep',  'position' => 'Resepsionis ', 'attendance' => 0],
 
-        // Buat 20 data dummy
-        for ($i = 1; $i <= 20; $i++) {
-            Employee::create([
-                'name'       => $faker->name(),
-                'position'   => $faker->randomElement(['Manager', 'Receptionist', 'Housekeeping', 'Technician', 'Security']),
-                'attendance' => $faker->numberBetween(15, 30), // jumlah kehadiran acak
-            ]);
+            // Housekeeper
+            ['name' => 'Faisal', 'position' => 'Housekeeping', 'attendance' => 0],
+            ['name' => 'Teguh',  'position' => 'Housekeeping', 'attendance' => 0],
+            ['name' => 'Robby',  'position' => 'Housekeeping', 'attendance' => 0],
+            ['name' => 'Jaja',   'position' => 'Housekeeping', 'attendance' => 0],
+            ['name' => 'Iyang',  'position' => 'Housekeeping', 'attendance' => 0],
+            ['name' => 'Udin',   'position' => 'Housekeeping', 'attendance' => 0],
+            ['name' => 'Ilham',  'position' => 'Housekeeping', 'attendance' => 0],
+
+            // Petugas Keamanan
+            ['name' => 'Sugih', 'position' => 'Petugas Keamanan', 'attendance' => 0],
+
+            // Petugas Laundry
+            ['name' => 'Sumi', 'position' => 'Petugas Laundry', 'attendance' => 0],
+        ];
+
+        foreach ($data as $item) {
+            Employee::create($item);
         }
     }
+
 }

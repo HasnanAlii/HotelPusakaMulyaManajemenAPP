@@ -20,8 +20,19 @@
                             <p class="text-sm font-medium text-gray-500">Total Kamar</p>
                             <h3 class="text-3xl font-bold text-gray-900">{{ $totalRooms }}</h3>
                         </div>
-                        <div class="p-3 bg-blue-100 rounded-full">
+                        
+                           <div class="flex items-center gap-3">
+                            @role('admin')
+                            <a href="{{ route('admin.galeri.index') }}"
+                            title="Lihat galeri"
+                            class="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-blue-100 hover:text-blue-600 transition duration-300 inline-flex">
+                                <i data-feather="image" class="w-4 h-4"></i>
+                            </a>
+                            @endrole
+                            
+                           <div class="p-3 bg-blue-100 rounded-full">
                             <i data-feather="home" class="text-blue-600"></i>
+                        </div>
                         </div>
                     </div>
                 </div>
