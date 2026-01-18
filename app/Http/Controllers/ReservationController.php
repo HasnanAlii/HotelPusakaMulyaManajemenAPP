@@ -9,6 +9,7 @@ use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
@@ -64,6 +65,7 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         try {
             $validated = $request->validate([
                 'customer_id' => 'required|exists:customers,id',
@@ -92,6 +94,7 @@ class ReservationController extends Controller
                 'reservation_id' => $reservation->id,
                 'expense_id'     => null,
                 'amount'         => $amount,
+                'user_id'        => $user->id,
                 'keterangan'     => 'Reservasi Kamar ' . $reservation->room->room_number . ' untuk customer - ' . $reservation->customer->name,
             ]);
 

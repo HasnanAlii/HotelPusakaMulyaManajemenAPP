@@ -125,15 +125,19 @@
                     </div>
                 </div>
             </div>
-            {{-- Tombol Print --}}
-            <a href="{{ route('finances.print', ['filter' => request('filter'), 'date' => request('date')]) }}" 
-                target="_blank"
-                class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm text-sm font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6m-6-4v4m6-4v4m-6-4H6m6 0h6"/>
+                {{-- Tombol Cetak Laporan --}}
+            <a href="{{ route('finances.print', ['filter' => request('filter'), 'date' => request('date')]) }}"
+            target="_blank"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg 
+                    hover:bg-emerald-700 shadow-sm text-sm font-semibold transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z"/>
                 </svg>
-                Print
+                Cetak Laporan
             </a>
+
 
             {{-- Tombol Hapus Data Lama --}}
             <form action="{{ route('finances.deleteOld') }}" method="POST" 

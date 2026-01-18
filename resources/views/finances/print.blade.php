@@ -9,7 +9,7 @@
             font-size: 11px;
             color: #2d3748;
             margin: 0;
-            background-color: #f9fafb;
+            /* background-color: #f9fafb; */
         }
 
         .container {
@@ -93,7 +93,7 @@
         }
 
         .col-no, .col-tanggal {
-            width: 10%;
+            width: 13%;
             text-align: center;
         }
         .col-uang {
@@ -175,6 +175,7 @@
                     <h2>Laporan Keuangan</h2>
                     <p><strong>Filter:</strong> {{ ucfirst($filter) }} @if($date) - {{ $date }} @endif</p>
                     <p><strong>Tanggal Cetak:</strong> {{ \Carbon\Carbon::now()->format('d-m-Y') }}</p>
+                    <p><strong>Resepsionis:</strong> {{ optional($resepsionis)->user->name ?? 'Tidak ada data' }}</p>
                 </td>
             </tr>
         </table>
@@ -230,6 +231,38 @@
                 <td>Rp {{ number_format($totalDana,0,',','.') }}</td>
             </tr>
         </table>
+
+
+        <h4 style="margin-top:30px;">Data Absensi Pegawai</h4>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="col-no">No</th>
+                    <th>Nama Pegawai</th>
+                    <th class="col-tanggal">Tanggal</th>
+                    <th>Jam Masuk</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($attendances as $i => $absen)
+                    <tr>
+                        <td class="col-no">{{ $i+1 }}</td>
+                        <td>{{ $absen->employee->name ?? '-' }}</td>
+                        <td class="col-tanggal">{{ \Carbon\Carbon::parse($absen->date)->format('d-m-Y') }}</td>
+                        <td>{{ $absen->check_in }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding:15px; color:#64748b;">
+                            Tidak ada data absensi untuk periode ini.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+
 
         <div class="footer">
             <p>Hotel Pusaka Mulya &copy; {{ date('Y') }} — Laporan otomatis sistem. Semua hak dilindungi.</p>

@@ -90,7 +90,7 @@
             <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100 flex flex-col md:flex-row transition-all duration-300 hover:shadow-2xl hover:shadow-blue-100/50">
                 
                 {{-- Image Section --}}
-                <div class="md:w-5/12 relative group h-64 md:h-auto overflow-hidden">
+                <div class="md:w-full relative group h-64 md:h-auto overflow-hidden">
                     <div class="absolute top-4 left-4 z-20">
                          <span class="px-3 py-1.5 bg-blue-600/90 backdrop-blur-sm text-white rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg">
                             <i class="fas fa-star mr-1 text-yellow-300"></i> Pilihan Terbaik

@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RoomController extends Controller
@@ -157,6 +158,7 @@ class RoomController extends Controller
 
     public function cekInMultipleStore(Request $request)
 {
+    $user = Auth::user();
     try {
         // Validasi
         $validated = $request->validate([
@@ -199,6 +201,7 @@ class RoomController extends Controller
             Finance::create([
                 'reservation_id' => $reservation->id,
                 'expense_id'     => null,
+                'user_id'        => $user->id,
                 'amount'         => $amount,
                 'keterangan'     => 'Reservasi Kamar ' . $reservation->room->room_number 
                                     . ' untuk customer - ' . $reservation->customer->name,

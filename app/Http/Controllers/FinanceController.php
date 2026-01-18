@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Finance;
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -63,7 +65,7 @@ public function printPdf(Request $request)
     $filter = $request->filter ?? 'all';
     $date = $request->date;
 
-    $financesQuery = \App\Models\Finance::query();
+    $financesQuery = \App\Models\Finance::with('user');
 
     if ($filter === 'harian' && $date) {
         $financesQuery->whereDate('created_at', $date);
@@ -71,6 +73,17 @@ public function printPdf(Request $request)
         $financesQuery->whereYear('created_at', Carbon::parse($date)->year)
                       ->whereMonth('created_at', Carbon::parse($date)->month);
     }
+    
+    $attendanceQuery = Attendance::with('employee');
+
+    if ($filter === 'harian' && $date) {
+        $attendanceQuery->whereDate('date', $date);
+    } elseif ($filter === 'bulanan' && $date) {
+        $attendanceQuery->whereYear('date', Carbon::parse($date)->year)
+                        ->whereMonth('date', Carbon::parse($date)->month);
+    }
+
+    $attendances = $attendanceQuery->orderBy('date', 'desc')->get();
 
     $finances = $financesQuery->orderBy('created_at', 'desc')->get();
 
@@ -85,6 +98,10 @@ public function printPdf(Request $request)
     } elseif ($filter === 'bulanan' && $date) {
         $formattedDate = Carbon::parse($date)->format('F Y');
     }
+    $finances = $financesQuery->orderBy('created_at', 'desc')->get();
+
+    // ambil resepsionis dari data finance TERBARU sesuai filter
+    $resepsionis = $finances->first();
 
     $pdf = PDF::loadView('finances.print', [
         'finances' => $finances,
@@ -92,7 +109,11 @@ public function printPdf(Request $request)
         'totalPengeluaran' => $totalPengeluaran,
         'totalDana' => $totalDana,
         'filter' => $filter,
-        'date' => $formattedDate ?: $date
+        'date' => $formattedDate ?: $date,
+        'resepsionis' => $resepsionis,
+        'attendances' => $attendances
+
+
     ]);
 
     $filename = 'laporan-keuangan';

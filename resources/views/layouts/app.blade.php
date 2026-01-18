@@ -118,7 +118,7 @@
                 <a href="{{ route('rooms.index') }}"
                    class="flex items-center px-4 py-3 rounded-lg 
                    transition-colors duration-200
-                   {{ request()->routeIs('rooms.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                   {{ request()->routeIs('rooms.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
                     <i data-feather="grid" class="h-5 w-5"></i>
                     <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Manajemen Kamar</span>
                 </a>
@@ -126,7 +126,7 @@
                 <a href="{{ route('employees.index') }}"
                    class="flex items-center px-4 py-3 rounded-lg 
                    transition-colors duration-200
-                   {{ request()->routeIs('employees.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                   {{ request()->routeIs('employees.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
                     <i data-feather="users" class="h-5 w-5"></i>
                     <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Manajemen Pegawai</span>
                 </a>
@@ -134,7 +134,7 @@
                 <a href="{{ route('maintenances.index') }}"
                    class="flex items-center px-4 py-3 rounded-lg 
                    transition-colors duration-200
-                   {{ request()->routeIs('maintenances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                   {{ request()->routeIs('maintenances.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
                     <i data-feather="alert-circle" class="h-5 w-5"></i>
                     <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Kerusakan</span>
                 </a>
@@ -143,7 +143,7 @@
                 <a href="{{ route('finances.index') }}"
                    class="flex items-center px-4 py-3 rounded-lg 
                    transition-colors duration-200
-                   {{ request()->routeIs('finances.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                   {{ request()->routeIs('finances.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
                     <i data-feather="dollar-sign" class="h-5 w-5"></i>
                     <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Keuangan</span>
                 </a>
@@ -151,7 +151,7 @@
                 <a href="{{ route('reservations.index') }}"
                    class="flex items-center px-4 py-3 rounded-lg 
                    transition-colors duration-200
-                   {{ request()->routeIs('reservations.index*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
+                   {{ request()->routeIs('reservations.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
                     <i data-feather="file-text" class="h-5 w-5"></i>
                     <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Reservasi</span>
                 </a>

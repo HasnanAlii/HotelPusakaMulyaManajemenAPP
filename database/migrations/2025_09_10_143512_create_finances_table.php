@@ -14,8 +14,10 @@ return new class extends Migration
     Schema::create('finances', function (Blueprint $table) {
         $table->id();
         $table->foreignId('reservation_id')->nullable()->constrained('reservations')->onDelete('cascade');
+        $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
         $table->foreignId('expense_id')->nullable()->constrained('expenses')->onDelete('cascade');
         $table->string('keterangan')->nullable();
+
         $table->unsignedBigInteger('amount');
 
 
