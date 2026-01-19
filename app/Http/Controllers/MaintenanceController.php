@@ -167,7 +167,7 @@ public function storee(Request $request)
                 'room_id'     => 'required|exists:rooms,id',
                 'damage'      => 'required|string|max:255',
                 'customer_id' => 'nullable|exists:customers,id',
-                'employee_id' => 'nullable|exists:employees,id',
+                'employee_id' => 'required|exists:employees,id',
                 'amount'      => 'required|numeric|min:0',
                 'is_repaired' => 'boolean',
             ]);

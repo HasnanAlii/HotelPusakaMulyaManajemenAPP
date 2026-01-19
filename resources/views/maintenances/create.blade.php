@@ -58,11 +58,11 @@
                 <select 
                     name="employee_id" 
                     id="employee_id"
-                    class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
+                    class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition" required
                 >
-                    <option value="">-- Tidak Ada --</option>
+                    <option value="" required>-- Tidak Ada --</option>
                     @foreach($employees as $employee)
-                        <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                        <option value="{{ $employee->id }}" >{{ $employee->name }}</option>
                     @endforeach
                 </select>
             </div>
