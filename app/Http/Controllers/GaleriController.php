@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\galeri;
+use App\Models\Galeri;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -13,13 +13,13 @@ class GaleriController extends Controller
      */
     public function index()
     {
-        $galeries = galeri::all();
+        $galeries = Galeri::all();
         return view('galeri.index', compact('galeries'));
     }
 
         public function awal()
     {
-        $galeri = galeri::all();
+        $galeri = Galeri::all();
         $rooms = Room::all();
         return view('welcome', compact('galeri', 'rooms'));
     }
@@ -42,7 +42,7 @@ class GaleriController extends Controller
             'caption' => 'nullable|string|max:255'
         ]);
 
-        $galeri = new galeri();
+        $galeri = new Galeri();
         $galeri->caption = $request->caption;
 
         if ($request->hasFile('image_path')) {
@@ -58,7 +58,7 @@ class GaleriController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(galeri $galeri)
+    public function edit(Galeri $galeri)
     {
         return view('galeri.edit', compact('galeri'));
     }
@@ -66,7 +66,7 @@ class GaleriController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, galeri $galeri)
+    public function update(Request $request, Galeri $galeri)
     {
         $request->validate([
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:12048',

@@ -51,7 +51,7 @@ class EmployeeController extends Controller
                 'attendance' => 0,
             ]);
 
-            return redirect()->back()->with([
+            return redirect()->route('employees.index')->with([
                 'message' => 'Karyawan berhasil ditambahkan.',
                 'alert-type' => 'success'
             ]);
@@ -61,7 +61,7 @@ class EmployeeController extends Controller
                 'alert-type' => 'error'
             ]);
         }
-    }
+    } 
 
     // Form edit
     public function edit(Employee $employee)
@@ -90,7 +90,7 @@ class EmployeeController extends Controller
                 'position' => $request->position,
             ]);
 
-            return redirect()->back()->with([
+           return redirect()->route('employees.index')->with([
                 'message' => 'Data karyawan berhasil diperbarui.',
                 'alert-type' => 'success'
             ]);
@@ -100,6 +100,10 @@ class EmployeeController extends Controller
                 'alert-type' => 'error'
             ]);
         }
+                return redirect()->route('employees.index');
+
+
+
     }
 
     // Hapus karyawan

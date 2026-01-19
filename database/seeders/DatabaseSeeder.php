@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             // ExpenseSeeder::class,
             FuzzySettingSeeder::class,
             FuzzyInputSeeder::class,
+             GaleriSeeder::class,
            
         ]);
     }
