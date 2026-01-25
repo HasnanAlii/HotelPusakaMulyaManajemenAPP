@@ -15,7 +15,7 @@ return new class extends Migration
         $table->id();
         $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
         $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
-        $table->enum('status', ['checkin', 'checkout'])->default('checkin');
+        $table->enum('status', ['checkin', 'checkout','booking'])->default('checkin');
         $table->date('check_in');
         $table->date('check_out');
         $table->timestamps();

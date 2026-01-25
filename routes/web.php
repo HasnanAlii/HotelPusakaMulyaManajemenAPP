@@ -31,7 +31,11 @@ Route::get('/dashboard', function () {
 
 
 // Route::get('/', [FuzzyController::class, 'index'])->name('fuzzy.index');
-Route::post('/', [FuzzyController::class, 'process'])->name('fuzzy.process');
+Route::post('/hasil', [FuzzyController::class, 'process'])->name('fuzzy.process');
+Route::get('/rooms/{room}/reservasi', [RoomController::class, 'reservasi'])->name('rooms.reservasi');
+Route::post('/reservasi/pelanggan', [ReservationController::class, 'reservasi'])->name('reservations.reservasi');
+Route::get('/reservasi/{room}', [RoomController::class, 'nota'])->name('rooms.nota');
+
 
 Route::prefix('admin')
     ->middleware(['auth', 'role:admin'])
@@ -117,6 +121,9 @@ Route::middleware('auth')->group(function () {
     | Reservations
     |--------------------------------------------------------------------------
     */
+    Route::get('/reservations/verifikasi/{reservation}', [ReservationController::class, 'verifikasi'])->name('reservations.verifikasi');
+    Route::get('/reservations/tolak/{reservation}', [ReservationController::class, 'tolak'])->name('reservations.tolak');
+
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
     Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');

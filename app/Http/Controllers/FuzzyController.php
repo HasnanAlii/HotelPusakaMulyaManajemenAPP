@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\FuzzySetting;
-use App\Models\galeri;
+use App\Models\Galeri;
 use Illuminate\Http\Request;
 
 class FuzzyController extends Controller

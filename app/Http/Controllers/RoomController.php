@@ -23,7 +23,7 @@ class RoomController extends Controller
     {
         try {
             $rooms = Room::with(['reservations' => function ($r) {
-                    $r->where('status', 'checkin')->with('customer');
+                    $r->where('status', 'checkin')->orWhere('status', 'booking')->with('customer');
                 }])
 
                 ->when($request->search, function ($query, $search) {
@@ -66,6 +66,8 @@ class RoomController extends Controller
             ]);
         }
     }
+
+ 
 
     /**
      * Simpan kamar baru
@@ -186,7 +188,7 @@ class RoomController extends Controller
 
             /** Update status kamar */
             Room::where('id', $roomId)->update([
-                'status' => 'dibooking'
+                'status' => 'terisi'
             ]);
 
             /** Hitung jumlah hari */
@@ -223,7 +225,33 @@ class RoomController extends Controller
     }
 }
 
+    public function nota($id)
+    {
+        try {
+            $room = Room::findOrFail($id);
 
+            $reservation = $room->reservations()->latest()->first();
+            $customer = $reservation ? $reservation->customer : null;
+
+            $nights = 0;
+            $totalPrice = 0;
+
+            if ($reservation) {
+                $checkIn = Carbon::parse($reservation->check_in);
+                $checkOut = Carbon::parse($reservation->check_out);
+
+                $nights = $checkIn->diffInDays($checkOut);
+                $totalPrice = $room->price * $nights;
+            }
+
+            return view('fuzzy.nota', compact('room', 'customer', 'reservation', 'nights', 'totalPrice'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'message' => 'Gagal menampilkan nota kamar: ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ]);
+        }
+    }
     /**
      * Tampilkan nota kamar
      */
@@ -337,5 +365,25 @@ class RoomController extends Controller
                 ]);
             }
         }
+
+
+
+         public function reservasi(Room $room)
+    {
+        try {
+            $customers = Customer::all();
+            return view('fuzzy.cekin', compact('customers', 'room'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'message' => 'Gagal membuka form reservasi: ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ]);
+        }
+    }
+
+    /**
+     * Simpan reservasi baru
+     */
+    
 
 }

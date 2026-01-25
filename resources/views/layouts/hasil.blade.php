@@ -13,6 +13,11 @@
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
     
     <script src="//unpkg.com/alpinejs" defer></script>
 
@@ -57,11 +62,12 @@
                 </a>
     </nav>
     
-
-        <main class="flex-1 overflow-y-auto">
-            {{ $slot }}
-        </main>
-
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    
+            <main class="flex-1 overflow-y-auto">
+                {{ $slot }}
+            </main>
 
     <footer id="contact" class="bg-gradient-to-b from-blue-900 via-blue-950 to-blue-950 text-white pt-20 pb-10">
         <div class="max-w-7xl mx-auto px-6">
@@ -152,6 +158,7 @@
                 <br>
             </div>
         </div>
+        
     </footer>
 
 </html>

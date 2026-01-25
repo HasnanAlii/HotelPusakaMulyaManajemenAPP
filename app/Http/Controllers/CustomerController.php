@@ -46,7 +46,7 @@ class CustomerController extends Controller
 
         Customer::create($validated);
 
-          return redirect()->route('rooms.index')
+        return redirect()->back()
                          ->with('success', 'Customer berhasil diperbarui');
     }
 

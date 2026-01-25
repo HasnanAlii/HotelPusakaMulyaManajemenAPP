@@ -67,7 +67,7 @@
         $detail = collect($roomData)->firstWhere('nama', $category) ?? $roomData[0];
     @endphp
 
-    <div class="min-h-screen py-12 bg-slate-50 relative overflow-hidden">
+    <div class="min-h-screen pt-12 bg-slate-50 relative overflow-hidden">
         {{-- Background Decoration --}}
         <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-blue-600 to-slate-50 opacity-10 pointer-events-none"></div>
 
@@ -167,11 +167,11 @@
                             </div>
                             
                             {{-- Action Buttons --}}
-                            {{-- <div class="flex gap-3 w-full sm:w-auto">
-                                <button class="flex-1 sm:flex-none px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5">
-                                    Pesan Sekarang
-                                </button>
-                            </div> --}}
+                            <div class="flex gap-3 w-full sm:w-auto">
+                                <a href="{{ route('rooms.reservasi', $rekomendasi['room']->id) }}" class="flex-1 sm:flex-none px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5">
+                                    Pesan Kamar
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
 
             {{-- Back Link --}}
             <div class="mt-10 text-center">
-                <a href="{{ url()->previous() }}" 
+                <a href="/" 
                    class="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 font-medium transition-colors group">
                     <div class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center group-hover:border-blue-400 transition-colors">
                         <i class="fas fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>

@@ -82,7 +82,7 @@ class ReservationController extends Controller
 
             $reservation = Reservation::create($validated);
 
-            $reservation->room()->update(['status' => 'dibooking']);
+            $reservation->room()->update(['status' => 'terisi']);
 
             $checkIn  = Carbon::parse($reservation->check_in);
             $checkOut = Carbon::parse($reservation->check_out);
@@ -152,4 +152,102 @@ class ReservationController extends Controller
     }
 }
 
+public function reservasi(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $validated = $request->validate([
+                'customer_id' => 'required|exists:customers,id',
+                'room_id'     => 'required|exists:rooms,id',
+                'check_in'    => 'required|date',
+                'check_out'   => 'required|date|after_or_equal:check_in',
+            ]);
+            $validated['check_in'] = Carbon::createFromFormat('d-m-Y', $validated['check_in'])->format('Y-m-d');
+            $validated['check_out'] = Carbon::createFromFormat('d-m-Y', $validated['check_out'])->format('Y-m-d');
+
+
+            $validated['status'] = 'booking';
+
+            $reservation = Reservation::create($validated);
+
+            $reservation->room()->update(['status' => 'dibooking']);
+
+            $checkIn  = Carbon::parse($reservation->check_in);
+            $checkOut = Carbon::parse($reservation->check_out);
+            $days     = max($checkIn->diffInDays($checkOut), 1);
+
+            $amount = $reservation->room->price * $days;
+
+  
+
+            return redirect()->route('rooms.nota', $reservation->room->id)
+                             ->with([
+                                'message' => 'Check In Berhasil.',
+                                'alert-type' => 'success'
+                             ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with([
+                'message' => 'Gagal membuat reservasi: ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ]);
+        }
+    }
+public function tolak(Reservation $reservation)
+{
+    // Kembalikan status kamar jadi tersedia
+    $reservation->room()->update(['status' => 'tersedia']);
+
+    // Hapus data reservasi
+    $reservation->delete();
+
+    return redirect()->back()->with([
+        'message' => 'Reservasi berhasil ditolak dan dihapus.',
+        'alert-type' => 'success'
+    ]);
+}
+
+    
+public function verifikasi(Reservation $reservation)
+{
+    $user = Auth::user();
+
+    try {
+        $reservation->room()->update(['status' => 'terisi']);
+
+        // Hitung total hari & biaya
+        $checkIn  = Carbon::parse($reservation->check_in);
+        $checkOut = Carbon::parse($reservation->check_out);
+        $days     = max($checkIn->diffInDays($checkOut), 1);
+        $amount   = $reservation->room->price * $days;
+
+        $reservation->status = 'checkin';
+        $reservation->save();
+
+        // Simpan ke tabel finance
+        Finance::create([
+            'reservation_id' => $reservation->id,
+            'expense_id'     => null,
+            'amount'         => $amount,
+            'user_id'        => $user->id,
+            'keterangan'     => 'Reservasi Kamar ' . $reservation->room->room_number .
+                                ' untuk customer - ' . $reservation->customer->name,
+        ]);
+
+        return redirect()->route('rooms.show', $reservation->room->id)
+            ->with([
+                'message' => 'Verifikasi & Check In Berhasil.',
+                'alert-type' => 'success'
+            ]);
+
+    } catch (\Exception $e) {
+        return redirect()->back()->withInput()->with([
+            'message' => 'Gagal verifikasi reservasi: ' . $e->getMessage(),
+            'alert-type' => 'error'
+        ]);
+    }
+}
+
+
+
+    
 }

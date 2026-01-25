@@ -192,8 +192,11 @@ document.addEventListener('DOMContentLoaded', function() {
         dateFormat: "d-m-Y",
         locale: "id",
         onChange: function(selectedDates) {
-            if (selectedDates.length) {
-                fpCheckOut.set('minDate', selectedDates[0]);
+           if (selectedDates.length) {
+                const minDate = selectedDates[0]; // Date object
+                   minDate.setDate(minDate.getDate() + 1); 
+                // set minimal hari check_out ke minDate (atau minDate + 1 jika mau wajib 1 malam)
+                fpCheckOut.set('minDate', minDate);
             }
             hitungTotal();
         }
