@@ -67,7 +67,7 @@
         $detail = collect($roomData)->firstWhere('nama', $category) ?? $roomData[0];
     @endphp
 
-    <div class="min-h-screen pt-12 bg-slate-50 relative overflow-hidden">
+    <div class="min-h-screen py-12 bg-slate-50 relative overflow-hidden">
         {{-- Background Decoration --}}
         <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-blue-600 to-slate-50 opacity-10 pointer-events-none"></div>
 

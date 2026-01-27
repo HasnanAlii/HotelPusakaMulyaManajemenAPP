@@ -17,19 +17,12 @@ class FuzzyController extends Controller
             'pref_kenyamanan' => 'required|in:rendah,sedang,tinggi',
         ]);
 
-        /* ===============================
-           AMBIL SETTING FUZZY
-        =============================== */
         $setting = FuzzySetting::firstOrFail();
 
         $maxHarga   = (int) $request->harga_input;
         $prefFasil  = $request->pref_fasilitas;
         $prefNyaman = $request->pref_kenyamanan;
 
-        /* ===============================
-           OPSI A:
-           - hanya kamar <= budget
-        =============================== */
         $rooms = Room::where('status', 'tersedia')
             ->where('price', '<=', $maxHarga)
             ->get();
@@ -45,67 +38,50 @@ class FuzzyController extends Controller
 
         foreach ($rooms as $room) {
 
-            /* =================================================
-               FUZZY HARGA (OPSI A)
-               JS:
-               h = 1 / (harga / 100000)
-            ================================================= */
-            $h = $this->safeDiv(
-                1,
-                $this->safeDiv($room->price, 100000)
-            );
+            /* =========================
+            FUZZIFIKASI
+            ========================= */
 
-            /* =================================================
-               FUZZY FASILITAS (PAKAI SETTING)
-            ================================================= */
-            $fasilitas = max((int) $room->facilities, 0.000001);
+            // Harga (murah – mahal)
+            $muHarga = $this->safeDiv(1, $this->safeDiv($room->price, 100000));
 
+            // Fasilitas
+            $fasilitas = max((int)$room->facilities, 0.000001);
             if ($prefFasil === 'sedikit') {
-                $f = $this->safeDiv(1, $fasilitas);
+                $muFasil = $this->safeDiv(1, $fasilitas);
             } elseif ($prefFasil === 'cukup') {
-                $f = $this->safeDiv(
-                    1,
-                    abs($fasilitas - $setting->fasilitas_mid) + 1
-                );
-            } else { // lengkap
-                $f = $this->safeDiv($fasilitas, $setting->fasilitas_max);
+                $muFasil = $this->safeDiv(1, abs($fasilitas - $setting->fasilitas_mid) + 1);
+            } else {
+                $muFasil = $this->safeDiv($fasilitas, $setting->fasilitas_max);
             }
 
-            /* =================================================
-               FUZZY KENYAMANAN (PAKAI SETTING)
-            ================================================= */
-            $nyaman = max(
-                $this->mapNyamanRoom($room->category, $setting),
-                0.000001
-            );
-
+            // Kenyamanan
+            $nyaman = max($this->mapNyamanRoom($room->category, $setting), 0.000001);
             if ($prefNyaman === 'rendah') {
-                $n = $this->safeDiv(1, $nyaman);
+                $muNyaman = $this->safeDiv(1, $nyaman);
             } elseif ($prefNyaman === 'sedang') {
-                $n = $this->safeDiv(
-                    1,
-                    abs($nyaman - $setting->nyaman_mid) + 1
-                );
-            } else { // tinggi
-                $n = $this->safeDiv($nyaman, $setting->nyaman_max);
+                $muNyaman = $this->safeDiv(1, abs($nyaman - $setting->nyaman_mid) + 1);
+            } else {
+                $muNyaman = $this->safeDiv($nyaman, $setting->nyaman_max);
             }
 
-            /* =================================================
-               SKOR DASAR (JS STYLE)
-            ================================================= */
-            $skor = ($h + $f + $n) / 3;
+            /* =========================
+            INFERENSI (α-predikat)
+            Rule: IF harga AND fasilitas AND kenyamanan
+            ========================= */
+            $alpha = min($muHarga, $muFasil, $muNyaman);
 
-            /* =================================================
-               BOOSTER PREMIUM
-            ================================================= */
-            if (
-                $maxHarga >= 350000 &&
-                $prefFasil === 'lengkap' &&
-                $prefNyaman === 'tinggi' &&
-                (int) $room->price === 350000
-            ) {
-                $skor += 0.15;
-            }
+            /* =========================
+            OUTPUT MONOTON (z)
+            Rekomendasi Tinggi (naik)
+            ========================= */
+            $z = $setting->z_min + $alpha * ($setting->z_max - $setting->z_min);
+
+            /* =========================
+            DEFUZZIFIKASI
+            (karena satu rule dominan, z langsung jadi skor)
+            ========================= */
+            $skor = $z;
 
             $hasil[] = [
                 'room' => $room,
@@ -113,29 +89,23 @@ class FuzzyController extends Controller
             ];
         }
 
-        /* ===============================
-           URUTKAN & AMBIL TERBAIK
-        =============================== */
+        // Urutkan skor tertinggi
         usort($hasil, fn ($a, $b) => $b['skor'] <=> $a['skor']);
         $rekomendasi = $hasil[0];
 
-        $galeri = Galeri::all()->keyBy('caption'); 
+        $galeri = Galeri::all()->keyBy('caption');
 
         return view('fuzzy.hasil', compact('hasil', 'rekomendasi', 'galeri'));
     }
 
-    /* ===============================
-       SAFE DIV (ANTI DIV 0)
-    =============================== */
+
+    //Mencegah Pembagi 0
     private function safeDiv($a, $b)
     {
         return $a / ($b == 0 ? 0.000001 : $b);
     }
 
-    /* ===============================
-       MAP KENYAMANAN → NUMERIK
-       PAKAI SETTING
-    =============================== */
+    //konversi kategori kamar ke skala kenyamanan
     private function mapNyamanRoom($category, $setting)
     {
         return match (strtolower($category)) {
