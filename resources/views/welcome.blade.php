@@ -484,7 +484,7 @@
             <div class="absolute right-0 top-0 w-96 h-96 bg-blue-600 rounded-full blur-[100px]"></div>
         </div>
 
-        <div class="max-w-5xl mx-auto px-6 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
 
             {{-- HEADER --}}
             <div class="text-center mb-12">
@@ -505,7 +505,7 @@
                 class="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-slate-200">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
 
                     {{-- HARGA --}}
                     <div class="space-y-3">
@@ -532,6 +532,7 @@
                         <select name="pref_fasilitas" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
                                 text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
+                                  <option value="">Pilih Kelengkapan Fasilitas</option>
                             <option value="sedikit">Cukup Tidur</option>
                             <option value="cukup">Menengah</option>
                             <option value="lengkap">Komplit</option>
@@ -546,13 +547,31 @@
                         <select name="pref_kenyamanan" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
                                 text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
+                            <option value="">Pilih Tingkat Kenyamanan</option>
                             <option value="rendah">Standar</option>
                             <option value="sedang">Extra Nyaman</option>
                             <option value="tinggi">VIP</option>
                         </select>
                     </div>
 
+                    <!-- Jumlah Orang -->
+                    <div class="space-y-3">
+                        <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                            <i class="fas fa-users text-blue-500"></i> Jumlah Orang
+                        </label>
+
+                        <select name="jumlah_orang" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 pr-10 py-3
+                                text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
+                            <option value="">Pilih Kapasitas</option>
+                            <option value="1">1 - 2 Orang</option>
+                            <option value="2">Lebih dari 2 Orang</option>
+                        </select>
+                    </div>
                 </div>
+                    
+
+
 
                 {{-- BUTTON --}}
                 <div class="mt-10 text-center">

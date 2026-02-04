@@ -18,6 +18,7 @@ return new class extends Migration
         $table->text('facilities')->nullable();
         $table->string('category')->nullable();
         $table->unsignedBigInteger('price');
+        $table ->string('tata_letak')->nullable();
         $table->enum('status', ['tersedia', 'terisi', 'dibooking', 'perawatan'])->default('tersedia');
         $table->timestamps();
     });

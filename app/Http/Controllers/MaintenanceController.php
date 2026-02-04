@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\Finance;
 use App\Models\Reservation;
+use Illuminate\Database\Console\Migrations\StatusCommand;
 use Illuminate\Http\Request;
 
 class MaintenanceController extends Controller
@@ -100,6 +101,7 @@ public function storee(Request $request)
                 'status'      => 'required|in:tersedia,perawatan',
             ]);
 
+
             $room = Room::findOrFail($validated['room_id']);
 
             $lastReservation = $room->reservations()
@@ -107,15 +109,17 @@ public function storee(Request $request)
                 ->with('customer')
                 ->first();
 
-            $lastReservation->update(['status' => 'checkout']); 
-
+            $lastReservation->update(['status' => 'checkout', 'employee_id' => $request->employee_id ?? null]);
+              
+            if($validated['status'] === 'perawatan') {
             Maintenance::create([
                 'room_id'     => $room->id,
                 'damage'      => $validated['damage'] ?? null,
-                'employee_id' => $validated['employee_id'],
+                'employee_id' => $request->employee_id ?? null,
                 'customer_id' => $lastReservation?->customer_id,
                 'is_repaired' => false,
             ]);
+            }
 
             $room->update(['status' => $validated['status']]);
 

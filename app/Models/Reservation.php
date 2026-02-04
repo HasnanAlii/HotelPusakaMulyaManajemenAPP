@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    protected $fillable = ['customer_id', 'room_id', 'check_in', 'check_out',  'status', ];
+    protected $fillable = ['customer_id', 'room_id', 'check_in', 'check_out',  'status','employee_id' ];
 
     public function customer()
     {
@@ -16,6 +16,11 @@ class Reservation extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
     }
 
     public function finance()

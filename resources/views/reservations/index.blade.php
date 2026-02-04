@@ -74,17 +74,42 @@
                         
                         @forelse ($reservations as $reservation)
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition duration-300 hover:shadow-2xl">
-                                
-                                <div class="p-5 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                                <div class="p-5 border-b border-gray-200 bg-gray-50 
+                                     grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                                    {{-- Nomor Kamar --}}
                                     <div>
-                                        <span class="text-sm font-semibold text-blue-600">No. Kamar</span>
-                                        <h4 class="text-3xl font-bold text-gray-900">{{ $reservation->room->room_number }}</h4>
+                                        <span class="text-sm font-semibold text-blue-600">
+                                            No. Kamar
+                                        </span>
+                                        <h4 class="text-3xl font-bold text-gray-900">
+                                            {{ $reservation->room->room_number }}
+                                        </h4>
                                     </div>
+
+                                    {{-- Pegawai --}}
+                                    <div class="sm:text-center">
+                                        <span class="text-sm font-semibold text-gray-500 block">
+                                            Pegawai
+                                        </span>
+
+                                        <p class="text-lg font-medium text-gray-800">
+                                            {{ optional($reservation->employee)->name ?? '-' }}
+                                        </p>
+                                    </div>
+
+                                    {{-- Customer --}}
                                     <div class="sm:text-right">
-                                        <span class="text-sm font-semibold text-gray-500 block">Customer</span>
-                                        <p class="text-lg font-medium text-gray-800">{{ $reservation->customer->name }}</p>
+                                        <span class="text-sm font-semibold text-gray-500 block">
+                                            Customer
+                                        </span>
+
+                                        <p class="text-lg font-medium text-gray-800">
+                                            {{ $reservation->customer->name }}
+                                        </p>
                                     </div>
+
                                 </div>
+
 
                                 <div class="p-5">
                                     <div class="grid grid-cols-2 gap-4 mb-5">

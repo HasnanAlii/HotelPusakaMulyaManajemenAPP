@@ -14,6 +14,10 @@ return new class extends Migration
     Schema::create('reservations', function (Blueprint $table) {
         $table->id();
         $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
+        $table->foreignId('employee_id')
+            ->nullable()
+            ->constrained('employees')
+            ->onDelete('cascade');
         $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
         $table->enum('status', ['checkin', 'checkout','booking'])->default('checkin');
         $table->date('check_in');

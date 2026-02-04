@@ -41,8 +41,10 @@
             </div>
 
             {{-- Kerusakan --}}
-            <div class="col-span-2">
-                <label for="damage" class="block text-gray-700 font-medium mb-2">Kerusakan (Jika Ada)</label>
+            <div class="col-span-2" id="damage-wrapper">
+                <label for="damage" class="block text-gray-700 font-medium mb-2">
+                    Kerusakan
+                </label>
                 <textarea 
                     id="damage" 
                     name="damage" 
@@ -67,15 +69,6 @@
                 </select>
             </div>
 
-            <script>
-                $(document).ready(function() {
-                    $('#employee_id').select2({
-                        placeholder: "-- Pilih Pegawai --",
-                        allowClear: true,
-                        width: '100%'
-                    });
-                });
-            </script>
 
             {{-- Status Kamar --}}
             <div>
@@ -89,6 +82,7 @@
                     <option value="perawatan">Perawatan</option>
                 </select>
             </div>
+            
 
             {{-- Tombol Aksi --}}
             <div class="col-span-2 flex justify-end space-x-3 mt-6">
@@ -104,3 +98,28 @@
         </form>
     </div>
 </x-app-layout>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const statusSelect = document.getElementById('status');
+    const damageWrapper = document.getElementById('damage-wrapper');
+    const damageInput = document.getElementById('damage');
+
+    function toggleDamage() {
+        if (statusSelect.value === 'perawatan') {
+            damageWrapper.style.display = 'block';
+            damageInput.setAttribute('required', 'required');
+        } else {
+            damageWrapper.style.display = 'none';
+            damageInput.removeAttribute('required');
+            damageInput.value = '';
+        }
+    }
+
+    // saat halaman load
+    toggleDamage();
+
+    // saat status diubah
+    statusSelect.addEventListener('change', toggleDamage);
+});
+</script>
