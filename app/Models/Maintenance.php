@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Maintenance extends Model
 {
-    protected $fillable = ['room_id', 'damage', 'customer_id', 'employee_id','amount','is_repaired',];
+    protected $fillable = ['room_id', 'damage', 'customer_id', 'employee_id','amount','is_repaired','tingkat_kerusakan','waktu_perbaikan','biaya_perkiraan'];
       protected $casts = [
         'is_repaired' => 'boolean',
         'repaired_at' => 'datetime',

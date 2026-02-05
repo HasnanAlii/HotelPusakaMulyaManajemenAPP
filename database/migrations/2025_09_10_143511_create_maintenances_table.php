@@ -16,7 +16,10 @@ return new class extends Migration
     $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
     $table->string('damage')->nullable();
     $table->unsignedBigInteger('amount')->nullable();
-    $table->boolean('is_repaired')->default(false); // status perbaikan
+    $table->boolean('is_repaired')->default(false); 
+    $table->string('tingkat_kerusakan')->nullable();
+    $table->string('waktu_perbaikan')->nullable();
+    $table->string('biaya_perkiraan')->nullable();
     $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('set null');
     $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('set null');
     $table->timestamps();

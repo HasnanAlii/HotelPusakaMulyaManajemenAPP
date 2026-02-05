@@ -75,7 +75,7 @@
                         @forelse ($reservations as $reservation)
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition duration-300 hover:shadow-2xl">
                                 <div class="p-5 border-b border-gray-200 bg-gray-50 
-                                     grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                                     grid grid-cols-1 sm:grid-cols-4 gap-4 items-center">
                                     {{-- Nomor Kamar --}}
                                     <div>
                                         <span class="text-sm font-semibold text-blue-600">
@@ -89,11 +89,21 @@
                                     {{-- Pegawai --}}
                                     <div class="sm:text-center">
                                         <span class="text-sm font-semibold text-gray-500 block">
-                                            Pegawai
+                                            Housekeeper
                                         </span>
 
                                         <p class="text-lg font-medium text-gray-800">
                                             {{ optional($reservation->employee)->name ?? '-' }}
+                                        </p>
+                                    </div>
+
+                                      <div class="sm:text-center">
+                                        <span class="text-sm font-semibold text-gray-500 block">
+                                            Resepsionis
+                                        </span>
+
+                                        <p class="text-lg font-medium text-gray-800">
+                                            {{ optional($reservation->user)->name ?? '-' }}
                                         </p>
                                     </div>
 

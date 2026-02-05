@@ -233,7 +233,7 @@
                                 @elseif($room->status == 'terisi')
                                     <span class="px-2.5 py-1 text-[11px] uppercase tracking-wide font-bold text-blue-700 bg-blue-100 border border-blue-200 rounded-md">Terisi</span>
                                 @else
-                                    <span class="px-2.5 py-1 text-[11px] uppercase tracking-wide font-bold text-red-700 bg-red-100 border border-red-200 rounded-md">Maint</span>
+                                    <span class="px-2.5 py-1 text-[11px] uppercase tracking-wide font-bold text-red-700 bg-red-100 border border-red-200 rounded-md">Perawatan</span>
                                 @endif
                             </div>
                         </div>

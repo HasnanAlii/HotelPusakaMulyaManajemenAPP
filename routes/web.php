@@ -32,8 +32,9 @@ Route::get('/dashboard', function () {
 
 // Route::get('/', [FuzzyController::class, 'index'])->name('fuzzy.index');
 Route::post('/hasil', [FuzzyController::class, 'process'])->name('fuzzy.process');
-Route::get('/rooms/{room}/reservasi', [RoomController::class, 'reservasi'])->name('rooms.reservasi');
+Route::get('/reservasi/{room}/reservasi', [RoomController::class, 'reservasi'])->name('rooms.reservasi');
 Route::post('/reservasi/pelanggan', [ReservationController::class, 'reservasi'])->name('reservations.reservasi');
+Route::post('/reservasi/daftar', [CustomerController::class, 'store'])->name('pelanggan');
 Route::get('/reservasi/{room}', [RoomController::class, 'nota'])->name('rooms.nota');
 
 

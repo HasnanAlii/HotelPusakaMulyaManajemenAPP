@@ -169,6 +169,7 @@ class RoomController extends Controller
             'rooms.*'       => 'exists:rooms,id',
             'checkin_date'  => 'required|string',
             'checkout_date' => 'required|string',
+            'user_id'       => 'nullable|exists:users,id'
         ]);
 
         // Konversi tanggal dari d-m-Y → Y-m-d
@@ -184,6 +185,7 @@ class RoomController extends Controller
                 'check_in'    => $checkIn,
                 'check_out'   => $checkOut,
                 'status'      => 'checkin',
+                'user_id'     => $user->id,
             ]);
 
             /** Update status kamar */

@@ -39,6 +39,33 @@
                     class="w-full bg-gray-50 border border-gray-300 rounded-lg p-3 text-gray-700 shadow-sm cursor-not-allowed focus:ring-0 focus:border-gray-300"
                 />
             </div>
+            {{-- Pegawai --}}
+            <div>
+                <label for="employee_id" class="block text-gray-700 font-medium mb-2">Housekeeper</label>
+                <select 
+                    name="employee_id" 
+                    id="employee_id"
+                    class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition" required
+                >
+                    <option value="" required>-- Tidak Ada --</option>
+                    @foreach($employees as $employee)
+                        <option value="{{ $employee->id }}" >{{ $employee->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label for="status" class="block text-gray-700 font-medium mb-2">Status Kamar</label>
+                <select 
+                    name="status" 
+                    id="status"
+                    class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
+                >
+                    <option value="tersedia" selected>Tersedia</option>
+                    <option value="perawatan">Perawatan</option>
+                </select>
+            </div>
+            
 
             {{-- Kerusakan --}}
             <div class="col-span-2" id="damage-wrapper">
@@ -53,37 +80,67 @@
                     class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition resize-none"
                 ></textarea>
             </div>
-
-            {{-- Pegawai --}}
-            <div>
-                <label for="employee_id" class="block text-gray-700 font-medium mb-2">Pegawai</label>
-                <select 
-                    name="employee_id" 
-                    id="employee_id"
-                    class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition" required
-                >
-                    <option value="" required>-- Tidak Ada --</option>
-                    @foreach($employees as $employee)
-                        <option value="{{ $employee->id }}" >{{ $employee->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-
-            {{-- Status Kamar --}}
-            <div>
-                <label for="status" class="block text-gray-700 font-medium mb-2">Status Kamar</label>
-                <select 
-                    name="status" 
-                    id="status"
-                    class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
-                >
-                    <option value="tersedia" selected>Tersedia</option>
-                    <option value="perawatan">Perawatan</option>
-                </select>
-            </div>
             
 
+     
+            <div class="col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 mt-4" 
+                id="repair-wrapper" 
+                style="display:none;">
+                <!-- TINGKAT KERUSAKAN -->
+                <div>
+                    <label for="tingkat_kerusakan" class="block text-gray-700 font-medium mb-2">
+                        Tingkat Kerusakan
+                    </label>
+
+                    <select
+                        id="tingkat_kerusakan"
+                        name="tingkat_kerusakan"
+                        class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
+                    >
+                        <option value="">-- Pilih Tingkat --</option>
+                        <option value="ringan">Ringan</option>
+                        <option value="sedang">Sedang</option>
+                        <option value="berat">Berat</option>
+                    </select>
+                </div>
+
+                <!-- WAKTU PERBAIKAN -->
+                <div>
+                    <label for="waktu_perbaikan" class="block text-gray-700 font-medium mb-2">
+                        Estimasi Waktu Perbaikan
+                    </label>
+
+                    <select
+                        id="waktu_perbaikan"
+                        name="waktu_perbaikan"
+                        class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
+                    >
+                        <option value="">-- Pilih Waktu --</option>
+                        <option value="1-3 hari">1–3 Hari</option>
+                        <option value="1 minggu">1 Minggu</option>
+                        <option value=">1 minggu">&gt; 1 Minggu</option>
+                    </select>
+                </div>
+
+                <!-- BIAYA PERKIRAAN -->
+                <div>
+                    <label for="biaya_perkiraan" class="block text-gray-700 font-medium mb-2">
+                        Biaya Perkiraan
+                    </label>
+
+                    <select
+                        id="biaya_perkiraan"
+                        name="biaya_perkiraan"
+                        class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
+                    >
+                        <option value="">-- Pilih Biaya --</option>
+                        <option value="<100rb">&lt; 100rb</option>
+                        <option value="100-300rb">100–300rb</option>
+                        <option value=">300rb">&gt; 300rb</option>
+                    </select>
+                </div>
+
+            </div>
             {{-- Tombol Aksi --}}
             <div class="col-span-2 flex justify-end space-x-3 mt-6">
                 <a href="{{ route('rooms.index') }}"
@@ -98,21 +155,50 @@
         </form>
     </div>
 </x-app-layout>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const statusSelect = document.getElementById('status');
-    const damageWrapper = document.getElementById('damage-wrapper');
-    const damageInput = document.getElementById('damage');
+    const statusSelect   = document.getElementById('status');
+
+    const damageWrapper  = document.getElementById('damage-wrapper');
+    const damageInput    = document.getElementById('damage');
+
+    const repairWrapper  = document.getElementById('repair-wrapper');
+    const tingkat        = document.getElementById('tingkat_kerusakan');
+    const waktu          = document.getElementById('waktu_perbaikan');
+    const biaya          = document.getElementById('biaya_perkiraan');
 
     function toggleDamage() {
         if (statusSelect.value === 'perawatan') {
+
+            // tampilkan
             damageWrapper.style.display = 'block';
+            repairWrapper.style.display = 'grid';
+
+            // jadikan wajib
             damageInput.setAttribute('required', 'required');
+            tingkat.setAttribute('required', 'required');
+            waktu.setAttribute('required', 'required');
+            biaya.setAttribute('required', 'required');
+
         } else {
+
+            // sembunyikan
             damageWrapper.style.display = 'none';
+            repairWrapper.style.display = 'none';
+
+            // hapus required
             damageInput.removeAttribute('required');
+            tingkat.removeAttribute('required');
+            waktu.removeAttribute('required');
+            biaya.removeAttribute('required');
+
+            // reset value
             damageInput.value = '';
+            tingkat.value = '';
+            waktu.value = '';
+            biaya.value = '';
         }
     }
 

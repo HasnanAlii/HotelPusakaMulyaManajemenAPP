@@ -72,9 +72,11 @@ class ReservationController extends Controller
                 'room_id'     => 'required|exists:rooms,id',
                 'check_in'    => 'required|date',
                 'check_out'   => 'required|date|after_or_equal:check_in',
+                'user_id'     => 'nullable|exists:users,id'
             ]);
             $validated['check_in'] = Carbon::createFromFormat('d-m-Y', $validated['check_in'])->format('Y-m-d');
             $validated['check_out'] = Carbon::createFromFormat('d-m-Y', $validated['check_out'])->format('Y-m-d');
+            $validated['user_id'] = $user->id;
 
             // Reservation::create($validated);
 
@@ -221,6 +223,7 @@ public function verifikasi(Reservation $reservation)
         $amount   = $reservation->room->price * $days;
 
         $reservation->status = 'checkin';
+        $reservation->user_id = $user->id;
         $reservation->save();
 
         // Simpan ke tabel finance

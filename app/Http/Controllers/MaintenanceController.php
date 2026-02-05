@@ -17,21 +17,90 @@ class MaintenanceController extends Controller
     /**
      * Menampilkan daftar kerusakan kamar
      */
-        public function index()
-        {
-            try {
-                $maintenances = Maintenance::with(['room', 'customer', 'employee'])
-                    ->orderBy('created_at', 'desc')
-                    ->paginate(10);
 
-                return view('maintenances.index', compact('maintenances'));
-            } catch (\Exception $e) {
-                return redirect()->back()->with([
-                    'message' => 'Gagal memuat daftar maintenance: ' . $e->getMessage(),
-                    'alert-type' => 'error'
-                ]);
-            }
-        }
+public function index()
+{
+    try {
+        $maintenances = Maintenance::with(['room', 'customer', 'employee'])
+            ->get()
+            ->map(function ($item) {
+
+                $item->prioritas = self::hitung(
+                    $item->tingkat_kerusakan,
+                    $item->waktu_perbaikan,
+                    $item->biaya_perkiraan
+                );
+
+                return $item;
+            })
+            ->sortByDesc('prioritas');
+
+        // manual pagination karena pakai collection
+        $page = request()->get('page', 1);
+        $perPage = 10;
+
+        $items = $maintenances->forPage($page, $perPage);
+
+        $paginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            $maintenances->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url()]
+        );
+
+        return view('maintenances.index', [
+            'maintenances' => $paginated
+        ]);
+
+    } catch (\Exception $e) {
+        return back()->with([
+            'message' => 'Gagal memuat daftar maintenance: ' . $e->getMessage(),
+            'alert-type' => 'error'
+        ]);
+    }
+}
+
+ 
+    public static function hitung($tingkat, $waktu, $biaya)
+    {
+        // Konversi ke nilai numerik
+        $nTingkat = match($tingkat) {
+            'ringan' => 30,
+            'sedang' => 60,
+            'berat'  => 90,
+            default  => 30,
+        };
+
+        $nWaktu = match($waktu) {
+            '1-3 hari' => 30,
+            '1 minggu' => 60,
+            '>1 minggu' => 90,
+            default => 30,
+        };
+
+        $nBiaya = match($biaya) {
+            '<100rb' => 30,
+            '100-300rb' => 60,
+            '>300rb' => 90,
+            default => 30,
+        };
+
+        // Rule Tsukamoto sederhana
+        // R1: Jika kerusakan berat OR waktu lama OR biaya besar → prioritas tinggi
+        $rule1 = max($nTingkat, $nWaktu, $nBiaya);
+
+        // R2: Jika sedang → prioritas sedang
+        $rule2 = ($nTingkat + $nWaktu + $nBiaya) / 3;
+
+        // R3: Jika semua rendah → rendah
+        $rule3 = min($nTingkat, $nWaktu, $nBiaya);
+
+        // Defuzzifikasi Tsukamoto (rata berbobot)
+        $z = ($rule1 * 0.5) + ($rule2 * 0.3) + ($rule3 * 0.2);
+
+        return round($z, 2);
+    }
 
 
     /**
@@ -58,35 +127,43 @@ class MaintenanceController extends Controller
             ]);
         }
     }
-public function createe()
-{
-    $rooms = Room::all(); // atau ->where('status', 'tersedia')->get();
 
-    return view('maintenances.add', compact('rooms'));
-}
+    
+    public function createe()
+    {
+        $rooms = Room::all(); // atau ->where('status', 'tersedia')->get();
+
+        return view('maintenances.add', compact('rooms'));
+    }
 
 
-public function storee(Request $request)
-{
-    $validated = $request->validate([
-        'room_id' => 'required|exists:rooms,id',
-        'damage'  => 'required|string|max:255',
-    ]);
-
-    Maintenance::create([
-        'room_id'     => $validated['room_id'],
-        'damage'      => $validated['damage'],
-        'amount'      => 0,
-        'is_repaired' => false,
-    ]);
-
-    return redirect()
-        ->route('maintenances.index')
-        ->with([
-            'message' => 'Data kerusakan berhasil ditambahkan.',
-            'alert-type' => 'success'
+    public function storee(Request $request)
+    {
+        $validated = $request->validate([
+            'room_id' => 'required|exists:rooms,id',
+            'damage'  => 'required|string|max:255',
+            'tingkat_kerusakan' => 'nullable|string',
+            'waktu_perbaikan' => 'nullable|string',
+            'biaya_perkiraan' => 'nullable|string',
         ]);
-}
+
+        Maintenance::create([
+            'room_id'     => $validated['room_id'],
+            'damage'      => $validated['damage'],
+            'amount'      => 0,
+            'is_repaired' => false,
+            'tingkat_kerusakan' => $validated['tingkat_kerusakan'] ?? null,
+            'waktu_perbaikan' => $validated['waktu_perbaikan'] ?? null,
+            'biaya_perkiraan' => $validated['biaya_perkiraan'] ?? null,
+        ]);
+
+        return redirect()
+            ->route('maintenances.index')
+            ->with([
+                'message' => 'Data kerusakan berhasil ditambahkan.',
+                'alert-type' => 'success'
+            ]);
+    }
 
     /**
      * Simpan data kerusakan baru
@@ -99,6 +176,10 @@ public function storee(Request $request)
                 'damage'      => 'nullable|string|max:255',
                 'employee_id' => 'nullable|exists:employees,id',
                 'status'      => 'required|in:tersedia,perawatan',
+                'tingkat_kerusakan' => 'nullable|string',
+                'waktu_perbaikan' => 'nullable|string',
+                'biaya_perkiraan' => 'nullable|string',
+                
             ]);
 
 
@@ -118,6 +199,9 @@ public function storee(Request $request)
                 'employee_id' => $request->employee_id ?? null,
                 'customer_id' => $lastReservation?->customer_id,
                 'is_repaired' => false,
+                'tingkat_kerusakan' => $validated['tingkat_kerusakan'] ?? null,
+                'waktu_perbaikan' => $validated['waktu_perbaikan'] ?? null,
+                'biaya_perkiraan' => $validated['biaya_perkiraan'] ?? null,
             ]);
             }
 

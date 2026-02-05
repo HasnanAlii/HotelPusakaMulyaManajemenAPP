@@ -86,18 +86,18 @@
         </div>
     </nav>
 
-    <section class="relative  flex items-center pt-32 pb-5 overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-white">
+    <section class="relative  flex items-center pt-36  overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-white pb-48">
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl animate-pulse delay-700"></div>
 
         <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             
             <div class="order-2 md:order-1 space-y-8 text-center md:text-left">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/50 border border-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wider">
+                {{-- <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/50 border border-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wider">
                     <span class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></span>
                     Hotel Terbaik di Cianjur
                 </div>
-                
+                 --}}
                 <h1 class="text-5xl md:text-7xl font-heading font-bold text-slate-900 leading-[1.1]">
                     Istirahat Tenang <br>
                     <span class="text-gradient">Pelayanan Bintang.</span>
@@ -189,7 +189,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
 
                 <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-slate-100 flex flex-col">
-                    <div class="relative h-64 overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">   
+                    <div class="absolute top-4 left-4 z-20">
+                        <span class="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wide">
+                            Terlaris
+                        </span>
+                    </div>
                         @php
                             $g = $galeri->where('id', 3)->first();
                         @endphp
@@ -293,11 +298,7 @@
 
                 <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-slate-100 flex flex-col relative">
                     
-                    <div class="absolute top-4 left-4 z-20">
-                        <span class="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wide">
-                            Popular
-                        </span>
-                    </div>
+                
 
                     <div class="relative h-64 overflow-hidden">
                         @php
@@ -352,7 +353,9 @@
                         </a> --}}
                     </div>
                 </div>
+                </div>
 
+            <div class="flex gap-10 p-8 ml-10"> 
                 <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-slate-100 flex flex-col">
                     <div class="relative h-64 overflow-hidden">
                         @php
@@ -412,7 +415,7 @@
                     
                     <div class="absolute top-4 right-4 z-20">
                         <span class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 uppercase tracking-wider">
-                            <i class="fas fa-crown text-yellow-300"></i> Best
+                            <i class="fas fa-crown text-yellow-300"></i> Premium
                         </span>
                     </div>
 
@@ -472,6 +475,7 @@
                             Booking VIP
                         </a> --}}
                     </div>
+                </div>
                 </div>
 
             </div>

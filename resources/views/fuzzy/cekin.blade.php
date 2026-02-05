@@ -63,7 +63,7 @@
                                 </button>
                             </div>
 
-                            <form action="{{ route('customers.store') }}" method="POST">
+                            <form action="{{ route('pelanggan') }}" method="POST">
                                 @csrf
                                 <div class="space-y-4">
                                     <div>
@@ -181,7 +181,7 @@
 
                     {{-- Tombol Aksi --}}
                     <div class="flex flex-col sm:flex-row justify-end items-center gap-3 pt-6">
-                        <a href="{{ route('rooms.index') }}"
+                        <a href="javascript:history.go(-1)" 
                            class="w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg transition">
                             Batal
                         </a>

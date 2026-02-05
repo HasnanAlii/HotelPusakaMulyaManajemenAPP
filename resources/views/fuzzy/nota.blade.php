@@ -92,7 +92,7 @@
 
                 <!-- Tindakan -->
                 <div class="mt-4 flex justify-between items-center">
-                    <a href="javascript:history.go(-2)" 
+                    <a href="/" 
                        class="px-3 py-1 bg-gray-500 text-white rounded-md text-sm hover:bg-gray-600 transition">
                         Kembali
                     </a>
