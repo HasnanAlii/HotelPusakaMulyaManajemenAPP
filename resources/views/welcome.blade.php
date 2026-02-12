@@ -516,7 +516,7 @@
                         <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-tag text-blue-500"></i> Harga (Rp)
                         </label>
-                        <select name="harga_input" required
+                        <select name="harga" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
                                 text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
                             <option value="">Pilih Budget</option>
@@ -533,13 +533,13 @@
                         <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-concierge-bell text-blue-500"></i> Kelengkapan Fasilitas
                         </label>
-                        <select name="pref_fasilitas" required
+                        <select name="fasilitas" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
                                 text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
                                   <option value="">Pilih Kelengkapan Fasilitas</option>
-                            <option value="sedikit">Cukup Tidur</option>
-                            <option value="cukup">Menengah</option>
-                            <option value="lengkap">Komplit</option>
+                            <option value="1">Cukup Tidur</option>
+                            <option value="3">Menengah</option>
+                            <option value="5">Komplit</option>
                         </select>
                     </div>
 
@@ -548,13 +548,13 @@
                         <label class="text-sm font-semibold text-slate-700 flex items-center gap-2">
                             <i class="fas fa-star text-blue-500"></i> Tingkat Kenyamanan
                         </label>
-                        <select name="pref_kenyamanan" required
+                        <select name="kenyamanan" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3
                                 text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
                             <option value="">Pilih Tingkat Kenyamanan</option>
-                            <option value="rendah">Standar</option>
-                            <option value="sedang">Extra Nyaman</option>
-                            <option value="tinggi">VIP</option>
+                            <option value="1">Standar</option>
+                            <option value="2">Extra Nyaman</option>
+                            <option value="3">VIP</option>
                         </select>
                     </div>
 
@@ -569,7 +569,7 @@
                                 text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
                             <option value="">Pilih Kapasitas</option>
                             <option value="1">1 - 2 Orang</option>
-                            <option value="2">Lebih dari 2 Orang</option>
+                            <option value="3">Lebih dari 2 Orang</option>
                         </select>
                     </div>
                 </div>

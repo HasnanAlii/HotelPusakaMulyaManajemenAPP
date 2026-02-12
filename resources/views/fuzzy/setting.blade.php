@@ -8,7 +8,6 @@
     <div class="py-12 min-h-screen">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- ALERT --}}
             @if(session('success'))
                 <div class="mb-6 p-4 bg-green-100 text-green-800 rounded-xl">
                     {{ session('success') }}
@@ -17,7 +16,6 @@
 
             <div class="bg-white rounded-2xl shadow-lg p-8 sm:p-10 transition-transform transform hover:scale-[1.01]">
 
-                {{-- JUDUL FORM --}}
                 <h3 class="text-xl font-semibold text-gray-800 mb-8 border-l-4 border-blue-500 pl-3">
                     Pengaturan Parameter Fuzzy
                 </h3>
@@ -34,53 +32,54 @@
                             Parameter Harga
                         </h4>
                         <p class="text-sm text-gray-600 mb-6">
-                            Parameter harga menggunakan <strong>rasio terhadap budget pengguna</strong>
-                            agar sistem tetap fleksibel untuk berbagai tingkat budget.
+                            Parameter harga menggunakan model tiga titik (Minimum – Tengah – Maksimum).
                         </p>
 
-                        <div class="grid sm:grid-cols-2 gap-6">
+                        <div class="grid sm:grid-cols-3 gap-6">
                             <div>
                                 <label class="block text-gray-700 font-medium mb-2">
-                                    Rasio Harga Minimum
+                                    Harga Minimum
                                 </label>
-                                <input type="number" step="0.01"
-                                    name="harga_min_ratio"
-                                    value="{{ old('harga_min_ratio', $setting->harga_min_ratio) }}"
+                                <input type="number"
+                                    name="harga_min"
+                                    value="{{ old('harga_min', $setting->harga_min) }}"
                                     class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm"
                                     required>
-
                                 <p class="text-xs text-gray-500 mt-2">
-                                    Harga dianggap sangat murah.<br>
-                                    Contoh: 200.000 × 0,60 = <strong>120.000</strong>
+                                     Murah
                                 </p>
                             </div>
 
                             <div>
                                 <label class="block text-gray-700 font-medium mb-2">
-                                    Rasio Harga Maksimum (Toleransi)
+                                    Harga Tengah
                                 </label>
-                                <input type="number" step="0.01"
-                                    name="harga_max_ratio"
-                                    value="{{ old('harga_max_ratio', $setting->harga_max_ratio) }}"
+                                <input type="number"
+                                    name="harga_mid"
+                                    value="{{ old('harga_mid', $setting->harga_mid) }}"
                                     class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm"
                                     required>
-
                                 <p class="text-xs text-gray-500 mt-2">
-                                    Harga masih bisa diterima meski di atas budget.<br>
-                                    Contoh: 200.000 × 1,30 = <strong>260.000</strong>
+                                    Sedang
                                 </p>
                             </div>
-                        </div>
 
-                        <div class="mt-5 bg-gray-50 border border-gray-200 rounded-lg p-4 text-xs text-gray-600">
-                            <strong>Ringkasan Logika Harga:</strong>
-                            <ul class="list-disc list-inside mt-2 space-y-1">
-                                <li>Murah → nilai tinggi</li>
-                                <li>Sesuai budget → paling ideal</li>
-                                <li>Lebih mahal → nilai menurun</li>
-                            </ul>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Harga Maksimum
+                                </label>
+                                <input type="number"
+                                    name="harga_max"
+                                    value="{{ old('harga_max', $setting->harga_max) }}"
+                                    class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm"
+                                    required>
+                                <p class="text-xs text-gray-500 mt-2">
+                                    Mahal
+                                </p>
+                            </div>
                         </div>
                     </section>
+
 
                     {{-- =========================
                         FASILITAS
@@ -104,7 +103,7 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                 Cukup Tidur
+                                    Cukup Tidur
                                 </p>
                             </div>
 
@@ -118,7 +117,7 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                 Menengah
+                                    Menengah
                                 </p>
                             </div>
 
@@ -132,11 +131,12 @@
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                     Komplit
+                                    Komplit
                                 </p>
                             </div>
                         </div>
                     </section>
+
 
                     {{-- =========================
                         KENYAMANAN
@@ -146,7 +146,7 @@
                             Parameter Kenyamanan
                         </h4>
                         <p class="text-sm text-gray-600 mb-6">
-                            Mewakili tingkat kenyamanan berdasarkan kategori kamar.
+                            Mewakili tingkat kenyamanan kamar.
                         </p>
 
                         <div class="grid sm:grid-cols-3 gap-6">
@@ -154,7 +154,7 @@
                                 <label class="block text-gray-700 font-medium mb-2">
                                     Kenyamanan Minimum
                                 </label>
-                                <input type="number" step="0.1"
+                                <input type="number"
                                     name="nyaman_min"
                                     value="{{ old('nyaman_min', $setting->nyaman_min) }}"
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
@@ -168,7 +168,7 @@
                                 <label class="block text-gray-700 font-medium mb-2">
                                     Kenyamanan Tengah
                                 </label>
-                                <input type="number" step="0.1"
+                                <input type="number"
                                     name="nyaman_mid"
                                     value="{{ old('nyaman_mid', $setting->nyaman_mid) }}"
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
@@ -182,64 +182,61 @@
                                 <label class="block text-gray-700 font-medium mb-2">
                                     Kenyamanan Maksimum
                                 </label>
-                                <input type="number" step="0.1"
+                                <input type="number"
                                     name="nyaman_max"
                                     value="{{ old('nyaman_max', $setting->nyaman_max) }}"
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                     VIP
+                                    VIP
                                 </p>
                             </div>
                         </div>
                     </section>
 
+
                     {{-- =========================
-                        NILAI Z
+                        JUMLAH ORANG
                     ========================= --}}
                     <section>
                         <h4 class="text-lg font-semibold text-gray-800 mb-2">
-                            Nilai Keluaran (Z)
+                            Parameter Jumlah Orang
                         </h4>
                         <p class="text-sm text-gray-600 mb-6">
-                            Nilai akhir hasil rekomendasi fuzzy Tsukamoto.
+                            Digunakan untuk menentukan kapasitas kamar.
                         </p>
 
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-gray-700 font-medium mb-2">
-                                    Nilai Z Minimum
+                                    Jumlah Orang 
                                 </label>
                                 <input type="number"
-                                    name="z_min"
-                                    value="{{ old('z_min', $setting->z_min) }}"
+                                    name="jumlah_orang_min"
+                                    value="{{ old('jumlah_orang_min', $setting->jumlah_orang_min) }}"
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
-                                <p class="text-xs text-gray-500 mt-2">
-                                    50 = tidak direkomendasikan
-                                </p>
+                                     <p class="text-xs text-gray-500 mt-2">
+                                    Sedikit
+                                    </p>    
                             </div>
 
                             <div>
                                 <label class="block text-gray-700 font-medium mb-2">
-                                    Nilai Z Maksimum
+                                    Jumlah Orang 
                                 </label>
                                 <input type="number"
-                                    name="z_max"
-                                    value="{{ old('z_max', $setting->z_max) }}"
+                                    name="jumlah_orang_max"
+                                    value="{{ old('jumlah_orang_max', $setting->jumlah_orang_max) }}"
                                     class="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
                                     required>
                                 <p class="text-xs text-gray-500 mt-2">
-                                    100 = sangat direkomendasikan
+                                    Banyak
                                 </p>
                             </div>
                         </div>
-
-                        <div class="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4 text-xs text-gray-600">
-                            <strong>Rumus:</strong><br>
-                            Z = Z<sub>min</sub> + (α × (Z<sub>max</sub> − Z<sub>min</sub>))
-                        </div>
                     </section>
+
 
                     {{-- ACTION --}}
                     <div class="flex justify-end gap-3 pt-6 border-t">

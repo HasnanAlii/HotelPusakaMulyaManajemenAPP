@@ -24,7 +24,7 @@
 
                     {{-- LEGEND PRIORITAS --}}
                     <div class="mb-5 flex flex-wrap gap-3 text-sm">
-                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-lg">
+                        {{-- <span class="px-3 py-1 bg-red-100 text-red-700 rounded-lg">
                             Prioritas Tinggi 
                         </span>
 
@@ -34,7 +34,7 @@
 
                         <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg">
                             Prioritas Rendah 
-                        </span>
+                        </span> --}}
 
                         <span class="text-gray-500 italic">
                             * Urutan dihitung otomatis dengan metode Fuzzy Tsukamoto
@@ -78,22 +78,29 @@
                                         @endif
 
                                         {{-- PRIORITAS --}}
-                                        <span class="px-3 py-1 text-xs font-semibold rounded-full
-                                            @if($p >= 75) bg-red-100 text-red-700
-                                            @elseif($p >= 50) bg-yellow-100 text-yellow-700
-                                            @else bg-green-100 text-green-700
-                                            @endif
-                                        ">
-                                            Prioritas
-                                            @if($p >= 75)
-                                                Tinggi
-                                            @elseif($p >= 50)
-                                                Sedang
-                                            @else
-                                                Rendah
-                                            @endif
-                                            {{-- ({{ $p }}) --}}
-                                        </span>
+                                     @php
+                                    $p = $maintenance->prioritas;
+                                @endphp
+
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full
+                                    @if($p >= 2.5) 
+                                        bg-red-100 text-red-700
+                                    @elseif($p >= 2) 
+                                        bg-yellow-100 text-yellow-700
+                                    @else 
+                                        bg-green-100 text-green-700
+                                    @endif
+                                ">
+                                    Prioritas
+                                    @if($p >= 2.5)
+                                        Tinggi
+                                    @elseif($p >= 2)
+                                        Menengah
+                                    @else
+                                        Rendah
+                                    @endif
+                                    {{-- ({{ $p }}) --}}
+                                </span>
 
                                     </div>
                                 </div>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
-use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -103,7 +102,7 @@ public function printPdf(Request $request)
     // ambil resepsionis dari data finance TERBARU sesuai filter
     $resepsionis = $finances->first();
 
-    $pdf = PDF::loadView('finances.print', [
+    $pdf = Pdf::loadView('finances.print', [
         'finances' => $finances,
         'totalPemasukan' => $totalPemasukan,
         'totalPengeluaran' => $totalPengeluaran,

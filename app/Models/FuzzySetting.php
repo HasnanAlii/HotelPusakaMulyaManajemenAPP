@@ -7,15 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class FuzzySetting extends Model
 {
     protected $fillable = [
-        'harga_min_ratio',
-        'harga_max_ratio',
-        'z_min',
-        'z_max',
+        'harga_min',
+        'harga_mid',
+        'harga_max',
         'fasilitas_min',
         'fasilitas_mid',
         'fasilitas_max',
         'nyaman_min',
         'nyaman_mid',
         'nyaman_max',
+        'jumlah_orang_min',
+        'jumlah_orang_max'
+
     ];
 }

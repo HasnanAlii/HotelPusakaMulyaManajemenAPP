@@ -65,10 +65,7 @@
                         >{{ old('damage') }}</textarea>
                     </div>
 
-                    {{-- PARAMETER FUZZY --}}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                        {{-- TINGKAT --}}
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Tingkat Kerusakan
@@ -79,25 +76,22 @@
 
                                 <option value="">-- Pilih Tingkat --</option>
 
-                                <option value="ringan"
-                                    {{ old('tingkat_kerusakan') == 'ringan' ? 'selected' : '' }}>
+                                <option value="30"
+                                    {{ old('tingkat_kerusakan') == '30' ? 'selected' : '' }}>
                                     Ringan
                                 </option>
 
-                                <option value="sedang"
-                                    {{ old('tingkat_kerusakan') == 'sedang' ? 'selected' : '' }}>
+                                <option value="60"
+                                    {{ old('tingkat_kerusakan') == '60' ? 'selected' : '' }}>
                                     Sedang
                                 </option>
 
-                                <option value="berat"
-                                    {{ old('tingkat_kerusakan') == 'berat' ? 'selected' : '' }}>
+                                <option value="100"
+                                    {{ old('tingkat_kerusakan') == '100' ? 'selected' : '' }}>
                                     Berat
                                 </option>
-
                             </select>
                         </div>
-
-                        {{-- WAKTU --}}
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Estimasi Waktu
@@ -108,25 +102,22 @@
 
                                 <option value="">-- Pilih Waktu --</option>
 
-                                <option value="1-3 hari"
-                                    {{ old('waktu_perbaikan') == '1-3 hari' ? 'selected' : '' }}>
+                                <option value="3"
+                                    {{ old('waktu_perbaikan') == '3' ? 'selected' : '' }}>
                                     1–3 Hari
                                 </option>
 
-                                <option value="1 minggu"
-                                    {{ old('waktu_perbaikan') == '1 minggu' ? 'selected' : '' }}>
+                                <option value="6"
+                                    {{ old('waktu_perbaikan') == '6' ? 'selected' : '' }}>
                                     1 Minggu
                                 </option>
 
-                                <option value=">1 minggu"
-                                    {{ old('waktu_perbaikan') == '>1 minggu' ? 'selected' : '' }}>
+                                <option value="10"
+                                    {{ old('waktu_perbaikan') == '10' ? 'selected' : '' }}>
                                     &gt; 1 Minggu
                                 </option>
-
                             </select>
                         </div>
-
-                        {{-- BIAYA --}}
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Biaya Perkiraan
@@ -137,24 +128,22 @@
 
                                 <option value="">-- Pilih Biaya --</option>
 
-                                <option value="<100rb"
-                                    {{ old('biaya_perkiraan') == '<100rb' ? 'selected' : '' }}>
+                                <option value="100000"
+                                    {{ old('biaya_perkiraan') == '100000' ? 'selected' : '' }}>
                                     &lt; 100rb
                                 </option>
 
-                                <option value="100-300rb"
-                                    {{ old('biaya_perkiraan') == '100-300rb' ? 'selected' : '' }}>
+                                <option value="200000"
+                                    {{ old('biaya_perkiraan') == '200000' ? 'selected' : '' }}>
                                     100–300rb
                                 </option>
 
-                                <option value=">300rb"
-                                    {{ old('biaya_perkiraan') == '>300rb' ? 'selected' : '' }}>
+                                <option value="350000"
+                                    {{ old('biaya_perkiraan') == '350000' ? 'selected' : '' }}>
                                     &gt; 300rb
                                 </option>
-
                             </select>
                         </div>
-
                     </div>
 
                     {{-- TOMBOL AKSI --}}

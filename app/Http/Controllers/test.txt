@@ -1373,3 +1373,145 @@ class FuzzyController extends Controller
 </body>
 </html> --}}
 
+
+
+
+<x-hasil-layout>
+    <x-slot name="header">
+        <h2 class="font-bold text-2xl text-gray-800 leading-tight">
+            {{ __('Hasil Rekomendasi Kamar') }}
+        </h2>
+    </x-slot>
+
+    @php
+        $roomRekom   = $rekomendasi['room'] ?? null;
+        $nilaiFuzzy  = $rekomendasi['nilai'] ?? null;
+        $category    = $roomRekom?->category;
+
+        $foto = ($roomRekom && isset($galeri[$category]))
+            ? $galeri[$category]
+            : null;
+
+        // Parsing fasilitas
+        $fasilitasList = [];
+
+        if ($roomRekom && $roomRekom->facilities) {
+            if (str_starts_with($roomRekom->facilities, '[')) {
+                $fasilitasList = json_decode($roomRekom->facilities, true);
+            } else {
+                $fasilitasList = explode(',', $roomRekom->facilities);
+            }
+        }
+    @endphp
+
+    <div class="min-h-screen py-12 bg-slate-50 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            {{-- Header --}}
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-extrabold text-slate-800">
+                    Rekomendasi Terbaik Untuk Anda
+                </h1>
+                @if($nilaiFuzzy)
+                    <p class="text-sm text-slate-400 mt-2">
+                        Nilai Fuzzy: {{ $nilaiFuzzy }}
+                    </p>
+                @endif
+            </div>
+
+            @if($roomRekom)
+
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+
+                {{-- Gambar --}}
+                <div class="md:w-1/2 relative">
+                    @if($foto)
+                        <img src="{{ asset('storage/'.$foto->image_path) }}"
+                             alt="{{ $category }}"
+                             class="w-full h-64 md:h-full object-cover">
+                    @else
+                        <img src="{{ asset('assets/no-image.png') }}"
+                             alt="Tidak ada gambar"
+                             class="w-full h-64 object-cover">
+                    @endif
+                </div>
+
+                {{-- Konten --}}
+                <div class="md:w-1/2 p-8 flex flex-col justify-between">
+
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900">
+                            {{ $category }}
+                            <span class="text-slate-400 text-lg">
+                                #{{ $roomRekom->room_number }}
+                            </span>
+                        </h3>
+
+                        <p class="mt-4 text-slate-600">
+                            {{ $roomRekom->tata_letak ?? 'Tidak ada deskripsi tersedia.' }}
+                        </p>
+
+                        {{-- Fasilitas --}}
+                        <div class="mt-6">
+                            <h4 class="font-semibold text-slate-800 mb-3">
+                                Fasilitas:
+                            </h4>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                @forelse($fasilitasList as $fasilitas)
+                                    <div class="flex items-center gap-2 p-2 bg-slate-100 rounded-lg">
+                                        <i class="fas fa-check text-blue-500"></i>
+                                        <span class="text-sm text-slate-700">
+                                            {{ trim($fasilitas) }}
+                                        </span>
+                                    </div>
+                                @empty
+                                    <span class="text-sm text-gray-400">
+                                        Tidak ada fasilitas tersedia
+                                    </span>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Harga & Tombol --}}
+                    <div class="mt-8 border-t pt-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-slate-400">
+                                    Harga Per Malam
+                                </p>
+                                <p class="text-2xl font-bold text-slate-900">
+                                    Rp {{ number_format($roomRekom->price, 0, ',', '.') }}
+                                </p>
+                            </div>
+
+                            <a href="{{ route('rooms.reservasi', $roomRekom->id) }}"
+                               class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">
+                                Pesan Kamar
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            @else
+
+            <div class="p-6 bg-red-50 border border-red-200 rounded-xl text-red-600 text-center">
+                Maaf, saat ini belum tersedia kamar sesuai kriteria Anda.
+            </div>
+
+            @endif
+
+            {{-- Back --}}
+            <div class="mt-10 text-center">
+                <a href="{{ url('/') }}"
+                   class="text-blue-600 hover:underline">
+                    ← Hitung Ulang Kriteria
+                </a>
+            </div>
+
+        </div>
+    </div>
+</x-hasil-layout>

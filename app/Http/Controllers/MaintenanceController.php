@@ -9,103 +9,147 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\Finance;
 use App\Models\Reservation;
-use Illuminate\Database\Console\Migrations\StatusCommand;
 use Illuminate\Http\Request;
 
 class MaintenanceController extends Controller
 {
-    /**
-     * Menampilkan daftar kerusakan kamar
-     */
 
-public function index()
-{
-    try {
-        $maintenances = Maintenance::with(['room', 'customer', 'employee'])
-            ->get()
-            ->map(function ($item) {
-
-                $item->prioritas = self::hitung(
-                    $item->tingkat_kerusakan,
-                    $item->waktu_perbaikan,
-                    $item->biaya_perkiraan
-                );
-
-                return $item;
-            })
-            ->sortByDesc('prioritas');
-
-        // manual pagination karena pakai collection
-        $page = request()->get('page', 1);
-        $perPage = 10;
-
-        $items = $maintenances->forPage($page, $perPage);
-
-        $paginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $items,
-            $maintenances->count(),
-            $perPage,
-            $page,
-            ['path' => request()->url()]
-        );
-
-        return view('maintenances.index', [
-            'maintenances' => $paginated
-        ]);
-
-    } catch (\Exception $e) {
-        return back()->with([
-            'message' => 'Gagal memuat daftar maintenance: ' . $e->getMessage(),
-            'alert-type' => 'error'
-        ]);
-    }
-}
-
- 
-    public static function hitung($tingkat, $waktu, $biaya)
+    public function index()
     {
-        // Konversi ke nilai numerik
-        $nTingkat = match($tingkat) {
-            'ringan' => 30,
-            'sedang' => 60,
-            'berat'  => 90,
-            default  => 30,
-        };
+        try {
+            $maintenances = Maintenance::with(['room', 'customer', 'employee'])
+                ->get()
+                ->map(function ($item) {
 
-        $nWaktu = match($waktu) {
-            '1-3 hari' => 30,
-            '1 minggu' => 60,
-            '>1 minggu' => 90,
-            default => 30,
-        };
+                    $item->prioritas = self::hitung(
+                        $item->tingkat_kerusakan,
+                        $item->waktu_perbaikan,
+                        $item->biaya_perkiraan
+                    );
+                    return $item;
+                })
+                ->sortByDesc('prioritas');
 
-        $nBiaya = match($biaya) {
-            '<100rb' => 30,
-            '100-300rb' => 60,
-            '>300rb' => 90,
-            default => 30,
-        };
+            // manual pagination karena pakai collection
+            $page = request()->get('page', 1);
+            $perPage = 10;
 
-        // Rule Tsukamoto sederhana
-        // R1: Jika kerusakan berat OR waktu lama OR biaya besar → prioritas tinggi
-        $rule1 = max($nTingkat, $nWaktu, $nBiaya);
+            $items = $maintenances->forPage($page, $perPage);
 
-        // R2: Jika sedang → prioritas sedang
-        $rule2 = ($nTingkat + $nWaktu + $nBiaya) / 3;
+            $paginated = new \Illuminate\Pagination\LengthAwarePaginator(
+                $items,
+                $maintenances->count(),
+                $perPage,
+                $page,
+                ['path' => request()->url()]
+            );
 
-        // R3: Jika semua rendah → rendah
-        $rule3 = min($nTingkat, $nWaktu, $nBiaya);
+            return view('maintenances.index', [
+                'maintenances' => $paginated
+            ]);
 
-        // Defuzzifikasi Tsukamoto (rata berbobot)
-        $z = ($rule1 * 0.5) + ($rule2 * 0.3) + ($rule3 * 0.2);
+        } catch (\Exception $e) {
+            return back()->with([
+                'message' => 'Gagal memuat daftar maintenance: ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ]);
+        }
+    }
 
-        return round($z, 2);
+        public static function hitung($kerusakan, $waktu, $biaya)
+    {
+        // ==============================
+        // FUZZIFIKASI
+        // ==============================
+
+        // --- Kerusakan ---
+        $ringan = ($kerusakan <= 30) ? 1 :
+                (($kerusakan > 30 && $kerusakan < 50) ? (50 - $kerusakan) / (50 - 30) : 0);
+
+        $sedang = ($kerusakan > 30 && $kerusakan < 50) ? ($kerusakan - 30) / (50 - 30) :
+                (($kerusakan >= 50 && $kerusakan <= 70) ? 1 :
+                (($kerusakan > 70 && $kerusakan < 100) ? (100 - $kerusakan) / (100 - 70) : 0));
+
+        $berat  = ($kerusakan > 70 && $kerusakan < 100) ? ($kerusakan - 70) / (100 - 70) :
+                (($kerusakan >= 100) ? 1 : 0);
+
+
+        // --- Waktu ---
+        $cepat = ($waktu <= 3) ? 1 :
+                (($waktu > 3 && $waktu < 5) ? (5 - $waktu) / (5 - 3) : 0);
+
+        $sedang_w = ($waktu > 3 && $waktu < 5) ? ($waktu - 3) / (5 - 3) :
+                    (($waktu >= 5 && $waktu <= 7) ? 1 :
+                    (($waktu > 7 && $waktu < 10) ? (10 - $waktu) / (10 - 7) : 0));
+
+        $lama = ($waktu > 7 && $waktu < 10) ? ($waktu - 7) / (10 - 7) :
+                (($waktu >= 10) ? 1 : 0);
+
+
+        // --- Biaya ---
+        $murah = ($biaya <= 100000) ? 1 :
+                (($biaya > 100000 && $biaya < 150000) ? 
+                (150000 - $biaya) / (150000 - 100000) : 0);
+
+        $sedang_b = ($biaya > 100000 && $biaya < 150000) ?
+                    ($biaya - 100000) / (150000 - 100000) :
+                    (($biaya >= 150000 && $biaya <= 250000) ? 1 :
+                    (($biaya > 250000 && $biaya < 300000) ?
+                    (300000 - $biaya) / (300000 - 250000) : 0));
+
+        $mahal = ($biaya > 250000 && $biaya < 350000) ?
+                ($biaya - 250000) / (350000 - 250000) :
+                (($biaya >= 350000) ? 1 : 0);
+
+
+        // ==============================
+        // INFERENSI (5 RULE)
+        // ==============================
+
+        $a1 = min($ringan, $cepat, $murah);              
+        $a2 = min($ringan, $sedang_w, $sedang_b);       
+        $a3 = min($sedang, $sedang_w, $sedang_b);      
+        $a4 = min($sedang, $lama, $mahal);              
+        $a5 = min($berat, $lama, $mahal);               
+
+
+        // ==============================
+        // CARI Zi (TSUKAMOTO)
+        // ==============================
+
+        // Rendah (monoton turun 1–2)
+        $z1 = 2 - $a1;
+
+        // Menengah (pakai pusat 2)
+        $z2 = 2;
+        $z3 = 2;
+
+        // Tinggi (monoton naik 2–3)
+        $z4 = 2 + $a4;
+        $z5 = 2 + $a5;
+
+
+        // ==============================
+        // DEFUZZIFIKASI
+        // ==============================
+
+        $sumAlphaZ =
+            ($a1 * $z1) +
+            ($a2 * $z2) +
+            ($a3 * $z3) +
+            ($a4 * $z4) +
+            ($a5 * $z5);
+
+        $sumAlpha = $a1 + $a2 + $a3 + $a4 + $a5;
+
+        if ($sumAlpha == 0) {
+            return 1;
+        }
+
+        return round($sumAlphaZ / $sumAlpha, 2);
     }
 
 
-    /**
-     * Form tambah data kerusakan
-     */
     public function create($room_id)
     {
         try {
@@ -131,8 +175,7 @@ public function index()
     
     public function createe()
     {
-        $rooms = Room::all(); // atau ->where('status', 'tersedia')->get();
-
+        $rooms = Room::where('status', 'tersedia')->get(); 
         return view('maintenances.add', compact('rooms'));
     }
 
@@ -157,6 +200,8 @@ public function index()
             'biaya_perkiraan' => $validated['biaya_perkiraan'] ?? null,
         ]);
 
+        Room::where('id', $validated['room_id'])->update(['status' => 'perawatan']);
+
         return redirect()
             ->route('maintenances.index')
             ->with([
@@ -165,9 +210,6 @@ public function index()
             ]);
     }
 
-    /**
-     * Simpan data kerusakan baru
-     */
     public function store(Request $request)
     {
         try {

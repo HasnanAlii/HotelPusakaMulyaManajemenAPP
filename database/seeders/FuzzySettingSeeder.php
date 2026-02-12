@@ -9,49 +9,37 @@ class FuzzySettingSeeder extends Seeder
 {
     public function run(): void
     {
-        // Pastikan hanya ada 1 konfigurasi aktif
+        // Pastikan hanya ada 1 konfigurasi
         if (FuzzySetting::count() === 0) {
 
             FuzzySetting::create([
 
-                /* =================================================
-                   HARGA
-                   JS:
-                   min = max * 0.6
-                   maxTol = max * 1.3
-                ================================================= */
-                'harga_min_ratio' => 0.60,
-                'harga_max_ratio' => 1.30,
+                /* ===============================
+                   HARGA (Segitiga)
+                   =============================== */
+                'harga_min' => 100000,
+                'harga_mid' => 200000,
+                'harga_max' => 300000,
 
-                /* =================================================
-                   KONSEKUEN (Z)
-                   JS:
-                   z = 50 + (alpha * 50)
-                ================================================= */
-                'z_min' => 50,
-                'z_max' => 100,
-
-                /* =================================================
+                /* ===============================
                    FASILITAS
-                   JS:
-                   sedikit : <=1
-                   cukup   : 3
-                   lengkap : >=5
-                ================================================= */
+                   =============================== */
                 'fasilitas_min' => 1,
                 'fasilitas_mid' => 3,
                 'fasilitas_max' => 5,
 
-                /* =================================================
+                /* ===============================
                    KENYAMANAN
-                   JS:
-                   rendah  : 1
-                   sedang  : 2
-                   tinggi  : 3
-                ================================================= */
+                   =============================== */
                 'nyaman_min' => 1,
                 'nyaman_mid' => 2,
                 'nyaman_max' => 3,
+
+                /* ===============================
+                   JUMLAH ORANG
+                   =============================== */
+                'jumlah_orang_min' => 1,
+                'jumlah_orang_max' => 2,
             ]);
         }
     }

@@ -98,9 +98,9 @@
                         class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
                     >
                         <option value="">-- Pilih Tingkat --</option>
-                        <option value="ringan">Ringan</option>
-                        <option value="sedang">Sedang</option>
-                        <option value="berat">Berat</option>
+                        <option value="30">Ringan</option>
+                        <option value="60">Sedang</option>
+                        <option value="100">Berat</option>
                     </select>
                 </div>
 
@@ -116,9 +116,9 @@
                         class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
                     >
                         <option value="">-- Pilih Waktu --</option>
-                        <option value="1-3 hari">1–3 Hari</option>
-                        <option value="1 minggu">1 Minggu</option>
-                        <option value=">1 minggu">&gt; 1 Minggu</option>
+                        <option value="3">1–3 Hari</option>
+                        <option value="6">1 Minggu</option>
+                        <option value="10">&gt; 1 Minggu</option>
                     </select>
                 </div>
 
@@ -134,13 +134,13 @@
                         class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg p-3 shadow-sm transition"
                     >
                         <option value="">-- Pilih Biaya --</option>
-                        <option value="<100rb">&lt; 100rb</option>
-                        <option value="100-300rb">100–300rb</option>
-                        <option value=">300rb">&gt; 300rb</option>
+                        <option value="100000">&lt; 100rb</option>
+                        <option value="200000">100–300rb</option>
+                        <option value="350000">&gt; 300rb</option>
                     </select>
                 </div>
-
             </div>
+            
             {{-- Tombol Aksi --}}
             <div class="col-span-2 flex justify-end space-x-3 mt-6">
                 <a href="{{ route('rooms.index') }}"
