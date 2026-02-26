@@ -104,24 +104,99 @@ class FuzzyController extends Controller
     // INFERENSI 
     // ==============================
 
-    $a1 = min($murah, $cukup, $standar, $sedikit);  // K1
-    $a2 = min($murah, $komplit, $extra, $sedikit);  // K2
-    $a3 = min($sedang, $komplit, $extra, $sedikit); // K3
-    $a4 = min($mahal, $menengah, $extra, $banyak);  // K4
-    $a5 = min($mahal, $komplit, $vip, $banyak);     // K5
+
+    // ===== MURAH =====
+    $a1  = min($murah, $cukup, $standar, $sedikit);
+    $a2  = min($murah, $cukup, $standar, $banyak);
+    $a3  = min($murah, $cukup, $extra, $sedikit);
+    $a4  = min($murah, $cukup, $extra, $banyak);
+    $a5  = min($murah, $cukup, $vip, $sedikit);
+    $a6  = min($murah, $cukup, $vip, $banyak);
+
+    $a7  = min($murah, $menengah, $standar, $sedikit);
+    $a8  = min($murah, $menengah, $standar, $banyak);
+    $a9  = min($murah, $menengah, $extra, $sedikit);
+    $a10 = min($murah, $menengah, $extra, $banyak);
+    $a11 = min($murah, $menengah, $vip, $sedikit);
+    $a12 = min($murah, $menengah, $vip, $banyak);
+
+    $a13 = min($murah, $komplit, $standar, $sedikit);
+    $a14 = min($murah, $komplit, $standar, $banyak);
+    $a15 = min($murah, $komplit, $extra, $sedikit);
+    $a16 = min($murah, $komplit, $extra, $banyak);
+    $a17 = min($murah, $komplit, $vip, $sedikit);
+    $a18 = min($murah, $komplit, $vip, $banyak);
+
+    // ===== SEDANG =====
+    $a19 = min($sedang, $cukup, $standar, $sedikit);
+    $a20 = min($sedang, $cukup, $standar, $banyak);
+    $a21 = min($sedang, $cukup, $extra, $sedikit);
+    $a22 = min($sedang, $cukup, $extra, $banyak);
+    $a23 = min($sedang, $cukup, $vip, $sedikit);
+    $a24 = min($sedang, $cukup, $vip, $banyak);
+
+    $a25 = min($sedang, $menengah, $standar, $sedikit);
+    $a26 = min($sedang, $menengah, $standar, $banyak);
+    $a27 = min($sedang, $menengah, $extra, $sedikit);
+    $a28 = min($sedang, $menengah, $extra, $banyak);
+    $a29 = min($sedang, $menengah, $vip, $sedikit);
+    $a30 = min($sedang, $menengah, $vip, $banyak);
+
+    $a31 = min($sedang, $komplit, $standar, $sedikit);
+    $a32 = min($sedang, $komplit, $standar, $banyak);
+    $a33 = min($sedang, $komplit, $extra, $sedikit);
+    $a34 = min($sedang, $komplit, $extra, $banyak);
+    $a35 = min($sedang, $komplit, $vip, $sedikit);
+    $a36 = min($sedang, $komplit, $vip, $banyak);
+
+    // ===== MAHAL =====
+    $a37 = min($mahal, $cukup, $standar, $sedikit);
+    $a38 = min($mahal, $cukup, $standar, $banyak);
+    $a39 = min($mahal, $cukup, $extra, $sedikit);
+    $a40 = min($mahal, $cukup, $extra, $banyak);
+    $a41 = min($mahal, $cukup, $vip, $sedikit);
+    $a42 = min($mahal, $cukup, $vip, $banyak);
+
+    $a43 = min($mahal, $menengah, $standar, $sedikit);
+    $a44 = min($mahal, $menengah, $standar, $banyak);
+    $a45 = min($mahal, $menengah, $extra, $sedikit);
+    $a46 = min($mahal, $menengah, $extra, $banyak);
+    $a47 = min($mahal, $menengah, $vip, $sedikit);
+    $a48 = min($mahal, $menengah, $vip, $banyak);
+
+    $a49 = min($mahal, $komplit, $standar, $sedikit);
+    $a50 = min($mahal, $komplit, $standar, $banyak);
+    $a51 = min($mahal, $komplit, $extra, $sedikit);
+    $a52 = min($mahal, $komplit, $extra, $banyak);
+    $a53 = min($mahal, $komplit, $vip, $sedikit);
+    $a54 = min($mahal, $komplit, $vip, $banyak);
 
     // ==============================
     // DEFUZZIFIKASI
     // ==============================
 
-    $sumAlphaZ =
-        ($a1 * 1) +
-        ($a2 * 2) +
-        ($a3 * 3) +
-        ($a4 * 4) +
-        ($a5 * 5);
+    $a = [
+        $a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,
+        $a11,$a12,$a13,$a14,$a15,$a16,$a17,$a18,
+        $a19,$a20,$a21,$a22,$a23,$a24,$a25,$a26,
+        $a27,$a28,$a29,$a30,$a31,$a32,$a33,$a34,
+        $a35,$a36,$a37,$a38,$a39,$a40,$a41,$a42,
+        $a43,$a44,$a45,$a46,$a47,$a48,$a49,$a50,
+        $a51,$a52,$a53,$a54
+    ];
 
-    $sumAlpha = $a1 + $a2 + $a3 + $a4 + $a5;
+    $z = [];
+    for ($i = 0; $i < 54; $i++) {
+        $z[$i] = ceil(($i+1)/11); 
+    }
+
+    $sumAlphaZ = 0;
+    $sumAlpha = 0;
+
+    for ($i = 0; $i < 54; $i++) {
+        $sumAlphaZ += $a[$i] * $z[$i];
+        $sumAlpha += $a[$i];
+    }
 
     $hasil = $sumAlpha == 0 ? 1 : $sumAlphaZ / $sumAlpha;
 

@@ -568,8 +568,8 @@
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 pr-10 py-3
                                 text-slate-700 focus:ring-2 focus:ring-blue-500 transition">
                             <option value="">Pilih Kapasitas</option>
-                            <option value="1">1 - 2 Orang</option>
-                            <option value="3">Lebih dari 2 Orang</option>
+                            <option value="2">1 - 2 Orang</option>
+                            <option value="4">Lebih dari 2 Orang</option>
                         </select>
                     </div>
                 </div>
