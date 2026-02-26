@@ -105,11 +105,54 @@
                                 });
                             </script>
 
-                            <div class="mb-4">
-                                <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan</label>
-                                <textarea name="keterangan" id="keterangan" rows="3" required
-                                          class="w-full border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"></textarea>
-                            </div>
+<div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
+
+    <div class="grid grid-cols-2 gap-2">
+
+        <label class="flex items-center p-2 border rounded">
+            <input type="checkbox" name="keterangan[]" value="paket" class="mr-2">
+            Paket
+        </label>
+
+        <label class="flex items-center p-2 border rounded">
+            <input type="checkbox" name="keterangan[]" value="gaji_karyawan" class="mr-2">
+            Gaji Karyawan
+        </label>
+
+        <label class="flex items-center p-2 border rounded">
+            <input type="checkbox" name="keterangan[]" value="operasional" class="mr-2">
+            Operasional
+        </label>
+
+        <label class="flex items-center p-2 border rounded">
+            <input type="checkbox" name="keterangan[]" value="maintenance" class="mr-2">
+            Maintenance
+        </label>
+
+        <label class="flex items-center p-2 border rounded">
+            <input type="checkbox" id="lainnyaCheckbox" name="keterangan[]" value="lainnya" class="mr-2">
+            Lainnya
+        </label>
+
+    </div>
+
+    <!-- textarea -->
+    <div id="lainnyaInput" class="mt-3 hidden">
+        <textarea name="keterangan_lainnya" rows="3"
+            placeholder="Masukkan keterangan lainnya..."
+            class="w-full border-gray-300 rounded-md px-3 py-2"></textarea>
+    </div>
+</div>
+
+<script>
+    const checkbox = document.getElementById('lainnyaCheckbox');
+    const input = document.getElementById('lainnyaInput');
+
+    checkbox.addEventListener('change', function () {
+        input.classList.toggle('hidden', !this.checked);
+    });
+</script>
 
                             <div class="flex justify-end space-x-2">
                                 <button type="button" @click="showPengeluaran = false"

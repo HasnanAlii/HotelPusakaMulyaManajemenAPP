@@ -102,8 +102,13 @@
                         <option value="60">Sedang</option>
                         <option value="100">Berat</option>
                     </select>
-                </div>
 
+                    <p class="text-sm text-gray-500 mt-2">
+                        • <b>Ringan</b>: kerusakan kecil seperti lampu redup, cat dinding terkelupas, atau noda ringan.<br>
+                        • <b>Sedang</b>: kerusakan yang mengganggu kenyamanan seperti AC kurang dingin, keran bocor, atau perabot rusak sebagian.<br>
+                        • <b>Berat</b>: kerusakan serius seperti listrik bermasalah, kebocoran besar, atau fasilitas utama tidak dapat digunakan.
+                    </p>
+                </div>
                 <!-- WAKTU PERBAIKAN -->
                 <div>
                     <label for="waktu_perbaikan" class="block text-gray-700 font-medium mb-2">

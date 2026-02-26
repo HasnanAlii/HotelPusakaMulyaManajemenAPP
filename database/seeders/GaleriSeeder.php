@@ -19,19 +19,19 @@ class GaleriSeeder extends Seeder
                 'caption' => 'sub image',
             ],
             [
-                'image_path' => 'galeri/2.jpg',
+                'image_path' => 'galeri/3.jpg',
                 'caption' => 'Standar',
             ],
             [
-                'image_path' => 'galeri/2.jpg',
+                'image_path' => 'galeri/3.jpg',
                 'caption' => 'Standar 1',
             ],
             [
-                'image_path' => 'galeri/3.jpg',
+                'image_path' => 'galeri/1.jpg',
                 'caption' => 'Superior 1',
             ],
             [
-                'image_path' => 'galeri/4.jpg',
+                'image_path' => 'galeri/2.jpg',
                 'caption' => 'Superior 2',
             ],
             [

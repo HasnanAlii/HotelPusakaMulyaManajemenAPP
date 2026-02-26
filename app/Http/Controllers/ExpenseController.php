@@ -45,24 +45,43 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         try {
+            // format angka
             $request->merge([
                 'amount' => str_replace('.', '', $request->amount),
             ]);
 
+            // validasi
             $validated = $request->validate([
-                'amount'     => 'required|numeric|min:0',
-                'keterangan' => 'required|string|max:255',
+                'amount' => 'required|numeric|min:0',
+                'keterangan' => 'required|array',
+                'keterangan.*' => 'string',
+                'keterangan_lainnya' => 'nullable|string|max:255',
             ]);
 
+            // ambil checkbox
+            $keterangan = $validated['keterangan'];
+
+            // kalau pilih "lainnya" dan diisi
+            if (in_array('lainnya', $keterangan) && $request->keterangan_lainnya) {
+                $keterangan[] = $request->keterangan_lainnya;
+            }
+
+            // hapus kata "lainnya" biar tidak ikut tersimpan
+            $keterangan = array_diff($keterangan, ['lainnya']);
+
+            // gabungkan jadi string
+            $finalKeterangan = implode(', ', $keterangan);
+
+            // simpan
             $expense = Expense::create([
-                'description' => $validated['keterangan'],
+                'description' => $finalKeterangan,
                 'amount'      => $validated['amount'],
             ]);
 
             Finance::create([
                 'reservation_id' => null,
                 'expense_id'     => $expense->id,
-                'keterangan'     => $validated['keterangan'],
+                'keterangan'     => $finalKeterangan,
                 'amount'         => $validated['amount'],
             ]);
 
@@ -70,6 +89,7 @@ class ExpenseController extends Controller
                 'message' => 'Pengeluaran berhasil ditambahkan.',
                 'alert-type' => 'success'
             ]);
+
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with([
                 'message' => 'Gagal menambahkan pengeluaran: ' . $e->getMessage(),
@@ -77,7 +97,6 @@ class ExpenseController extends Controller
             ]);
         }
     }
-
     /**
      * Display the specified resource.
      */

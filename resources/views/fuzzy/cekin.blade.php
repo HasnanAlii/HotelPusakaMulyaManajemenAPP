@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="pt-40 min-h-screen">
+    <div class="py-20 min-h-screen">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
           
             <div class="bg-white rounded-2xl shadow-lg p-8 sm:p-10 transition-transform transform hover:scale-[1.01]">

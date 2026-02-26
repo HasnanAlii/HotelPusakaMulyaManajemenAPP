@@ -91,6 +91,11 @@
                                     Berat
                                 </option>
                             </select>
+                            <p class="text-sm text-gray-500 mt-2">
+                                • <b>Ringan</b>: kerusakan kecil seperti lampu redup, cat dinding terkelupas, atau noda ringan.<br>
+                                • <b>Sedang</b>: kerusakan yang mengganggu kenyamanan seperti AC kurang dingin, keran bocor, atau perabot rusak sebagian.<br>
+                                • <b>Berat</b>: kerusakan serius seperti listrik bermasalah, kebocoran besar, atau fasilitas utama tidak dapat digunakan.
+                            </p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">
