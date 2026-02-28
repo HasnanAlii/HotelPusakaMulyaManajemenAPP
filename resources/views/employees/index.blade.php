@@ -31,7 +31,7 @@
                 {{--     MULAI PERUBAHAN: Tampilan Grid Card         --}}
                 {{-- ================================================== --}}
 
-                <div classT="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
                     @forelse ($employees as $employee)
                         @php
@@ -68,40 +68,40 @@
                             </div>
 
                           <div class="p-4 bg-gray-50 border-t border-gray-200">
-    <div class="flex justify-center flex-wrap gap-3">
+                            <div class="flex justify-center flex-wrap gap-3">
 
-        {{-- Tombol Absen --}}
-        <form action="{{ route('employees.attend', $employee->id) }}" method="POST">
-            @csrf
-            <button type="submit"
-                class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-md shadow-sm transition duration-300">
-                <i data-feather="check-circle" class="w-4 h-4"></i>
-                Absen
-            </button>
-        </form>
+                                {{-- Tombol Absen --}}
+                                <form action="{{ route('employees.attend', $employee->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-md shadow-sm transition duration-300">
+                                        <i data-feather="check-circle" class="w-4 h-4"></i>
+                                        Absen
+                                    </button>
+                                </form>
 
-        {{-- Tombol Edit (Hanya Admin) --}}
-        @role('admin')
-        <a href="{{ route('employees.edit', $employee->id) }}" 
-            class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 rounded-md shadow-sm transition duration-300">
-            <i data-feather="edit-3" class="w-4 h-4"></i>
-            Edit
-        </a>
+                                {{-- Tombol Edit (Hanya Admin) --}}
+                                @role('admin')
+                                <a href="{{ route('employees.edit', $employee->id) }}" 
+                                    class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 rounded-md shadow-sm transition duration-300">
+                                    <i data-feather="edit-3" class="w-4 h-4"></i>
+                                    Edit
+                                </a>
 
-        {{-- Tombol Hapus (Hanya Admin) --}}
-        <form action="{{ route('employees.destroy', $employee->id) }}" method="POST"
-            onsubmit="return confirm('Yakin ingin menghapus karyawan ini?')">
-            @csrf
-            @method('DELETE')
-            <button type="submit"
-                class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-rose-500 hover:bg-rose-600 rounded-md shadow-sm transition duration-300">
-                <i data-feather="trash-2" class="w-4 h-4"></i>
-                Hapus
-            </button>
-        </form>
-        @endrole
-    </div>
-</div>
+                                {{-- Tombol Hapus (Hanya Admin) --}}
+                                <form action="{{ route('employees.destroy', $employee->id) }}" method="POST"
+                                    onsubmit="return confirm('Yakin ingin menghapus karyawan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-rose-500 hover:bg-rose-600 rounded-md shadow-sm transition duration-300">
+                                        <i data-feather="trash-2" class="w-4 h-4"></i>
+                                        Hapus
+                                    </button>
+                                </form>
+                                @endrole
+                            </div>
+                        </div>
 
                         </div>
 

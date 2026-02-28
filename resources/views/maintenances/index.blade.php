@@ -137,28 +137,40 @@
 
                                         <div>
                                             <label class="text-xs font-semibold text-gray-500">
-                                                Tingkat
+                                                Tingkat Kerusakan
                                             </label>
                                             <p class="font-medium">
-                                                {{ $maintenance->tingkat_kerusakan ?? '-' }}
+                                                @php
+                                                    $kerusakan = $maintenance->tingkat_kerusakan;
+                                                @endphp
+
+                                                @if(is_null($kerusakan))
+                                                    -
+                                                @elseif($kerusakan <= 30)
+                                                    Ringan
+                                                @elseif($kerusakan <= 70)
+                                                    Sedang
+                                                @else
+                                                    Berat
+                                                @endif
                                             </p>
                                         </div>
 
                                         <div>
                                             <label class="text-xs font-semibold text-gray-500">
-                                                Waktu
+                                                Estimasi Waktu
                                             </label>
                                             <p class="font-medium">
-                                                {{ $maintenance->waktu_perbaikan ?? '-' }}
+                                                {{ $maintenance->waktu_perbaikan ?? '-' }} Hari
                                             </p>
                                         </div>
 
                                         <div>
                                             <label class="text-xs font-semibold text-gray-500">
-                                                Biaya
+                                                Estimasi Biaya
                                             </label>
                                             <p class="font-medium">
-                                                {{ $maintenance->biaya_perkiraan ?? '-' }}
+                                               {{ $maintenance->biaya_perkiraan ? 'Rp ' . number_format($maintenance->biaya_perkiraan, 0, ',', '.') : '-' }}
                                             </p>
                                         </div>
 
