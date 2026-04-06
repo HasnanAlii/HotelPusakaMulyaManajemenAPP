@@ -9,6 +9,7 @@ use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
@@ -159,28 +160,25 @@ public function reservasi(Request $request)
         $user = Auth::user();
         try {
             $validated = $request->validate([
-                'customer_id' => 'required|exists:customers,id',
-                'room_id'     => 'required|exists:rooms,id',
-                'check_in'    => 'required|date',
-                'check_out'   => 'required|date|after_or_equal:check_in',
+                'customer_id'    => 'required|exists:customers,id',
+                'room_id'        => 'required|exists:rooms,id',
+                'check_in'       => 'required|date',
+                'check_out'      => 'required|date|after_or_equal:check_in',
+                'bukti_transfer' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             ]);
             $validated['check_in'] = Carbon::createFromFormat('d-m-Y', $validated['check_in'])->format('Y-m-d');
             $validated['check_out'] = Carbon::createFromFormat('d-m-Y', $validated['check_out'])->format('Y-m-d');
 
+            if ($request->hasFile('bukti_transfer')) {
+                $validated['bukti_transfer'] = $request->file('bukti_transfer')
+                    ->store('bukti_transfer', 'public');
+            }
 
             $validated['status'] = 'booking';
 
             $reservation = Reservation::create($validated);
 
             $reservation->room()->update(['status' => 'dibooking']);
-
-            $checkIn  = Carbon::parse($reservation->check_in);
-            $checkOut = Carbon::parse($reservation->check_out);
-            $days     = max($checkIn->diffInDays($checkOut), 1);
-
-            $amount = $reservation->room->price * $days;
-
-  
 
             return redirect()->route('rooms.nota', $reservation->room->id)
                              ->with([

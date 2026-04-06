@@ -68,7 +68,7 @@
                                 <div class="space-y-4">
                                     <div>
                                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                                        <input type="text" id="name" name="name" required placeholder="Nama Customer"
+                                        <input type="text" id="name" name="name" required placeholder="Nama Pelanggan"
                                             class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2" />
                                     </div>
 
@@ -111,18 +111,18 @@
 
                
 
-                <form action="{{ route('reservations.reservasi') }}" method="POST" class="space-y-6">
+                <form action="{{ route('reservations.reservasi') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
-                    {{-- Pilih Customer --}}
+                    {{-- Pilih Pelanggan --}}
                     <div>
-                        <label class="block text-gray-700 font-medium mb-2">Customer</label>
+                        <label class="block text-gray-700 font-medium mb-2">Pelanggan</label>
                         <select 
                             id="customerSelect" 
                             name="customer_id"
                             class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm transition"
                             required>
-                            <option value="">-- Cari / Pilih Customer --</option>
+                            <option value="">-- Cari / Pilih Pelanggan --</option>
                             @foreach ($customers as $cust)
                                 <option value="{{ $cust->id }}">{{ $cust->name }}</option>
                             @endforeach
@@ -179,6 +179,66 @@
                         <input type="hidden" id="total" name="total">
                     </div>
 
+                    {{-- Rekening Tujuan --}}
+                    <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+                        <p class="text-sm font-semibold text-blue-700 mb-3 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                            Rekening Tujuan Transfer
+                        </p>
+                        <div class="space-y-1.5 text-sm text-gray-700">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Bank</span>
+                                <span class="font-semibold">BCA</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">No. Rekening</span>
+                                <span class="font-semibold tracking-wider">9201228834</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Atas Nama</span>
+                                <span class="font-semibold">Taufik Saputra</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Upload Bukti Transfer --}}
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">
+                            Bukti Transfer
+                            <span class="text-sm font-normal text-gray-400">(opsional, jpg/png/pdf, maks 2MB)</span>
+                        </label>
+                        <label for="bukti_transfer"
+                            class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                            <div id="upload-placeholder" class="flex flex-col items-center justify-center">
+                                <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                                <p class="text-sm text-gray-500">Klik untuk unggah bukti transfer</p>
+                                <p class="text-xs text-gray-400 mt-1">JPG, PNG, atau PDF</p>
+                            </div>
+                            <p class="hidden text-sm text-blue-600 font-medium" id="upload-filename"></p>
+                            <input id="bukti_transfer" name="bukti_transfer" type="file"
+                                accept=".jpg,.jpeg,.png,.pdf" class="hidden"
+                                onchange="
+                                    var ph = document.getElementById('upload-placeholder');
+                                    var fn = document.getElementById('upload-filename');
+                                    if (this.files.length) {
+                                        ph.classList.add('hidden');
+                                        fn.classList.remove('hidden');
+                                        fn.textContent = this.files[0].name;
+                                    } else {
+                                        ph.classList.remove('hidden');
+                                        fn.classList.add('hidden');
+                                    }
+                                " />
+                        </label>
+                        @error('bukti_transfer')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     {{-- Tombol Aksi --}}
                     <div class="flex flex-col sm:flex-row justify-end items-center gap-3 pt-6">
                         <a href="javascript:history.go(-1)" 
@@ -220,7 +280,7 @@
     // Inisialisasi Select2
     $(document).ready(function () {
         $('#customer_id').select2({
-            placeholder: "Cari nama customer...",
+            placeholder: "Cari nama pelanggan...",
             allowClear: true
         });
     });

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\Expense;
+use App\Models\Finance;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
@@ -162,6 +165,37 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with([
                 'message' => 'Gagal mencatat kehadiran: ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ]);
+        }
+    }
+
+    // Bayar insentif karyawan
+    public function bayarInsentif(Employee $employee)
+    {
+        try {
+            $keterangan = 'Insentif ' . $employee->name . ' - ' . now()->format('d/m/Y');
+
+            $expense = Expense::create([
+                'description' => $keterangan,
+                'amount'      => 100000,
+            ]);
+
+            Finance::create([
+                'reservation_id' => null,
+                'expense_id'     => $expense->id,
+                'amount'         => 100000,
+                'user_id'        => Auth::id(),
+                'keterangan'     => $keterangan,
+            ]);
+
+            return redirect()->back()->with([
+                'message' => 'Insentif Rp 100.000 untuk ' . $employee->name . ' berhasil dicatat.',
+                'alert-type' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'message' => 'Gagal membayar insentif: ' . $e->getMessage(),
                 'alert-type' => 'error'
             ]);
         }

@@ -50,7 +50,6 @@
                     </button>
 
 
-
                 {{-- Modal Tambah Pengeluaran --}}
                 <div 
                     x-show="showPengeluaran"
@@ -105,54 +104,49 @@
                                 });
                             </script>
 
-<div class="mb-4">
-    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
 
-    <div class="grid grid-cols-2 gap-2">
+                                <div class="grid grid-cols-2 gap-2">
 
-        <label class="flex items-center p-2 border rounded">
-            <input type="checkbox" name="keterangan[]" value="paket" class="mr-2">
-            Paket
-        </label>
+                                    <label class="flex items-center p-2 border rounded">
+                                        <input type="checkbox" name="keterangan[]" value="paket" class="mr-2">
+                                        Paket
+                                    </label>
+                                    
+                                    <label class="flex items-center p-2 border rounded">
+                                        <input type="checkbox" name="keterangan[]" value="operasional" class="mr-2">
+                                        Operasional
+                                    </label>
 
-        <label class="flex items-center p-2 border rounded">
-            <input type="checkbox" name="keterangan[]" value="gaji_karyawan" class="mr-2">
-            Gaji Karyawan
-        </label>
+                                    <label class="flex items-center p-2 border rounded">
+                                        <input type="checkbox" name="keterangan[]" value="maintenance" class="mr-2">
+                                        Maintenance
+                                    </label>
 
-        <label class="flex items-center p-2 border rounded">
-            <input type="checkbox" name="keterangan[]" value="operasional" class="mr-2">
-            Operasional
-        </label>
+                                    <label class="flex items-center p-2 border rounded">
+                                        <input type="checkbox" id="lainnyaCheckbox" name="keterangan[]" value="lainnya" class="mr-2">
+                                        Lainnya
+                                    </label>
 
-        <label class="flex items-center p-2 border rounded">
-            <input type="checkbox" name="keterangan[]" value="maintenance" class="mr-2">
-            Maintenance
-        </label>
+                                </div>
 
-        <label class="flex items-center p-2 border rounded">
-            <input type="checkbox" id="lainnyaCheckbox" name="keterangan[]" value="lainnya" class="mr-2">
-            Lainnya
-        </label>
+                                <!-- textarea -->
+                                <div id="lainnyaInput" class="mt-3 hidden">
+                                    <textarea name="keterangan_lainnya" rows="3"
+                                        placeholder="Masukkan keterangan lainnya..."
+                                        class="w-full border-gray-300 rounded-md px-3 py-2"></textarea>
+                                </div>
+                            </div>
 
-    </div>
+                            <script>
+                                const checkbox = document.getElementById('lainnyaCheckbox');
+                                const input = document.getElementById('lainnyaInput');
 
-    <!-- textarea -->
-    <div id="lainnyaInput" class="mt-3 hidden">
-        <textarea name="keterangan_lainnya" rows="3"
-            placeholder="Masukkan keterangan lainnya..."
-            class="w-full border-gray-300 rounded-md px-3 py-2"></textarea>
-    </div>
-</div>
-
-<script>
-    const checkbox = document.getElementById('lainnyaCheckbox');
-    const input = document.getElementById('lainnyaInput');
-
-    checkbox.addEventListener('change', function () {
-        input.classList.toggle('hidden', !this.checked);
-    });
-</script>
+                                checkbox.addEventListener('change', function () {
+                                    input.classList.toggle('hidden', !this.checked);
+                                });
+                            </script>
 
                             <div class="flex justify-end space-x-2">
                                 <button type="button" @click="showPengeluaran = false"
@@ -168,6 +162,98 @@
                     </div>
                 </div>
             </div>
+
+                {{-- Tombol Tambah Pemasukan --}}
+                <div x-data="{ showPemasukan: false }">
+                    <button
+                        @click="showPemasukan = true"
+                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg font-semibold shadow flex items-center gap-2 transition"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Tambah Pemasukan
+                    </button>
+
+                    <div
+                        x-show="showPemasukan"
+                        x-cloak
+                        style="display: none;"
+                        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                    >
+                        <div @click.away="showPemasukan = false"
+                             class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 transform transition-all"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 scale-90"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-90">
+
+                            <h2 class="text-lg font-bold mb-4 text-emerald-600">Tambah Pemasukan</h2>
+
+                            <form action="{{ route('finances.storePemasukan') }}" method="POST">
+                                @csrf
+
+                                <div class="mb-4">
+                                    <label for="pemasukan_amount" class="block text-sm font-medium text-gray-700">Jumlah (Rp)</label>
+                                    <input
+                                        type="text"
+                                        name="amount"
+                                        id="pemasukan_amount"
+                                        required
+                                        placeholder="Masukkan jumlah pemasukan"
+                                        class="w-full border-gray-300 rounded-md px-3 py-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm"
+                                    >
+                                </div>
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const pInput = document.getElementById('pemasukan_amount');
+                                        if (pInput) {
+                                            pInput.addEventListener('input', function(e) {
+                                                let value = e.target.value.replace(/\D/g, '');
+                                                e.target.value = value
+                                                    ? new Intl.NumberFormat('id-ID').format(value)
+                                                    : '';
+                                            });
+                                        }
+                                    });
+                                </script>
+
+                                <div class="mb-4">
+                                    <label for="pemasukan_keterangan" class="block text-sm font-medium text-gray-700 mb-1">Keterangan</label>
+                                    <input
+                                        type="text"
+                                        name="keterangan"
+                                        id="pemasukan_keterangan"
+                                        required
+                                        placeholder="Masukkan keterangan pemasukan"
+                                        class="w-full border-gray-300 rounded-md px-3 py-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm"
+                                    >
+                                </div>
+
+                                <div class="flex justify-end space-x-2">
+                                    <button type="button" @click="showPemasukan = false"
+                                            class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-700">
+                                        Batal
+                                    </button>
+                                    <button type="submit"
+                                            class="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-semibold">
+                                        Simpan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Tombol Cetak Laporan --}}
             <a href="{{ route('finances.print', ['filter' => request('filter'), 'date' => request('date')]) }}"
             target="_blank"

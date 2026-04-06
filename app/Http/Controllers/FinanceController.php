@@ -6,6 +6,7 @@ use App\Models\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
@@ -37,7 +38,10 @@ class FinanceController extends Controller
         $totalQuery = clone $query;
 
         $totalPemasukan = (clone $totalQuery)
-            ->whereNotNull('reservation_id')
+            ->where(function ($q) {
+                $q->whereNotNull('reservation_id')
+                  ->orWhere('type', 'pemasukan');
+            })
             ->sum('amount');
 
         $totalPengeluaran = (clone $totalQuery)
@@ -86,7 +90,7 @@ public function printPdf(Request $request)
 
     $finances = $financesQuery->orderBy('created_at', 'desc')->get();
 
-    $totalPemasukan = $finances->where('reservation_id', '!=', null)->sum('amount');
+    $totalPemasukan = $finances->filter(fn($f) => $f->reservation_id !== null || $f->type === 'pemasukan')->sum('amount');
     $totalPengeluaran = $finances->where('expense_id', '!=', null)->sum('amount');
     $totalDana = $totalPemasukan - $totalPengeluaran;
 
@@ -125,6 +129,30 @@ public function printPdf(Request $request)
 
     return $pdf->stream($filename);
 }
+
+      public function storePemasukan(Request $request)
+    {
+        $request->validate([
+            'amount'      => 'required|string',
+            'keterangan'  => 'required|string|max:255',
+        ]);
+
+        $amount = (int) str_replace(['.', ','], ['', ''], $request->amount);
+
+        Finance::create([
+            'reservation_id' => null,
+            'expense_id'     => null,
+            'type'           => 'pemasukan',
+            'amount'         => $amount,
+            'user_id'        => Auth::id(),
+            'keterangan'     => $request->keterangan,
+        ]);
+
+        return redirect()->back()->with([
+            'message'    => 'Pemasukan sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil dicatat.',
+            'alert-type' => 'success',
+        ]);
+    }
 
       public function deleteOld()
 {

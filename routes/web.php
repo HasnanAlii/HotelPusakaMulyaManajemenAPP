@@ -22,6 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/', [GaleriController::class, 'awal']);
+Route::get('/tentang-kami', [GaleriController::class, 'tentang'])->name('tentang');
 
 
 Route::get('/dashboard', function () {
@@ -104,6 +105,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::post('/employees/{employee}/attend', [EmployeeController::class, 'attend'])->name('employees.attend');
+    Route::post('/employees/{employee}/insentif', [EmployeeController::class, 'bayarInsentif'])->name('employees.insentif');
 
     /*
     |--------------------------------------------------------------------------
@@ -173,6 +175,7 @@ Route::post('/maintenances/add', [MaintenanceController::class, 'storee'])
     |--------------------------------------------------------------------------
     */
     Route::get('/finances', [FinanceController::class, 'index'])->name('finances.index');
+    Route::post('/finances/pemasukan', [FinanceController::class, 'storePemasukan'])->name('finances.storePemasukan');
     Route::get('/finances/print', [FinanceController::class, 'printPdf'])->name('finances.print');
     Route::delete('/finances/delete-old', [FinanceController::class, 'deleteOld'])->name('finances.deleteOld');
 });

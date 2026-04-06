@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-5">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8"> {{-- max-w-7xl agar lebih lebar --}}
+        <div class=""> {{-- max-w-7xl agar lebih lebar --}}
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
 
                 {{-- Pesan sukses --}}
@@ -79,6 +79,87 @@
                                         Absen
                                     </button>
                                 </form>
+
+                                {{-- Tombol Bayar Insentif (Hanya Admin) --}}
+                                @role('admin')
+                             <div x-data="{ openInsentif: false }">
+                                <!-- Button Trigger -->
+                                <button @click="openInsentif = true"
+                                    class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg shadow-sm transition">
+                                    <i data-feather="dollar-sign" class="w-4 h-4"></i>
+                                    Bayar Insentif
+                                </button>
+                                <!-- Overlay -->
+                                <div x-show="openInsentif"
+                                    x-transition.opacity
+                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+
+                                    <!-- Modal -->
+                                    <div @click.away="openInsentif = false"
+                                        x-show="openInsentif"
+                                        x-transition
+                                        class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+
+                                        <!-- Header Icon -->
+                                        <div class="flex justify-center pt-6">
+                                            <div class="bg-violet-100 p-4 rounded-full">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-7 h-7 text-violet-600"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 
+                                                        3 .895 3 2-1.343 2-3 2m0-8c1.11 0 
+                                                        2.08.402 2.599 1M12 8V7m0 1v8m0 
+                                                        0v1m0-1c-1.11 0-2.08-.402-2.599-1
+                                                        M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <!-- Content -->
+                                        <div class="px-6 pt-4 pb-6 text-center">
+                                            <h3 class="text-lg font-semibold text-gray-800">
+                                                Konfirmasi Pembayaran
+                                            </h3>
+
+                                            <p class="mt-2 text-sm text-gray-500 leading-relaxed">
+                                                Anda akan membayar insentif sebesar
+                                                <span class="font-semibold text-violet-600">Rp 100.000</span>
+                                                kepada
+                                                <span class="font-medium text-gray-700">{{ $employee->name }}</span>.
+                                            </p>
+
+                                            <p class="text-xs text-gray-400 mt-2">
+                                                Data akan langsung masuk ke laporan keuangan.
+                                            </p>
+                                        </div>
+
+                                        <!-- Divider -->
+                                        <div class="border-t border-gray-100"></div>
+
+                                        <!-- Actions -->
+                                        <div class="px-6 py-4 flex flex-col sm:flex-row gap-3 sm:justify-end">
+
+                                            <button @click="openInsentif = false"
+                                                class="w-full sm:w-auto min-w-[120px] px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                                                Batal
+                                            </button>
+
+                                            <form action="{{ route('employees.insentif', $employee->id) }}" method="POST" class="w-full sm:w-auto">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="w-full sm:w-auto min-w-[120px] px-5 py-2.5 text-sm font-medium text-white bg-violet-600 rounded-lg hover:bg-violet-700 focus:ring-2 focus:ring-violet-300 transition shadow-sm">
+                                                    Ya, Bayar
+                                                </button>
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                                @endrole
 
                                 {{-- Tombol Edit (Hanya Admin) --}}
                                 @role('admin')

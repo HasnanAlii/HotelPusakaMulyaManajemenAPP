@@ -204,7 +204,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-screen-xl mx-auto sm:px-6 lg:px-8">
+        <div class=" mx-auto sm:px-6 lg:px-8">
             
             
             {{-- Ringkasan Dana --}}
@@ -257,7 +257,7 @@
                         @forelse ($finances as $finance)
                             <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 flex items-center gap-4 transition duration-300 hover:shadow-xl">
                                 <div class="flex-shrink-0">
-                                    @if ($finance->reservation_id)
+                                    @if ($finance->reservation_id || $finance->type === 'pemasukan')
                                         <span class="flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -278,7 +278,7 @@
                                 </div>
 
                                 <div class="ml-auto text-right flex-shrink-0">
-                                    @if ($finance->reservation_id)
+                                    @if ($finance->reservation_id || $finance->type === 'pemasukan')
                                         <span class="text-lg font-bold text-green-600">
                                             + Rp {{ number_format($finance->amount, 0, ',', '.') }}
                                         </span>

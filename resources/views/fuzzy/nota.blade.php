@@ -22,9 +22,9 @@
                     </div>
                 </div>
 
-                <!-- Detail Customer -->
+                <!-- Detail Pelanggan -->
                 <div class="mb-4">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Detail Customer</h3>
+                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Detail Pelanggan</h3>
                     <div class="grid grid-cols-2 gap-5 text-gray-600 text-sm">
                         <div>
                             <p><span class="font-semibold">Nama:</span> {{ $customer->name }}</p>

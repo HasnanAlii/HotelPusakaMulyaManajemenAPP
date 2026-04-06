@@ -11,10 +11,10 @@
     <div class="py-6">
         <div class="mx-auto sm:px-6 lg:px-8">
             
-            {{-- Bagian Atas: Tombol Customer & Filter --}}
+            {{-- Bagian Atas: Tombol Pelanggan & Filter --}}
             <div class="flex flex-col gap-5 mb-6">
                 
-                {{-- Modal Tambah Customer (Dipercantik agar konsisten) --}}
+                {{-- Modal Tambah Pelanggan (Dipercantik agar konsisten) --}}
                 <div x-data="{ showCustomer: false }">
                     <button 
                         @click="showCustomer = true"
@@ -23,7 +23,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
-                        Tambah Customer
+                        Tambah Pelanggan
                     </button>
 
                     {{-- Modal Overlay --}}
@@ -55,7 +55,7 @@
                                     <span class="bg-blue-100 p-2 rounded-full text-blue-600">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     </span>
-                                    Tambah Customer
+                                    Tambah Pelanggan
                                 </h2>
                                 <button @click="showCustomer = false" class="text-gray-400 hover:text-gray-600 transition">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -67,7 +67,7 @@
                                 <div class="space-y-4">
                                     <div>
                                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                                        <input type="text" id="name" name="name" required placeholder="Nama Customer"
+                                        <input type="text" id="name" name="name" required placeholder="Nama Pelanggan"
                                             class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2" />
                                     </div>
 
@@ -203,7 +203,7 @@
                                    Kamar  {{ $room->room_number }}
                                 </h3>
 
-                                {{-- Logic Label Customer VIP (>= 5x Checkin) --}}
+                                {{-- Logic Label Pelanggan VIP (>= 5x Checkin) --}}
                                 @if (
                                     $room->status === 'terisi' &&
                                     $latestReservation &&
@@ -359,8 +359,41 @@
                                                     <div class="px-6 py-4 text-center">
                                                         <h3 class="text-xl font-bold text-gray-800 mb-2">Konfirmasi Reservasi</h3>
                                                         <p class="text-sm text-gray-500 leading-relaxed">
-                                                            Tentukan tindakan untuk tamu <span class="font-semibold text-gray-700">{{ $latestReservation->guest_name ?? 'ini' }}</span>.
+                                                            Tentukan tindakan untuk tamu <span class="font-semibold text-gray-700">{{ $latestReservation->customer->name ?? 'ini' }}</span>.
                                                         </p>
+                                                    </div>
+
+                                                    {{-- Bukti Transfer --}}
+                                                    <div class="px-6 pb-4">
+                                                        @if($latestReservation->bukti_transfer)
+                                                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Bukti Transfer</p>
+                                                            @php
+                                                                $ext = pathinfo($latestReservation->bukti_transfer, PATHINFO_EXTENSION);
+                                                            @endphp
+                                                            @if(in_array(strtolower($ext), ['jpg','jpeg','png']))
+                                                                <a href="{{ Storage::url($latestReservation->bukti_transfer) }}" target="_blank">
+                                                                    <img src="{{ Storage::url($latestReservation->bukti_transfer) }}"
+                                                                         alt="Bukti Transfer"
+                                                                         class="w-full rounded-lg border border-gray-200 object-contain max-h-48 hover:opacity-90 transition cursor-zoom-in">
+                                                                </a>
+                                                                <p class="text-xs text-gray-400 mt-1 text-center">Klik gambar untuk memperbesar</p>
+                                                            @else
+                                                                <a href="{{ Storage::url($latestReservation->bukti_transfer) }}" target="_blank"
+                                                                   class="flex items-center gap-2 px-4 py-2.5 bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 transition">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                    </svg>
+                                                                    Lihat Bukti Transfer (PDF)
+                                                                </a>
+                                                            @endif
+                                                        @else
+                                                            <div class="flex items-center gap-2 px-4 py-2.5 bg-gray-50 border border-dashed border-gray-300 text-gray-400 text-sm rounded-lg">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                </svg>
+                                                                Tidak ada bukti transfer
+                                                            </div>
+                                                        @endif
                                                     </div>
 
                                                     <div class="bg-gray-50 px-6 py-4 flex flex-col gap-3 sm:flex-row-reverse">

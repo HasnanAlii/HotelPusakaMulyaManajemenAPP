@@ -28,9 +28,9 @@
                 />
             </div>
 
-            {{-- Customer --}}
+            {{-- Pelanggan --}}
             <div>
-                <label class="block text-gray-700 font-medium mb-2">Customer</label>
+                <label class="block text-gray-700 font-medium mb-2">Pelanggan</label>
                 <input type="hidden" name="customer_id" value="{{ $customer?->id }}">
                 <input 
                     type="text" 

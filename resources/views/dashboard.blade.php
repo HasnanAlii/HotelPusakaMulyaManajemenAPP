@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-10">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class=" mx-auto sm:px-6 lg:px-8 space-y-6">
 
             {{-- ================================================== --}}
             {{--     PERUBAHAN: Statistik Ringkas (Gaya Baru)     --}}
@@ -37,29 +37,29 @@
                     </div>
                 </div>
 
-                {{-- Customer --}}
+                {{-- Pelanggan --}}
                 <div class="bg-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl">
                     <div class="flex justify-between items-center">
                         <div>
-                            <p class="text-sm font-medium text-gray-500">Customer</p>
+                            <p class="text-sm font-medium text-gray-500">Pelanggan</p>
                             <h3 class="text-3xl font-bold text-gray-900">{{ $totalCustomers }}</h3>
                         </div>
                         <div class="flex items-center gap-3">
                             @role('admin')
                             {{-- Tombol Hapus (ikon) --}}
                             <form action="{{ route('customers.deleteInactive') }}" method="POST" 
-                                  onsubmit="return confirm('Yakin ingin menghapus customer yang tidak aktif 6 bulan terakhir?')">
+                                  onsubmit="return confirm('Yakin ingin menghapus pelanggan yang tidak aktif 6 bulan terakhir?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
-                                        title="Hapus customer tidak aktif"
+                                        title="Hapus pelanggan tidak aktif"
                                         class="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-red-100 hover:text-red-600 transition duration-300">
                                     <i data-feather="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </form>
                             @endrole
                             
-                            {{-- Ikon Customer --}}
+                            {{-- Ikon Pelanggan --}}
                             <div class="p-3 bg-green-100 rounded-full">
                                 <i data-feather="users" class="text-green-600"></i>
                             </div>

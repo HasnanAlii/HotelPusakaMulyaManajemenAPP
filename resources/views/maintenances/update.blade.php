@@ -29,7 +29,7 @@
             @csrf
             @method('PUT')
 
-            <!-- Kamar dan Customer -->
+            <!-- Kamar dan Pelanggan -->
             <div class="grid grid-cols-2 gap-6">
                 <!-- Pilih Kamar -->
                 <div>
@@ -39,9 +39,9 @@
                     <input type="hidden" name="room_id" value="{{ $maintenance->room_id }}">
                 </div>
 
-                <!-- Customer -->
+                <!-- Pelanggan -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Customer</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pelanggan</label>
                     <input type="text" value="{{ $maintenance->customer?->name ?? '-' }}" readonly
                            class="w-full rounded-lg border-gray-200 shadow-sm bg-gray-50 text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                     <input type="hidden" name="customer_id" value="{{ $maintenance->customer_id }}">

@@ -17,15 +17,15 @@
                 <form action="{{ route('reservations.store') }}" method="POST" class="space-y-6">
                     @csrf
 
-                    {{-- Pilih Customer --}}
+                    {{-- Pilih Pelanggan --}}
                     <div>
-                        <label class="block text-gray-700 font-medium mb-2">Customer</label>
+                        <label class="block text-gray-700 font-medium mb-2">Pelanggan</label>
                         <select 
                             id="customerSelect" 
                             name="customer_id"
                             class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm transition"
                             required>
-                            <option value="">-- Cari / Pilih Customer --</option>
+                            <option value="">-- Cari / Pilih Pelanggan --</option>
                             @foreach ($customers as $cust)
                                 <option value="{{ $cust->id }}">{{ $cust->name }}</option>
                             @endforeach
@@ -123,7 +123,7 @@
     // Inisialisasi Select2
     $(document).ready(function () {
         $('#customer_id').select2({
-            placeholder: "Cari nama customer...",
+            placeholder: "Cari nama pelanggan...",
             allowClear: true
         });
     });
@@ -182,7 +182,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-     new TomSelect("#customerSelect", { placeholder: "Cari Customer..." });
+     new TomSelect("#customerSelect", { placeholder: "Cari Pelanggan..." });
 
 });
 

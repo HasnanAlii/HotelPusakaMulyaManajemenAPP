@@ -88,7 +88,7 @@ class MaintenanceController extends Controller
 
         // --- Biaya ---
         $murah = ($biaya <= 100000) ? 1 :
-                (($biaya > 100000 && $biaya < 150000) ? 
+                (($biaya > 100000 && $biaya < 150000) ?
                 (150000 - $biaya) / (150000 - 100000) : 0);
 
         $sedang_b = ($biaya > 100000 && $biaya < 150000) ?
@@ -103,44 +103,106 @@ class MaintenanceController extends Controller
 
 
         // ==============================
-        // INFERENSI (5 RULE)
+        // INFERENSI — 27 RULE (3 × 3 × 3)
+        // Output: Rendah [1–2], Menengah [~2], Tinggi [2–3]
         // ==============================
 
-        $a1 = min($ringan, $cepat, $murah);              
-        $a2 = min($ringan, $sedang_w, $sedang_b);       
-        $a3 = min($sedang, $sedang_w, $sedang_b);      
-        $a4 = min($sedang, $lama, $mahal);              
-        $a5 = min($berat, $lama, $mahal);               
+        // --- OUTPUT: RENDAH (z = 2 - alpha) ---
+        // Kerusakan ringan + waktu cepat dominan → prioritas rendah
+        $a_rendah_1 = min($ringan, $cepat,    $murah);     // R1 : Ringan + Cepat  + Murah
+        $a_rendah_2 = min($ringan, $cepat,    $sedang_b);  // R2 : Ringan + Cepat  + Sedang
+        $a_rendah_3 = min($ringan, $sedang_w, $murah);     // R4 : Ringan + Sedang + Murah
+        $a_rendah_4 = min($sedang, $cepat,    $murah);     // R10: Sedang + Cepat  + Murah
+
+        // --- OUTPUT: MENENGAH (z = 2) ---
+        $a_menengah_1  = min($ringan, $cepat,    $mahal);    // R3 : Ringan + Cepat  + Mahal
+        $a_menengah_2  = min($ringan, $sedang_w, $sedang_b); // R5 : Ringan + Sedang + Sedang
+        $a_menengah_3  = min($ringan, $sedang_w, $mahal);    // R6 : Ringan + Sedang + Mahal
+        $a_menengah_4  = min($ringan, $lama,     $murah);    // R7 : Ringan + Lama   + Murah
+        $a_menengah_5  = min($ringan, $lama,     $sedang_b); // R8 : Ringan + Lama   + Sedang
+        $a_menengah_6  = min($sedang, $cepat,    $sedang_b); // R11: Sedang + Cepat  + Sedang
+        $a_menengah_7  = min($sedang, $cepat,    $mahal);    // R12: Sedang + Cepat  + Mahal
+        $a_menengah_8  = min($sedang, $sedang_w, $murah);    // R13: Sedang + Sedang + Murah
+        $a_menengah_9  = min($sedang, $sedang_w, $sedang_b); // R14: Sedang + Sedang + Sedang
+        $a_menengah_10 = min($sedang, $lama,     $murah);    // R16: Sedang + Lama   + Murah
+        $a_menengah_11 = min($berat,  $cepat,    $murah);    // R19: Berat  + Cepat  + Murah
+        $a_menengah_12 = min($berat,  $cepat,    $sedang_b); // R20: Berat  + Cepat  + Sedang
+        $a_menengah_13 = min($berat,  $sedang_w, $murah);    // R22: Berat  + Sedang + Murah
+
+        // --- OUTPUT: TINGGI (z = 2 + alpha) ---
+        // Kombinasi berat/lama/mahal → prioritas tinggi
+        $a_tinggi_1  = min($ringan, $lama,     $mahal);    // R9 : Ringan + Lama   + Mahal
+        $a_tinggi_2  = min($sedang, $sedang_w, $mahal);    // R15: Sedang + Sedang + Mahal
+        $a_tinggi_3  = min($sedang, $lama,     $sedang_b); // R17: Sedang + Lama   + Sedang
+        $a_tinggi_4  = min($sedang, $lama,     $mahal);    // R18: Sedang + Lama   + Mahal
+        $a_tinggi_5  = min($berat,  $cepat,    $mahal);    // R21: Berat  + Cepat  + Mahal
+        $a_tinggi_6  = min($berat,  $sedang_w, $sedang_b); // R23: Berat  + Sedang + Sedang
+        $a_tinggi_7  = min($berat,  $sedang_w, $mahal);    // R24: Berat  + Sedang + Mahal
+        $a_tinggi_8  = min($berat,  $lama,     $murah);    // R25: Berat  + Lama   + Murah
+        $a_tinggi_9  = min($berat,  $lama,     $sedang_b); // R26: Berat  + Lama   + Sedang
+        $a_tinggi_10 = min($berat,  $lama,     $mahal);    // R27: Berat  + Lama   + Mahal
 
 
         // ==============================
         // CARI Zi (TSUKAMOTO)
+        // Rendah  : monoton turun [1,2]  → z = 2 - alpha
+        // Menengah: pusat domain = 2     → z = 2
+        // Tinggi  : monoton naik  [2,3]  → z = 2 + alpha
         // ==============================
 
-        // Rendah (monoton turun 1–2)
-        $z1 = 2 - $a1;
+        $z_rendah_1 = 2 - $a_rendah_1;
+        $z_rendah_2 = 2 - $a_rendah_2;
+        $z_rendah_3 = 2 - $a_rendah_3;
+        $z_rendah_4 = 2 - $a_rendah_4;
 
-        // Menengah (pakai pusat 2)
-        $z2 = 2;
-        $z3 = 2;
-
-        // Tinggi (monoton naik 2–3)
-        $z4 = 2 + $a4;
-        $z5 = 2 + $a5;
+        $z_tinggi_1  = 2 + $a_tinggi_1;
+        $z_tinggi_2  = 2 + $a_tinggi_2;
+        $z_tinggi_3  = 2 + $a_tinggi_3;
+        $z_tinggi_4  = 2 + $a_tinggi_4;
+        $z_tinggi_5  = 2 + $a_tinggi_5;
+        $z_tinggi_6  = 2 + $a_tinggi_6;
+        $z_tinggi_7  = 2 + $a_tinggi_7;
+        $z_tinggi_8  = 2 + $a_tinggi_8;
+        $z_tinggi_9  = 2 + $a_tinggi_9;
+        $z_tinggi_10 = 2 + $a_tinggi_10;
 
 
         // ==============================
-        // DEFUZZIFIKASI
+        // DEFUZZIFIKASI (Weighted Average)
         // ==============================
 
         $sumAlphaZ =
-            ($a1 * $z1) +
-            ($a2 * $z2) +
-            ($a3 * $z3) +
-            ($a4 * $z4) +
-            ($a5 * $z5);
+            // Rendah
+            ($a_rendah_1 * $z_rendah_1) +
+            ($a_rendah_2 * $z_rendah_2) +
+            ($a_rendah_3 * $z_rendah_3) +
+            ($a_rendah_4 * $z_rendah_4) +
+            // Menengah (semua z = 2)
+            (($a_menengah_1 + $a_menengah_2 + $a_menengah_3 + $a_menengah_4 +
+              $a_menengah_5 + $a_menengah_6 + $a_menengah_7 + $a_menengah_8 +
+              $a_menengah_9 + $a_menengah_10 + $a_menengah_11 + $a_menengah_12 +
+              $a_menengah_13) * 2) +
+            // Tinggi
+            ($a_tinggi_1  * $z_tinggi_1)  +
+            ($a_tinggi_2  * $z_tinggi_2)  +
+            ($a_tinggi_3  * $z_tinggi_3)  +
+            ($a_tinggi_4  * $z_tinggi_4)  +
+            ($a_tinggi_5  * $z_tinggi_5)  +
+            ($a_tinggi_6  * $z_tinggi_6)  +
+            ($a_tinggi_7  * $z_tinggi_7)  +
+            ($a_tinggi_8  * $z_tinggi_8)  +
+            ($a_tinggi_9  * $z_tinggi_9)  +
+            ($a_tinggi_10 * $z_tinggi_10);
 
-        $sumAlpha = $a1 + $a2 + $a3 + $a4 + $a5;
+        $sumAlpha =
+            $a_rendah_1    + $a_rendah_2    + $a_rendah_3    + $a_rendah_4    +
+            $a_menengah_1  + $a_menengah_2  + $a_menengah_3  + $a_menengah_4  +
+            $a_menengah_5  + $a_menengah_6  + $a_menengah_7  + $a_menengah_8  +
+            $a_menengah_9  + $a_menengah_10 + $a_menengah_11 + $a_menengah_12 +
+            $a_menengah_13 +
+            $a_tinggi_1  + $a_tinggi_2  + $a_tinggi_3  + $a_tinggi_4  +
+            $a_tinggi_5  + $a_tinggi_6  + $a_tinggi_7  + $a_tinggi_8  +
+            $a_tinggi_9  + $a_tinggi_10;
 
         if ($sumAlpha == 0) {
             return 1;

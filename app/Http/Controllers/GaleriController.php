@@ -24,6 +24,12 @@ class GaleriController extends Controller
         return view('welcome', compact('galeri', 'rooms'));
     }
 
+        public function tentang()
+    {
+        $galeri = Galeri::all();
+        return view('tentang-kami', compact('galeri'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

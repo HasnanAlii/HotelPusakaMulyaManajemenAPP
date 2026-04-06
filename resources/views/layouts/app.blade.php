@@ -136,7 +136,7 @@
                    transition-colors duration-200
                    {{ request()->routeIs('maintenances.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' }}">
                     <i data-feather="alert-circle" class="h-5 w-5"></i>
-                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text">Laporan Kerusakan</span>
+                    <span x-show="sidebarOpen" class="ml-3 font-medium fade-text"> Perawatan Kamar</span>
                 </a>
 
                 @role('admin')

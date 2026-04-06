@@ -7,7 +7,7 @@
 
     <div class="py-6">
         {{-- Dibuat lebih lebar --}}
-        <div class="max-w-screen-xl mx-auto sm:px-6 lg:px-8">
+        <div class=" mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
@@ -107,10 +107,10 @@
                                         </p>
                                     </div>
 
-                                    {{-- Customer --}}
+                                    {{-- Pelanggan --}}
                                     <div class="sm:text-right">
                                         <span class="text-sm font-semibold text-gray-500 block">
-                                            Customer
+                                            Pelanggan
                                         </span>
 
                                         <p class="text-lg font-medium text-gray-800">
@@ -136,7 +136,7 @@
                                     <hr class="my-4">
 
                                     <div>
-                                        <h5 class="text-sm font-semibold text-gray-600 mb-3">Detail Customer</h5>
+                                        <h5 class="text-sm font-semibold text-gray-600 mb-3">Detail Pelanggan</h5>
                                         <div class="space-y-2 text-sm text-gray-700">
                                             <div class="flex justify-between items-center">
                                                 <span class="font-medium text-gray-500 w-24">NIK</span>

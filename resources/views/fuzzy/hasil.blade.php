@@ -159,7 +159,7 @@
                         <div class="mt-8 pt-6 border-t border-slate-100">
                             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div>
-                                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wide">Harga Per Malam</p>
+                                    <p class="text-xs text-gray-600 font-bold uppercase tracking-wide">Harga Per Malam</p>
                                     <div class="flex items-baseline gap-1">
                                         <span class="text-sm font-bold text-blue-600">Rp</span>
                                         <span class="text-3xl font-extrabold text-slate-900 tracking-tight">

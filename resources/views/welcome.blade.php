@@ -60,7 +60,7 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#pricelist" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition tracking-wide">Pricelist</a>
                     <a href="#rekomendasi" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition tracking-wide">Rekomendasi Kamar</a>
-                    <a href="#about" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition tracking-wide">Tentang</a>
+                    <a href="{{ route('tentang') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition tracking-wide">Tentang Kami</a>
                     <a href="#contact" class="px-5 py-2.5 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5">
                         Kontak Kami
                     </a>
@@ -80,7 +80,7 @@
             <div class="px-6 py-4 space-y-3">
                 <a href="#pricelist" @click="open = false" class="block py-2 text-slate-600 font-medium border-b border-slate-50">Pricelist</a>
                 <a href="#rekomendasi" @click="open = false" class="block py-2 text-slate-600 font-medium border-b border-slate-50">Rekomendasi</a>
-                <a href="#about" @click="open = false" class="block py-2 text-slate-600 font-medium border-b border-slate-50">Tentang Kami</a>
+                <a href="{{ route('tentang') }}" @click="open = false" class="block py-2 text-slate-600 font-medium border-b border-slate-50">Tentang Kami</a>
                 <a href="#contact" @click="open = false" class="block py-2 text-blue-600 font-bold">Hubungi Kami</a>
             </div>
         </div>
@@ -604,7 +604,7 @@
                                 class="relative rounded-3xl shadow-2xl z-10 w-full object-cover h-[400px]">
                         @endif
                 <div class="absolute -bottom-6 -right-6 bg-blue-600 text-white p-6 rounded-2xl z-20 shadow-xl hidden md:block">
-                    <p class="text-3xl font-bold font-heading">10+</p>
+                    <p class="text-3xl font-bold font-heading">50+</p>
                     <p class="text-sm opacity-90">Tahun Pengalaman</p>
                 </div>
             </div>
@@ -612,10 +612,10 @@
                 <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-3">Tentang Kami</h2>
                 <h3 class="text-4xl font-heading font-bold text-slate-900 mb-6">Kenyamanan Rumah <br>di Jantung Kota</h3>
                 <p class="text-slate-600 leading-relaxed text-lg mb-6">
-                    Hotel Pusaka Mulya didirikan dengan visi sederhana: memberikan tempat istirahat yang tenang tanpa menguras kantong. 
+                    Hotel Pusaka Mulya didirikan pada tahun 1974 oleh Hj. Mumiroh sebagai bentuk usaha keluarga. Hotel ini merupakan bisnis turun-temurun yang hingga kini masih dikelola oleh pihak keluarga dengan penuh dedikasi.
                 </p>
                 <p class="text-slate-600 leading-relaxed text-lg mb-8">
-                    Terletak strategis, kami menjadi pilihan utama bagi pelancong bisnis maupun keluarga yang menginginkan akses mudah ke berbagai destinasi wisata namun tetap menginginkan ketenangan saat beristirahat.
+                    Berkomitmen memberikan pelayanan penginapan yang nyaman, terjangkau, dan ramah — menjaga nilai tradisi usaha keluarga sekaligus terus beradaptasi dengan perkembangan teknologi dan kebutuhan tamu.
                 </p>
                 <ul class="space-y-4">
                     <li class="flex items-center gap-3 text-slate-700 font-medium">
@@ -627,7 +627,15 @@
                     <li class="flex items-center gap-3 text-slate-700 font-medium">
                         <i class="fas fa-check-circle text-green-500"></i> Kebersihan Terjamin
                     </li>
+                    <li class="flex items-center gap-3 text-slate-700 font-medium">
+                        <i class="fas fa-check-circle text-green-500"></i> Nilai Kekeluargaan
+                    </li>
                 </ul>
+                <div class="mt-8">
+                    <a href="{{ route('tentang') }}" class="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
+                        Selengkapnya tentang kami <i class="fas fa-arrow-right text-sm"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </section>

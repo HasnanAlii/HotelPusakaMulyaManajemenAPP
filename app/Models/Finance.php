@@ -10,6 +10,7 @@ class Finance extends Model
     'reservation_id',
     'expense_id',
     'keterangan',
+    'type',
     'amount',
     'user_id'
 ];
