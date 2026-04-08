@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Galeri;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Pest\Support\Str;
 
 class GaleriController extends Controller
 {
@@ -52,8 +54,10 @@ class GaleriController extends Controller
         $galeri->caption = $request->caption;
 
         if ($request->hasFile('image_path')) {
-            $path = $request->file('image_path')->store('galeri', 'public');
-            $galeri->image_path = $path;
+            $file = $request->file('image_path');
+            $newName = 'galeri/' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+            Storage::disk('public')->put($newName, file_get_contents($file));
+            $galeri->image_path = 'storage/' . $newName;
         }
 
         $galeri->save();
@@ -82,8 +86,10 @@ class GaleriController extends Controller
         $galeri->caption = $request->caption;
 
         if ($request->hasFile('image_path')) {
-            $path = $request->file('image_path')->store('galeri', 'public');
-            $galeri->image_path = $path;
+            $file = $request->file('image_path');
+            $newName = 'galeri/' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+            Storage::disk('public')->put($newName, file_get_contents($file));
+            $galeri->image_path = 'storage/' . $newName;
         }
 
         $galeri->save();

@@ -106,7 +106,7 @@
                     @endphp
 
                     @if($foto)
-                        <img src="{{ asset('storage/'.$foto->image_path) }}"
+                        <img src="{{ asset($foto->image_path) }}"
                             alt="{{ $roomRekom->category }}"
                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
                             loading="lazy">

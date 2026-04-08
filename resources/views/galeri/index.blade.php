@@ -30,7 +30,7 @@
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition">
 
                             <div class=" overflow-hidden">
-                                <img src="{{ asset('storage/'.$galeri->image_path) }}"
+                                <img src="{{ asset($galeri->image_path) }}"
                                      class="w-full h-full object-cover">
                             </div>
 
