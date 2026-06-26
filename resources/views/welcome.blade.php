@@ -140,7 +140,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                 class="w-full h-full object-cover mb-2">
                         @endif
@@ -151,7 +151,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                 class="w-full h-full object-cover rounded-xl">
                         @endif
@@ -200,7 +200,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                  class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
                         @endif
@@ -248,7 +248,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                  class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
                         @endif
@@ -306,7 +306,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                  class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
                         @endif
@@ -363,7 +363,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                  class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
                         @endif
@@ -425,7 +425,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                  class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
                         @endif
@@ -599,7 +599,7 @@
                         @endphp
 
                         @if($g)
-                            <img src="{{ asset('storage/'.$g->image_path) }}"
+                            <img src="{{ asset($g->image_path) }}"
                                 alt="{{ $g->caption }}"
                                 class="relative rounded-3xl shadow-2xl z-10 w-full object-cover h-[400px]">
                         @endif
@@ -730,6 +730,109 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // JavaScript untuk membatasi pilihan berdasarkan harga
+        document.addEventListener('DOMContentLoaded', function() {
+            const hargaSelect = document.querySelector('select[name="harga"]');
+            const fasilitasSelect = document.querySelector('select[name="fasilitas"]');
+            const kenyamananSelect = document.querySelector('select[name="kenyamanan"]');
+            const jumlahOrangSelect = document.querySelector('select[name="jumlah_orang"]');
+            
+            // Simpan semua opsi fasilitas
+            const allFasilitasOptions = {
+                '': '<option value="">Pilih Kelengkapan Fasilitas</option>',
+                '1': '<option value="1">Cukup Tidur</option>',
+                '3': '<option value="3">Menengah</option>',
+                '5': '<option value="5">Komplit</option>'
+            };
+            
+            // Simpan semua opsi kenyamanan
+            const allKenyamananOptions = {
+                '': '<option value="">Pilih Tingkat Kenyamanan</option>',
+                '1': '<option value="1">Standar</option>',
+                '2': '<option value="2">Extra Nyaman</option>',
+                '3': '<option value="3">VIP</option>'
+            };
+            
+            // Simpan semua opsi jumlah orang
+            const allJumlahOrangOptions = {
+                '': '<option value="">Pilih Kapasitas</option>',
+                '2': '<option value="2">1 - 2 Orang</option>',
+                '4': '<option value="4">Lebih dari 2 Orang</option>'
+            };
+            
+            // Fungsi untuk update opsi berdasarkan harga
+            function updateOptions() {
+                const selectedHarga = parseInt(hargaSelect.value);
+                let allowedFasilitas = [''];
+                let allowedKenyamanan = [''];
+                let allowedJumlahOrang = [''];
+                
+                // Tentukan opsi yang diperbolehkan berdasarkan harga
+                switch(selectedHarga) {
+                    case 100000:
+                        allowedFasilitas = ['', '1']; // Hanya Cukup Tidur
+                        allowedKenyamanan = ['', '1']; // Hanya Standar
+                        allowedJumlahOrang = ['', '2']; // Hanya 1-2 Orang
+                        break;
+                    case 150000:
+                        allowedFasilitas = ['', '1', '3']; // Cukup Tidur + Menengah
+                        allowedKenyamanan = ['', '1']; // Hanya Standar
+                        allowedJumlahOrang = ['', '2']; // Hanya 1-2 Orang
+                        break;
+                    case 200000:
+                        allowedFasilitas = ['', '1', '3']; // Cukup Tidur + Menengah
+                        allowedKenyamanan = ['', '1', '2']; // Standar + Extra Nyaman
+                        allowedJumlahOrang = ['', '2']; // Hanya 1-2 Orang
+                        break;
+                    case 250000:
+                        allowedFasilitas = ['', '1', '3', '5']; // Semua
+                        allowedKenyamanan = ['', '1', '2']; // Standar + Extra Nyaman
+                        allowedJumlahOrang = ['', '2', '4']; // Semua
+                        break;
+                    case 350000:
+                        allowedFasilitas = ['', '1', '3', '5']; // Semua
+                        allowedKenyamanan = ['', '1', '2', '3']; // Semua
+                        allowedJumlahOrang = ['', '2', '4']; // Semua
+                        break;
+                    default:
+                        allowedFasilitas = ['', '1', '3', '5'];
+                        allowedKenyamanan = ['', '1', '2', '3'];
+                        allowedJumlahOrang = ['', '2', '4'];
+                }
+                
+                // Update select options untuk Fasilitas
+                fasilitasSelect.innerHTML = '';
+                allowedFasilitas.forEach(value => {
+                    fasilitasSelect.innerHTML += allFasilitasOptions[value];
+                });
+                fasilitasSelect.value = '';
+                
+                // Update select options untuk Kenyamanan
+                kenyamananSelect.innerHTML = '';
+                allowedKenyamanan.forEach(value => {
+                    kenyamananSelect.innerHTML += allKenyamananOptions[value];
+                });
+                kenyamananSelect.value = '';
+                
+                // Update select options untuk Jumlah Orang
+                jumlahOrangSelect.innerHTML = '';
+                allowedJumlahOrang.forEach(value => {
+                    jumlahOrangSelect.innerHTML += allJumlahOrangOptions[value];
+                });
+                jumlahOrangSelect.value = '';
+            }
+            
+            // Event listener untuk perubahan harga
+            hargaSelect.addEventListener('change', updateOptions);
+            
+            // Inisialisasi saat halaman dimuat
+            if (hargaSelect.value) {
+                updateOptions();
+            }
+        });
+    </script>
 
 </body>
 </html>

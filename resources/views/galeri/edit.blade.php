@@ -26,7 +26,7 @@
 
                     <div>
                         <label class="block text-gray-700 font-medium mb-2">Gambar Saat Ini</label>
-                        <img src="{{ asset('storage/'.$galeri->image_path) }}" 
+                        <img src="{{ asset($galeri->image_path) }}" 
                             class="w-48 h-32 object-cover rounded-lg shadow mb-2">
                     </div>
 

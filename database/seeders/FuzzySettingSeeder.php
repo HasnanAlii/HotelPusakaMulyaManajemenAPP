@@ -39,7 +39,7 @@ class FuzzySettingSeeder extends Seeder
                    JUMLAH ORANG
                    =============================== */
                 'jumlah_orang_min' => 1,
-                'jumlah_orang_max' => 2,
+                'jumlah_orang_max' => 4,
             ]);
         }
     }
